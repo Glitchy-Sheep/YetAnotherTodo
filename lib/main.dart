@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:yet_another_todo/core/utils/logger.dart';
+import 'package:yet_another_todo/feature/app/app_entry_point.dart';
 
 void main() {
   PlatformDispatcher.instance.onError = (error, stackTrace) {
@@ -15,25 +16,8 @@ void main() {
   };
 
   runZonedGuarded(() {
-    runApp(const MyApp());
+    runApp(const YetAnotherTodoApp());
   }, (error, stackTrace) {
     logger.e("$error \n $stackTrace \n");
   });
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    logger.i("App started");
-
-    return MaterialApp(
-      title: 'YetAnotherTodo App - The beginning',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Placeholder(),
-    );
-  }
 }
