@@ -17,9 +17,10 @@ class TodoViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      floatingActionButton: _AddTaskButton(onPressed: () {}),
       backgroundColor: ColorPalette.ligthBackPrimary,
-      body: SafeArea(
+      body: const SafeArea(
         child: CustomScrollView(
           slivers: [
             _TasksAppBar(),
@@ -28,6 +29,32 @@ class TodoViewScreen extends StatelessWidget {
               sliver: _TaskList(),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AddTaskButton extends StatelessWidget {
+  const _AddTaskButton({
+    required this.onPressed,
+  });
+
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 56.0,
+      width: 56.0,
+      child: FittedBox(
+        child: FloatingActionButton(
+          onPressed: onPressed,
+          backgroundColor: ColorPalette.lightColorBlue,
+          child: const Icon(
+            Icons.add,
+            color: ColorPalette.lightColorWhite,
+          ),
         ),
       ),
     );
