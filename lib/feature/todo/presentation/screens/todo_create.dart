@@ -102,6 +102,24 @@ class _DeadlineDatePicker extends StatelessWidget {
           behavior: HitTestBehavior.opaque,
           onTap: () {
             logger.i("Open date picker");
+            showDatePicker(
+              builder: (context, child) {
+                // Override theme to match exact color of the date picker
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    colorScheme: const ColorScheme.light(
+                      primary: ColorPalette.lightColorBlue,
+                    ),
+                  ),
+                  child: child!,
+                );
+              },
+              context: context,
+              firstDate: DateTime.now(),
+              lastDate: DateTime.now().add(
+                const Duration(days: 365),
+              ),
+            );
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
