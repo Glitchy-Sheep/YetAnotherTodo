@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:yet_another_todo/feature/todo/domain/task.dart';
+import 'package:yet_another_todo/feature/todo/domain/task_importance.dart';
+import 'package:yet_another_todo/feature/todo/presentation/widgets/task_tile.dart';
 import 'package:yet_another_todo/uikit/app_text_style.dart';
 import 'package:yet_another_todo/uikit/colors.dart';
 
@@ -12,10 +15,6 @@ const _eyeIcon = Icon(
 class TodoViewScreen extends StatelessWidget {
   const TodoViewScreen({super.key});
 
-  static const _appBarSpaceHeight = 164.0;
-  static const _appBarCollapsedHeight = 88.0;
-  static const _appBarCollapseContentHeight = 80.0;
-
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
@@ -23,11 +22,7 @@ class TodoViewScreen extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            _TasksAppBar(
-              appBarCollapsedHeight: _appBarCollapsedHeight,
-              appBarSpaceHeight: _appBarSpaceHeight,
-              appBarCollapseContentHeight: _appBarCollapseContentHeight,
-            ),
+            _TasksAppBar(),
             SliverPadding(
               padding: EdgeInsets.all(16.0),
               sliver: _TaskList(),
@@ -40,18 +35,11 @@ class TodoViewScreen extends StatelessWidget {
 }
 
 class _TasksAppBar extends StatelessWidget {
-  const _TasksAppBar({
-    super.key,
-    required double appBarCollapsedHeight,
-    required double appBarSpaceHeight,
-    required double appBarCollapseContentHeight,
-  })  : _appBarCollapsedHeight = appBarCollapsedHeight,
-        _appBarSpaceHeight = appBarSpaceHeight,
-        _appBarCollapseContentHeight = appBarCollapseContentHeight;
+  const _TasksAppBar();
 
-  final double _appBarCollapsedHeight;
-  final double _appBarSpaceHeight;
-  final double _appBarCollapseContentHeight;
+  static const _appBarSpaceHeight = 164.0;
+  static const _appBarCollapsedHeight = 88.0;
+  static const _appBarCollapseContentHeight = 80.0;
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +68,7 @@ class _TasksAppBar extends StatelessWidget {
 }
 
 class _TaskList extends StatelessWidget {
-  const _TaskList({
-    super.key,
-  });
+  const _TaskList();
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +82,16 @@ class _TaskList extends StatelessWidget {
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (_, int index) {
-            return ListTile(
-              title: Text("Задача $index"),
+            return TaskTile(
+              task: TaskEntity(
+                id: 1,
+                description: "Купить что-то",
+                isDone: index % 2 == 0 ? true : false,
+                finishUntil: DateTime.now(),
+                priority:
+                    index % 3 == 0 ? TaskImportance.high : TaskImportance.low,
+              ),
+              onCheck: (newValue) {},
             );
           },
         ),
@@ -107,9 +101,7 @@ class _TaskList extends StatelessWidget {
 }
 
 class _AppBarCollapsedContent extends StatelessWidget {
-  const _AppBarCollapsedContent({
-    super.key,
-  });
+  const _AppBarCollapsedContent();
 
   @override
   Widget build(BuildContext context) {
@@ -133,9 +125,7 @@ class _AppBarCollapsedContent extends StatelessWidget {
 }
 
 class _AppBarFullContent extends StatelessWidget {
-  const _AppBarFullContent({
-    super.key,
-  });
+  const _AppBarFullContent();
 
   @override
   Widget build(BuildContext context) {
