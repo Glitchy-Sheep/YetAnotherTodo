@@ -119,13 +119,22 @@ class _TaskList extends StatelessWidget {
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (_, int index) {
+            final TaskPriority priority;
+            if (index % 3 == 0) {
+              priority = TaskPriority.high;
+            } else if (index % 4 == 0) {
+              priority = TaskPriority.low;
+            } else {
+              priority = TaskPriority.none;
+            }
+
             return TaskTile(
               task: TaskEntity(
                 id: 1,
                 description: "Нажать на галочку",
                 isDone: index % 2 == 0 ? true : false,
                 finishUntil: index % 3 == 0 ? DateTime.now() : null,
-                priority: index % 3 == 0 ? TaskPriority.high : TaskPriority.low,
+                priority: priority,
               ),
               onCheck: (newValue) {},
             );

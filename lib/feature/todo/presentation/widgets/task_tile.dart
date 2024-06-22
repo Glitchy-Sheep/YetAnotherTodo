@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:yet_another_todo/core/utils/date_formatters.dart';
 import 'package:yet_another_todo/feature/todo/domain/task.dart';
+import 'package:yet_another_todo/feature/todo/domain/task_priority.dart';
 import 'package:yet_another_todo/uikit/app_text_style.dart';
 import 'package:yet_another_todo/uikit/colors.dart';
 
@@ -48,22 +50,61 @@ class _TaskTileState extends State<TaskTile> {
           color: ColorPalette.lightColorWhite,
         ),
       ),
-      child: ListTile(
-        titleAlignment: ListTileTitleAlignment.center,
-        leading: _TaskCheckBox(
-          task: widget.task,
-          onCheck: (newValue) {},
-        ),
-        title: Text(
-          widget.task.description,
-          style: AppTextStyle.bodyText.copyWith(),
-        ),
-        trailing: const Icon(
-          Icons.info_outline,
-          color: ColorPalette.lightLabelTertiary,
-        ),
-        subtitle: subtitle,
+      child: _TaskContent(task: widget.task, subtitle: subtitle),
+    );
+  }
+}
+
+class _TaskContent extends StatelessWidget {
+  const _TaskContent({
+    super.key,
+    required this.task,
+    required this.subtitle,
+  });
+
+  final Text? subtitle;
+  final TaskEntity task;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      titleAlignment: ListTileTitleAlignment.center,
+      horizontalTitleGap: 0,
+      leading: _TaskCheckBox(
+        task: task,
+        onCheck: (newValue) {},
       ),
+      title: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          if (task.priority == TaskPriority.high)
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: SvgPicture.asset(
+                "assets/icons/exclamation_marks.svg",
+              ),
+            ),
+          if (task.priority == TaskPriority.low)
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: SvgPicture.asset(
+                "assets/icons/arrow_down.svg",
+              ),
+            ),
+          Text(
+            task.description,
+            style: AppTextStyle.bodyText.copyWith(
+              decoration: task.isDone ? TextDecoration.lineThrough : null,
+              color: task.isDone ? ColorPalette.lightLabelTertiary : null,
+            ),
+          ),
+        ],
+      ),
+      trailing: const Icon(
+        Icons.info_outline,
+        color: ColorPalette.lightLabelTertiary,
+      ),
+      subtitle: subtitle,
     );
   }
 }
@@ -105,11 +146,26 @@ class _TaskCheckBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color? fillColor;
+    BorderSide? checkboxSide;
+
+    if (!task.isDone && task.priority == TaskPriority.high) {
+      fillColor = ColorPalette.lightColorRed.withOpacity(0.16);
+      checkboxSide = const BorderSide(
+        color: ColorPalette.lightColorRed,
+        width: 2,
+      );
+    }
+
     return Checkbox(
       value: task.isDone,
       onChanged: onCheck,
       activeColor: ColorPalette.lightColorGreen,
       checkColor: ColorPalette.lightColorWhite,
+      fillColor: WidgetStateProperty.resolveWith(
+        (state) => fillColor,
+      ),
+      side: checkboxSide,
     );
   }
 }
