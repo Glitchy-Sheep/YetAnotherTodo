@@ -73,7 +73,7 @@ Each feature usually divided into 3 parts:
 
 <!-- Look, Mom, I centered the div! 😁 -->
 <div align="center" style="font-size: 24px;">
-    <a href="https://github.com/Glitchy-Sheep/yet-another-todo/releases/latest">
+    <a href="https://github.com/Glitchy-Sheep/YetAnotherTodo/releases/latest">
         Click here to download the app
     </a>
 </div>
