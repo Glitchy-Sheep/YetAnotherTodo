@@ -13,6 +13,8 @@ class YetAnotherTodoApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: false,
       ),
+      // Override the default localization delegate
+      // so the app is consistent with its language.
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate

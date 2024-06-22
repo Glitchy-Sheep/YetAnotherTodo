@@ -16,18 +16,20 @@ const _eyeIcon = Icon(
 class TodoViewScreen extends StatelessWidget {
   const TodoViewScreen({super.key});
 
+  void onAddTaskPressed(context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const TodoCreateScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: _AddTaskButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const TodoCreateScreen(),
-            ),
-          );
-        },
+        onPressed: () => onAddTaskPressed(context),
       ),
       backgroundColor: ColorPalette.ligthBackPrimary,
       body: const SafeArea(
@@ -116,9 +118,11 @@ class _TaskList extends StatelessWidget {
           Radius.circular(8.0),
         ),
       ),
+      // Infinite list as a stub for the first stage
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (_, int index) {
+            // Some stub data to show all the cases
             final TaskPriority priority;
             if (index % 3 == 0) {
               priority = TaskPriority.high;
@@ -145,6 +149,7 @@ class _TaskList extends StatelessWidget {
   }
 }
 
+// The sliver app bar content when it is collapsed
 class _AppBarCollapsedContent extends StatelessWidget {
   const _AppBarCollapsedContent();
 
@@ -169,6 +174,7 @@ class _AppBarCollapsedContent extends StatelessWidget {
   }
 }
 
+// The sliver app bar content when it's expanded
 class _AppBarFullContent extends StatelessWidget {
   const _AppBarFullContent();
 

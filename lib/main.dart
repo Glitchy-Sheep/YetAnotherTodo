@@ -16,6 +16,7 @@ void main() {
   };
 
   runZonedGuarded(() {
+    // App entry point
     runApp(const YetAnotherTodoApp());
   }, (error, stackTrace) {
     logger.e("$error \n $stackTrace \n");
