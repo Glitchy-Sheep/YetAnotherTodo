@@ -8,8 +8,11 @@ class YetAnotherTodoApp extends StatelessWidget {
   // All the DI will be done in the [YetAnotherTodoApp] class
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: TodoViewScreen(),
+    return MaterialApp(
+      theme: ThemeData(
+        useMaterial3: false,
+      ),
+      home: const TodoViewScreen(),
     );
   }
 }
