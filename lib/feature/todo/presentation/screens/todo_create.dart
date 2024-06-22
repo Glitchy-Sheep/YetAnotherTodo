@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:yet_another_todo/core/utils/logger.dart';
+import 'package:yet_another_todo/feature/todo/domain/task_priority.dart';
 import 'package:yet_another_todo/uikit/app_text_style.dart';
 import 'package:yet_another_todo/uikit/colors.dart';
 
@@ -184,46 +185,73 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
   }
 }
 
-class _PriorityDropdownButton extends StatelessWidget {
+class _PriorityDropdownButton extends StatefulWidget {
   const _PriorityDropdownButton();
 
   @override
+  State<_PriorityDropdownButton> createState() =>
+      _PriorityDropdownButtonState();
+}
+
+class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
+  TaskPriority _selectedPriority = TaskPriority.none;
+
+  @override
   Widget build(BuildContext context) {
-    return DropdownMenu(
-      width: 164,
-      expandedInsets: const EdgeInsets.all(0),
-      textStyle: AppTextStyle.subheadText.value,
-      trailingIcon: const Visibility(
-        // bruh
-        visible: false,
-        child: Icon(Icons.arrow_drop_down),
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        border: InputBorder.none,
-        isDense: false,
-        constraints: BoxConstraints.tight(
-          const Size.fromHeight(22),
-        ),
-      ),
-      dropdownMenuEntries: [
-        const DropdownMenuEntry(
-          label: "Нет",
-          value: null,
-        ),
-        const DropdownMenuEntry(
-          label: "Низкий",
-          value: null,
-        ),
-        DropdownMenuEntry(
-          label: "!! Высокий",
-          value: null,
-          style: MenuItemButton.styleFrom(
-            textStyle: const TextStyle(
-              color: ColorPalette.lightColorRed,
+    return PopupMenuButton(
+      tooltip: "",
+      enableFeedback: false,
+      iconSize: 0,
+      constraints: const BoxConstraints(minWidth: 164),
+      offset: const Offset(0, -20),
+      itemBuilder: (BuildContext context) {
+        return [
+          PopupMenuItem(
+            value: TaskPriority.none,
+            child: Text(
+              TaskPriority.none.toNameString,
+              style: AppTextStyle.bodyText.value.copyWith(
+                color: ColorPalette.lightLabelPrimary,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
+          PopupMenuItem(
+            value: TaskPriority.low,
+            child: Text(
+              TaskPriority.low.toNameString,
+              style: AppTextStyle.bodyText.value.copyWith(
+                color: ColorPalette.lightLabelPrimary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          PopupMenuItem(
+            value: TaskPriority.high,
+            child: Text(
+              TaskPriority.high.toNameString,
+              style: AppTextStyle.bodyText.value.copyWith(
+                color: ColorPalette.lightColorRed,
+              ),
+            ),
+          ),
+        ];
+      },
+      onSelected: (value) {
+        setState(() {
+          _selectedPriority = value;
+        });
+      },
+      child: Container(
+        height: 28,
+        alignment: Alignment.centerLeft,
+        child: Text(
+          _selectedPriority.toNameString,
+          style: const TextStyle(
+            color: ColorPalette.lightLabelTertiary,
+          ),
         ),
-      ],
+      ),
     );
   }
 }
