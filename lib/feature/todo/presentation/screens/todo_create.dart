@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:yet_another_todo/core/utils/date_formatters.dart';
 import 'package:yet_another_todo/core/utils/logger.dart';
 import 'package:yet_another_todo/feature/todo/domain/task_priority.dart';
 import 'package:yet_another_todo/uikit/app_text_style.dart';
@@ -127,13 +127,6 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
         _selectedDate = date;
       });
     }
-  }
-
-  String formatDate(DateTime date) {
-    return DateFormat(
-      'dd MMMM yyyy',
-      'ru',
-    ).format(date);
   }
 
   @override

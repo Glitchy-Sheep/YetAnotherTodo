@@ -122,9 +122,9 @@ class _TaskList extends StatelessWidget {
             return TaskTile(
               task: TaskEntity(
                 id: 1,
-                description: "Купить что-то",
+                description: "Нажать на галочку",
                 isDone: index % 2 == 0 ? true : false,
-                finishUntil: DateTime.now(),
+                finishUntil: index % 3 == 0 ? DateTime.now() : null,
                 priority: index % 3 == 0 ? TaskPriority.high : TaskPriority.low,
               ),
               onCheck: (newValue) {},

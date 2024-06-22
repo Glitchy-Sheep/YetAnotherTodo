@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yet_another_todo/core/utils/date_formatters.dart';
 import 'package:yet_another_todo/feature/todo/domain/task.dart';
 import 'package:yet_another_todo/uikit/app_text_style.dart';
 import 'package:yet_another_todo/uikit/colors.dart';
@@ -22,7 +23,7 @@ class _TaskTileState extends State<TaskTile> {
   Widget build(BuildContext context) {
     final subtitle = widget.task.finishUntil != null
         ? Text(
-            widget.task.finishUntil.toString(),
+            formatDate(widget.task.finishUntil!),
             style: const TextStyle(
               color: ColorPalette.lightLabelTertiary,
             ),
@@ -85,7 +86,7 @@ class _DismissContainer extends StatelessWidget {
       child: Align(
         alignment: alignment,
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: child,
         ),
       ),
