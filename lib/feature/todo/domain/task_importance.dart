@@ -1,4 +1,0 @@
-enum TaskImportance {
-  low,
-  high,
-}

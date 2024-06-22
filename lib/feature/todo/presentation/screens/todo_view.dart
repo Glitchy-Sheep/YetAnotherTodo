@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yet_another_todo/feature/todo/domain/task.dart';
-import 'package:yet_another_todo/feature/todo/domain/task_importance.dart';
+import 'package:yet_another_todo/feature/todo/domain/task_priority.dart';
 import 'package:yet_another_todo/feature/todo/presentation/screens/todo_create.dart';
 import 'package:yet_another_todo/feature/todo/presentation/widgets/task_tile.dart';
 import 'package:yet_another_todo/uikit/app_text_style.dart';
@@ -125,8 +125,7 @@ class _TaskList extends StatelessWidget {
                 description: "Купить что-то",
                 isDone: index % 2 == 0 ? true : false,
                 finishUntil: DateTime.now(),
-                priority:
-                    index % 3 == 0 ? TaskImportance.high : TaskImportance.low,
+                priority: index % 3 == 0 ? TaskPriority.high : TaskPriority.low,
               ),
               onCheck: (newValue) {},
             );

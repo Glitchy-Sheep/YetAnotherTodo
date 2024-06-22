@@ -1,4 +1,4 @@
-import 'package:yet_another_todo/feature/todo/domain/task_importance.dart';
+import 'package:yet_another_todo/feature/todo/domain/task_priority.dart';
 
 /// Entity representing a task
 /// which can be done or undone ([isDone])
@@ -11,7 +11,7 @@ class TaskEntity {
   final bool isDone;
 
   final DateTime? finishUntil;
-  final TaskImportance? priority;
+  final TaskPriority? priority;
 
   TaskEntity({
     required this.id,
