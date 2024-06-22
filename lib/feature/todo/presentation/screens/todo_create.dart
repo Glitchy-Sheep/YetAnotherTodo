@@ -18,14 +18,70 @@ class TodoCreateScreen extends StatelessWidget {
             logger.i("Unfocus textfield");
           },
           child: SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.all(16),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _TaskDescriptionInputArea(),
-                ],
-              ),
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const _DescriptionInputArea(),
+                      const SizedBox(height: 28),
+                      Text(
+                        "Важность",
+                        style: AppTextStyle.bodyText.value,
+                      ),
+                      const _PriorityDropdownButton(),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        color: ColorPalette.lightSupportSeparator,
+                        height: 16,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const _DeadlineDatePicker(),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Divider(
+                  thickness: 1,
+                  color: ColorPalette.lightSupportSeparator,
+                ),
+                SizedBox(
+                  height: 50,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.delete,
+                          color: ColorPalette.lightColorRed,
+                          size: 24,
+                        ),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Text(
+                          "Удалить",
+                          style: TextStyle(
+                            color: ColorPalette.lightColorRed,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -34,8 +90,97 @@ class TodoCreateScreen extends StatelessWidget {
   }
 }
 
-class _TaskDescriptionInputArea extends StatelessWidget {
-  const _TaskDescriptionInputArea();
+class _DeadlineDatePicker extends StatelessWidget {
+  const _DeadlineDatePicker();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            logger.i("Open date picker");
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Сделать до",
+                style: AppTextStyle.bodyText.value,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                "2 июня 2021",
+                style: AppTextStyle.subheadText.value.copyWith(
+                  color: ColorPalette.lightColorBlue,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: 36,
+          height: 20,
+          child: Switch(
+            onChanged: (value) {},
+            value: true,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PriorityDropdownButton extends StatelessWidget {
+  const _PriorityDropdownButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownMenu(
+      width: 164,
+      expandedInsets: const EdgeInsets.all(0),
+      textStyle: AppTextStyle.subheadText.value,
+      trailingIcon: const Visibility(
+        // bruh
+        visible: false,
+        child: Icon(Icons.arrow_drop_down),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: InputBorder.none,
+        isDense: false,
+        constraints: BoxConstraints.tight(
+          const Size.fromHeight(22),
+        ),
+      ),
+      dropdownMenuEntries: [
+        const DropdownMenuEntry(
+          label: "Нет",
+          value: null,
+        ),
+        const DropdownMenuEntry(
+          label: "Низкий",
+          value: null,
+        ),
+        DropdownMenuEntry(
+          label: "!! Высокий",
+          value: null,
+          style: MenuItemButton.styleFrom(
+            textStyle: const TextStyle(
+              color: ColorPalette.lightColorRed,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DescriptionInputArea extends StatelessWidget {
+  const _DescriptionInputArea();
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +223,7 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      elevation: 0,
       backgroundColor: ColorPalette.ligthBackPrimary,
       leading: IconButton(
         icon: const Icon(
