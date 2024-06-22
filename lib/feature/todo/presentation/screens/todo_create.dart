@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:yet_another_todo/core/utils/logger.dart';
 import 'package:yet_another_todo/uikit/app_text_style.dart';
 import 'package:yet_another_todo/uikit/colors.dart';
@@ -90,8 +91,49 @@ class TodoCreateScreen extends StatelessWidget {
   }
 }
 
-class _DeadlineDatePicker extends StatelessWidget {
+class _DeadlineDatePicker extends StatefulWidget {
   const _DeadlineDatePicker();
+
+  @override
+  State<_DeadlineDatePicker> createState() => _DeadlineDatePickerState();
+}
+
+class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
+  DateTime? _selectedDate = DateTime.now();
+
+  void _onDeadlineDatePickerTap(BuildContext context) async {
+    final DateTime? date = await showDatePicker(
+      builder: (context, child) {
+        // Override theme to match exact color of the date picker
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: ColorPalette.lightColorBlue,
+            ),
+          ),
+          child: child!,
+        );
+      },
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(
+        const Duration(days: 365),
+      ),
+    );
+
+    if (date != null) {
+      setState(() {
+        _selectedDate = date;
+      });
+    }
+  }
+
+  String formatDate(DateTime date) {
+    return DateFormat(
+      'dd MMMM yyyy',
+      'ru',
+    ).format(date);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,27 +142,7 @@ class _DeadlineDatePicker extends StatelessWidget {
       children: [
         GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: () {
-            logger.i("Open date picker");
-            showDatePicker(
-              builder: (context, child) {
-                // Override theme to match exact color of the date picker
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    colorScheme: const ColorScheme.light(
-                      primary: ColorPalette.lightColorBlue,
-                    ),
-                  ),
-                  child: child!,
-                );
-              },
-              context: context,
-              firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(
-                const Duration(days: 365),
-              ),
-            );
-          },
+          onTap: () => _onDeadlineDatePickerTap(context),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -131,12 +153,13 @@ class _DeadlineDatePicker extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Text(
-                "2 июня 2021",
-                style: AppTextStyle.subheadText.value.copyWith(
-                  color: ColorPalette.lightColorBlue,
+              if (_selectedDate != null)
+                Text(
+                  formatDate(_selectedDate!),
+                  style: AppTextStyle.subheadText.value.copyWith(
+                    color: ColorPalette.lightColorBlue,
+                  ),
                 ),
-              ),
             ],
           ),
         ),
@@ -144,8 +167,16 @@ class _DeadlineDatePicker extends StatelessWidget {
           width: 36,
           height: 20,
           child: Switch(
-            onChanged: (value) {},
-            value: true,
+            onChanged: (value) {
+              if (value) {
+                _onDeadlineDatePickerTap(context);
+              } else {
+                setState(() {
+                  _selectedDate = null;
+                });
+              }
+            },
+            value: _selectedDate != null,
           ),
         ),
       ],
