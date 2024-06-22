@@ -24,28 +24,28 @@ class TodoCreateScreen extends StatelessWidget {
               children: [
                 Container(
                   margin: const EdgeInsets.all(16),
-                  child: Column(
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const _DescriptionInputArea(),
-                      const SizedBox(height: 28),
+                      _DescriptionInputArea(),
+                      SizedBox(height: 28),
                       Text(
                         "Важность",
-                        style: AppTextStyle.bodyText.value,
+                        style: AppTextStyle.bodyText,
                       ),
-                      const _PriorityDropdownButton(),
-                      const SizedBox(
+                      _PriorityDropdownButton(),
+                      SizedBox(
                         height: 16,
                       ),
-                      const Divider(
+                      Divider(
                         thickness: 1,
                         color: ColorPalette.lightSupportSeparator,
                         height: 16,
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 16,
                       ),
-                      const _DeadlineDatePicker(),
+                      _DeadlineDatePicker(),
                     ],
                   ),
                 ),
@@ -147,9 +147,9 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 "Сделать до",
-                style: AppTextStyle.bodyText.value,
+                style: AppTextStyle.bodyText,
               ),
               const SizedBox(
                 height: 10,
@@ -157,7 +157,7 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
               if (_selectedDate != null)
                 Text(
                   formatDate(_selectedDate!),
-                  style: AppTextStyle.subheadText.value.copyWith(
+                  style: AppTextStyle.subheadText.copyWith(
                     color: ColorPalette.lightColorBlue,
                   ),
                 ),
@@ -210,27 +210,21 @@ class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
             value: TaskPriority.none,
             child: Text(
               TaskPriority.none.toNameString,
-              style: AppTextStyle.bodyText.value.copyWith(
-                color: ColorPalette.lightLabelPrimary,
-                fontWeight: FontWeight.w500,
-              ),
+              style: AppTextStyle.bodyText,
             ),
           ),
           PopupMenuItem(
             value: TaskPriority.low,
             child: Text(
               TaskPriority.low.toNameString,
-              style: AppTextStyle.bodyText.value.copyWith(
-                color: ColorPalette.lightLabelPrimary,
-                fontWeight: FontWeight.w500,
-              ),
+              style: AppTextStyle.bodyText,
             ),
           ),
           PopupMenuItem(
             value: TaskPriority.high,
             child: Text(
               TaskPriority.high.toNameString,
-              style: AppTextStyle.bodyText.value.copyWith(
+              style: AppTextStyle.bodyText.copyWith(
                 color: ColorPalette.lightColorRed,
               ),
             ),
@@ -284,7 +278,7 @@ class _DescriptionInputArea extends StatelessWidget {
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: "Что надо сделать...",
-          hintStyle: AppTextStyle.subheadText.value.copyWith(fontSize: 16.0),
+          hintStyle: AppTextStyle.subheadText.copyWith(fontSize: 16.0),
         ),
         keyboardType: TextInputType.multiline,
         maxLines: 7,

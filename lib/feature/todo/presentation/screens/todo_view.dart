@@ -141,8 +141,8 @@ class _AppBarCollapsedContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(
+    return const Padding(
+      padding: EdgeInsetsDirectional.only(
         start: 16,
         end: 24,
       ),
@@ -151,7 +151,7 @@ class _AppBarCollapsedContent extends StatelessWidget {
         children: [
           Text(
             "Мои дела",
-            style: AppTextStyle.mediumTitle.value,
+            style: AppTextStyle.mediumTitle,
           ),
           _eyeIcon
         ],
@@ -165,8 +165,8 @@ class _AppBarFullContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(
+    return const Padding(
+      padding: EdgeInsetsDirectional.only(
         start: 60,
         end: 24,
       ),
@@ -176,9 +176,9 @@ class _AppBarFullContent extends StatelessWidget {
         children: [
           Text(
             "Мои дела",
-            style: AppTextStyle.largeTitle.value,
+            style: AppTextStyle.largeTitle,
           ),
-          const SizedBox(
+          SizedBox(
             height: 4,
           ),
           Row(
@@ -186,7 +186,7 @@ class _AppBarFullContent extends StatelessWidget {
             children: [
               Text(
                 "Выполнено - 5",
-                style: AppTextStyle.subheadText.value,
+                style: AppTextStyle.subheadText,
               ),
               _eyeIcon
             ],

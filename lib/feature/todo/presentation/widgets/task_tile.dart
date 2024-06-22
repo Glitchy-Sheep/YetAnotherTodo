@@ -55,7 +55,7 @@ class _TaskTileState extends State<TaskTile> {
         ),
         title: Text(
           widget.task.description,
-          style: AppTextStyle.bodyText.value.copyWith(),
+          style: AppTextStyle.bodyText.copyWith(),
         ),
         trailing: const Icon(
           Icons.info_outline,
