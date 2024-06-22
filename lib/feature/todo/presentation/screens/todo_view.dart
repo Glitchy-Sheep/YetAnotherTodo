@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yet_another_todo/feature/todo/domain/task.dart';
 import 'package:yet_another_todo/feature/todo/domain/task_importance.dart';
+import 'package:yet_another_todo/feature/todo/presentation/screens/todo_create.dart';
 import 'package:yet_another_todo/feature/todo/presentation/widgets/task_tile.dart';
 import 'package:yet_another_todo/uikit/app_text_style.dart';
 import 'package:yet_another_todo/uikit/colors.dart';
@@ -18,7 +19,16 @@ class TodoViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: _AddTaskButton(onPressed: () {}),
+      floatingActionButton: _AddTaskButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const TodoCreateScreen(),
+            ),
+          );
+        },
+      ),
       backgroundColor: ColorPalette.ligthBackPrimary,
       body: const SafeArea(
         child: CustomScrollView(
