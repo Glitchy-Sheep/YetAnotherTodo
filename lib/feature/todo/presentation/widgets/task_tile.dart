@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:yet_another_todo/core/utils/date_formatters.dart';
 import 'package:yet_another_todo/feature/todo/domain/task.dart';
 import 'package:yet_another_todo/feature/todo/domain/task_priority.dart';
+import 'package:yet_another_todo/feature/todo/presentation/screens/todo_create.dart';
 import 'package:yet_another_todo/uikit/app_text_style.dart';
 import 'package:yet_another_todo/uikit/colors.dart';
 
@@ -34,12 +35,22 @@ class _TaskTileState extends State<TaskTile> {
 
     return Dismissible(
       key: UniqueKey(),
-      background: const _DismissContainer(
+      background: _DismissContainer(
         dismissColor: ColorPalette.lightColorGreen,
         alignment: Alignment.centerLeft,
-        child: Icon(
-          Icons.check,
-          color: ColorPalette.lightColorWhite,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const TodoCreateScreen(),
+              ),
+            );
+          },
+          child: const Icon(
+            Icons.check,
+            color: ColorPalette.lightColorWhite,
+          ),
         ),
       ),
       secondaryBackground: const _DismissContainer(
