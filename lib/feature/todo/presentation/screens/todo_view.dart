@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:yet_another_todo/feature/todo/domain/task.dart';
-import 'package:yet_another_todo/feature/todo/domain/task_priority.dart';
 import 'package:yet_another_todo/feature/todo/presentation/screens/todo_create.dart';
 import 'package:yet_another_todo/feature/todo/presentation/widgets/task_tile.dart';
 import 'package:yet_another_todo/uikit/app_text_style.dart';
@@ -8,22 +7,13 @@ import 'package:yet_another_todo/uikit/colors.dart';
 
 const _eyeIcon = Icon(
   Icons.remove_red_eye,
-  size: 24.0,
+  size: 24,
   color: ColorPalette.lightColorBlue,
 );
 
 /// Main screen which shows the list of todos
 class TodoViewScreen extends StatelessWidget {
   const TodoViewScreen({super.key});
-
-  void onAddTaskPressed(context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const TodoCreateScreen(),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +27,7 @@ class TodoViewScreen extends StatelessWidget {
           slivers: [
             _TasksAppBar(),
             SliverPadding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16),
               sliver: _TaskList(),
             ),
           ],
@@ -45,20 +35,29 @@ class TodoViewScreen extends StatelessWidget {
       ),
     );
   }
+
+  void onAddTaskPressed(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute<TodoCreateScreen>(
+        builder: (context) => const TodoCreateScreen(),
+      ),
+    );
+  }
 }
 
 class _AddTaskButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+
   const _AddTaskButton({
     required this.onPressed,
   });
 
-  final VoidCallback? onPressed;
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 56.0,
-      width: 56.0,
+      height: 56,
+      width: 56,
       child: FittedBox(
         child: FloatingActionButton(
           onPressed: onPressed,
@@ -74,11 +73,11 @@ class _AddTaskButton extends StatelessWidget {
 }
 
 class _TasksAppBar extends StatelessWidget {
-  const _TasksAppBar();
-
   static const _appBarSpaceHeight = 164.0;
   static const _appBarCollapsedHeight = 88.0;
   static const _appBarCollapseContentHeight = 80.0;
+
+  const _TasksAppBar();
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +92,7 @@ class _TasksAppBar extends StatelessWidget {
         centerTitle: true,
         expandedTitleScale: 1,
         title: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
+          builder: (context, constraints) {
             if (constraints.biggest.height >= _appBarCollapseContentHeight) {
               return const _AppBarFullContent();
             } else {
@@ -115,13 +114,13 @@ class _TaskList extends StatelessWidget {
       decoration: const BoxDecoration(
         color: ColorPalette.lightBackElevated,
         borderRadius: BorderRadius.all(
-          Radius.circular(8.0),
+          Radius.circular(8),
         ),
       ),
       // Infinite list as a stub for the first stage
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
-          (_, int index) {
+          (_, index) {
             // Some stub data to show all the cases
             final TaskPriority priority;
             if (index % 3 == 0) {
@@ -135,7 +134,7 @@ class _TaskList extends StatelessWidget {
             return TaskTile(
               task: TaskEntity(
                 id: 1,
-                description: "Нажать на галочку",
+                description: 'Нажать на галочку',
                 isDone: index % 2 == 0 ? true : false,
                 finishUntil: index % 3 == 0 ? DateTime.now() : null,
                 priority: priority,
@@ -164,10 +163,10 @@ class _AppBarCollapsedContent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Мои дела",
+            'Мои дела',
             style: AppTextStyle.mediumTitle,
           ),
-          _eyeIcon
+          _eyeIcon,
         ],
       ),
     );
@@ -190,7 +189,7 @@ class _AppBarFullContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Мои дела",
+            'Мои дела',
             style: AppTextStyle.largeTitle,
           ),
           SizedBox(
@@ -200,10 +199,10 @@ class _AppBarFullContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Выполнено - 5",
+                'Выполнено - 5',
                 style: AppTextStyle.subheadText,
               ),
-              _eyeIcon
+              _eyeIcon,
             ],
           ),
         ],

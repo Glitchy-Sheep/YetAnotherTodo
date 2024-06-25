@@ -1,4 +1,12 @@
-include: package:flutter_lints/flutter.yaml
+include: package:surf_lint_rules/analysis_options.yaml
 
 linter:
   rules:
+    - avoid_dynamic_calls
+    - avoid_print
+    - prefer_single_quotes
+    - annotate_overrides
+    - file_names
+    - lines_longer_than_80_chars
+    - require_trailing_commas
+    - use_named_constants

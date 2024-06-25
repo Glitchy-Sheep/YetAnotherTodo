@@ -1,5 +1,3 @@
-import 'package:yet_another_todo/feature/todo/domain/task_priority.dart';
-
 /// Entity representing a task
 /// which can be done or undone ([isDone])
 /// and has a [description] that can be edited
@@ -20,4 +18,19 @@ class TaskEntity {
     this.finishUntil,
     this.priority,
   });
+}
+
+/// Priority of the task
+enum TaskPriority {
+  none,
+  low,
+  high;
+
+  String get toNameString {
+    return switch (this) {
+      TaskPriority.none => 'Нет',
+      TaskPriority.low => 'Низкий',
+      TaskPriority.high => '!! Высокий'
+    };
+  }
 }

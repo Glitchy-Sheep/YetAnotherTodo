@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yet_another_todo/core/utils/date_formatters.dart';
 import 'package:yet_another_todo/core/utils/logger.dart';
-import 'package:yet_another_todo/feature/todo/domain/task_priority.dart';
+import 'package:yet_another_todo/feature/todo/domain/task.dart';
 import 'package:yet_another_todo/uikit/app_text_style.dart';
 import 'package:yet_another_todo/uikit/colors.dart';
 
@@ -17,7 +17,7 @@ class TodoCreateScreen extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
-            logger.i("Unfocus textfield");
+            logger.i('Unfocus textfield');
           },
           child: SingleChildScrollView(
             child: Column(
@@ -30,7 +30,7 @@ class TodoCreateScreen extends StatelessWidget {
                       _DescriptionInputArea(),
                       SizedBox(height: 28),
                       Text(
-                        "Важность",
+                        'Важность',
                         style: AppTextStyle.bodyText,
                       ),
                       _PriorityDropdownButton(),
@@ -61,7 +61,6 @@ class TodoCreateScreen extends StatelessWidget {
                   child: TextButton(
                     onPressed: () {},
                     child: const Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.delete,
@@ -72,7 +71,7 @@ class TodoCreateScreen extends StatelessWidget {
                           width: 12,
                         ),
                         Text(
-                          "Удалить",
+                          'Удалить',
                           style: TextStyle(
                             color: ColorPalette.lightColorRed,
                             fontSize: 16,
@@ -102,33 +101,6 @@ class _DeadlineDatePicker extends StatefulWidget {
 class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
   DateTime? _selectedDate = DateTime.now();
 
-  void _onDeadlineDatePickerTap(BuildContext context) async {
-    final DateTime? date = await showDatePicker(
-      builder: (context, child) {
-        // Override theme to match exact color of the date picker
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: ColorPalette.lightColorBlue,
-            ),
-          ),
-          child: child!,
-        );
-      },
-      context: context,
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(
-        const Duration(days: 365),
-      ),
-    );
-
-    if (date != null) {
-      setState(() {
-        _selectedDate = date;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -141,7 +113,7 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Сделать до",
+                'Сделать до',
                 style: AppTextStyle.bodyText,
               ),
               const SizedBox(
@@ -176,6 +148,33 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
       ],
     );
   }
+
+  Future<void> _onDeadlineDatePickerTap(BuildContext context) async {
+    final date = await showDatePicker(
+      builder: (context, child) {
+        // Override theme to match exact color of the date picker
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: ColorPalette.lightColorBlue,
+            ),
+          ),
+          child: child!,
+        );
+      },
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(
+        const Duration(days: 365),
+      ),
+    );
+
+    if (date != null) {
+      setState(() {
+        _selectedDate = date;
+      });
+    }
+  }
 }
 
 class _PriorityDropdownButton extends StatefulWidget {
@@ -192,12 +191,12 @@ class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-      tooltip: "",
+      tooltip: '',
       enableFeedback: false,
       iconSize: 0,
       constraints: const BoxConstraints(minWidth: 164),
       offset: const Offset(0, -20),
-      itemBuilder: (BuildContext context) {
+      itemBuilder: (context) {
         return [
           PopupMenuItem(
             value: TaskPriority.none,
@@ -252,7 +251,7 @@ class _DescriptionInputArea extends StatelessWidget {
       decoration: const BoxDecoration(
         color: ColorPalette.lightBackElevated,
         borderRadius: BorderRadius.all(
-          Radius.circular(8.0),
+          Radius.circular(8),
         ),
         boxShadow: [
           BoxShadow(
@@ -266,12 +265,12 @@ class _DescriptionInputArea extends StatelessWidget {
           ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: TextField(
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: "Что надо сделать...",
-          hintStyle: AppTextStyle.subheadText.copyWith(fontSize: 16.0),
+          hintText: 'Что надо сделать...',
+          hintStyle: AppTextStyle.subheadText.copyWith(fontSize: 16),
         ),
         keyboardType: TextInputType.multiline,
         maxLines: 7,
@@ -282,6 +281,9 @@ class _DescriptionInputArea extends StatelessWidget {
 }
 
 class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
   const _AddTaskAppBar();
 
   @override
@@ -310,7 +312,4 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
       ],
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

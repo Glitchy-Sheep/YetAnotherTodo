@@ -7,18 +7,21 @@ import 'package:yet_another_todo/feature/app/app_entry_point.dart';
 
 void main() {
   PlatformDispatcher.instance.onError = (error, stackTrace) {
-    logger.e("$error \n $stackTrace \n");
+    logger.e('$error \n $stackTrace \n');
     return true;
   };
 
-  FlutterError.onError = (FlutterErrorDetails details) {
-    logger.e("${details.exception} \n ${details.stack} \n");
+  FlutterError.onError = (details) {
+    logger.e('${details.exception} \n ${details.stack} \n');
   };
 
-  runZonedGuarded(() {
-    // App entry point
-    runApp(const YetAnotherTodoApp());
-  }, (error, stackTrace) {
-    logger.e("$error \n $stackTrace \n");
-  });
+  runZonedGuarded(
+    () {
+      // App entry point
+      runApp(const YetAnotherTodoApp());
+    },
+    (error, stackTrace) {
+      logger.e('$error \n $stackTrace \n');
+    },
+  );
 }

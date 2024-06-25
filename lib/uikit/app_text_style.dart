@@ -6,41 +6,41 @@ import 'package:yet_another_todo/uikit/colors.dart';
 
 abstract class AppTextStyle {
   static const largeTitle = TextStyle(
-    fontSize: 32.0,
+    fontSize: 32,
     height: 38 / 32,
     fontWeight: FontWeight.w500,
-    fontFamily: "Roboto",
+    fontFamily: 'Roboto',
     color: ColorPalette.lightLabelPrimary,
   );
 
   static const mediumTitle = TextStyle(
-    fontSize: 20.0,
+    fontSize: 20,
     height: 32 / 20,
     fontWeight: FontWeight.w500,
-    fontFamily: "Roboto",
+    fontFamily: 'Roboto',
     color: ColorPalette.lightLabelPrimary,
   );
 
   static const buttonText = TextStyle(
-    fontSize: 14.0,
+    fontSize: 14,
     height: 24 / 14,
     fontWeight: FontWeight.w500,
-    fontFamily: "Roboto",
+    fontFamily: 'Roboto',
     color: ColorPalette.lightLabelPrimary,
   );
 
   static const bodyText = TextStyle(
-    fontSize: 16.0,
+    fontSize: 16,
     height: 20 / 16,
     fontWeight: FontWeight.w400,
-    fontFamily: "Roboto",
+    fontFamily: 'Roboto',
     color: ColorPalette.lightLabelPrimary,
   );
 
   static const subheadText = TextStyle(
-    fontSize: 14.0,
+    fontSize: 14,
     height: 20 / 14,
-    fontFamily: "Roboto",
+    fontFamily: 'Roboto',
     fontWeight: FontWeight.w400,
     color: ColorPalette.lightLabelTertiary,
   );
