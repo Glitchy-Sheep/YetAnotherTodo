@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yet_another_todo/core/utils/date_formatters.dart';
-import 'package:yet_another_todo/core/utils/logger.dart';
 import 'package:yet_another_todo/feature/todo/domain/task.dart';
 import 'package:yet_another_todo/feature/todo/domain/task_priority.dart';
 import 'package:yet_another_todo/feature/todo/presentation/screens/todo_create.dart';
@@ -70,7 +69,6 @@ class _TaskTileState extends State<TaskTile> {
 
 class _TaskContent extends StatelessWidget {
   const _TaskContent({
-    super.key,
     required this.task,
     required this.subtitle,
   });
