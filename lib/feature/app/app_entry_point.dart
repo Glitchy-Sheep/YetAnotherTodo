@@ -18,7 +18,8 @@ class YetAnotherTodoApp extends StatelessWidget {
       // so the app is consistent with its language.
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
         Locale('ru'),
