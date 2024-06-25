@@ -1,5 +1,10 @@
 include: package:surf_lint_rules/analysis_options.yaml
 
+analyzer:
+  errors:
+    # Prefer relative imports is not compatible with this
+    always_use_package_imports: ignore
+
 linter:
   rules:
     - avoid_dynamic_calls
@@ -10,3 +15,4 @@ linter:
     - lines_longer_than_80_chars
     - require_trailing_commas
     - use_named_constants
+    - prefer_relative_imports

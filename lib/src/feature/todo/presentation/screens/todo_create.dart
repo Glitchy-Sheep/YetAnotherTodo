@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:yet_another_todo/core/utils/date_formatters.dart';
-import 'package:yet_another_todo/core/utils/logger.dart';
-import 'package:yet_another_todo/feature/todo/domain/task.dart';
-import 'package:yet_another_todo/uikit/app_text_style.dart';
-import 'package:yet_another_todo/uikit/colors.dart';
+
+import '../../../../core/utils/date_formatters.dart';
+import '../../../../core/utils/logger.dart';
+import '../../../../uikit/app_text_style.dart';
+import '../../../../uikit/colors.dart';
+import '../../domain/task.dart';
 
 class TodoCreateScreen extends StatelessWidget {
   const TodoCreateScreen({super.key});

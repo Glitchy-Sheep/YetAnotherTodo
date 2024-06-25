@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yet_another_todo/uikit/colors.dart';
+
+import 'colors.dart';
 
 /// App Text Style contains all
 /// typography styles used in the app

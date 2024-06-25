@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:yet_another_todo/core/utils/logger.dart';
-import 'package:yet_another_todo/feature/app/app_entry_point.dart';
+
+import 'src/core/utils/logger.dart';
+import 'src/feature/app/app_entry_point.dart';
 
 void main() {
   PlatformDispatcher.instance.onError = (error, stackTrace) {

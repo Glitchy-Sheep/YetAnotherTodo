@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:yet_another_todo/feature/todo/domain/task.dart';
-import 'package:yet_another_todo/feature/todo/presentation/screens/todo_create.dart';
-import 'package:yet_another_todo/feature/todo/presentation/widgets/task_tile.dart';
-import 'package:yet_another_todo/uikit/app_text_style.dart';
-import 'package:yet_another_todo/uikit/colors.dart';
+
+import '../../../../uikit/app_text_style.dart';
+import '../../../../uikit/colors.dart';
+import '../../domain/task.dart';
+import '../widgets/task_tile.dart';
+import 'todo_create.dart';
+
 
 const _eyeIcon = Icon(
   Icons.remove_red_eye,

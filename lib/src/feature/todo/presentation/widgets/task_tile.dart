@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:yet_another_todo/core/utils/date_formatters.dart';
-import 'package:yet_another_todo/feature/todo/domain/task.dart';
-import 'package:yet_another_todo/feature/todo/presentation/screens/todo_create.dart';
-import 'package:yet_another_todo/uikit/app_text_style.dart';
-import 'package:yet_another_todo/uikit/colors.dart';
 
-///
+import '../../../../core/utils/date_formatters.dart';
+import '../../../../uikit/app_text_style.dart';
+import '../../../../uikit/colors.dart';
+import '../../domain/task.dart';
+import '../screens/todo_create.dart';
+
 class TaskTile extends StatefulWidget {
   final TaskEntity task;
   final ValueChanged<bool?> onCheck;
