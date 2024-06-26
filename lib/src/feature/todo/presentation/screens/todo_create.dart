@@ -5,6 +5,7 @@ import '../../../../core/tools/logger.dart';
 import '../../../../core/uikit/app_icons.dart';
 import '../../../../core/uikit/app_text_style.dart';
 import '../../../../core/uikit/colors.dart';
+import '../../../../core/uikit/decorations.dart';
 import '../../domain/task.dart';
 
 class TodoCreateScreen extends StatelessWidget {
@@ -246,23 +247,7 @@ class _DescriptionInputArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: ColorPalette.lightBackElevated,
-        borderRadius: BorderRadius.all(
-          Radius.circular(8),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, 0.06),
-            blurRadius: 2,
-          ),
-          BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, 0.12),
-            blurRadius: 2,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
+      decoration: AppDecorations.taskInputContainer,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: TextField(
         decoration: InputDecoration(
