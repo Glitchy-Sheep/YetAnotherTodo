@@ -55,9 +55,7 @@ class DynamicSliverAppBar extends SliverPersistentHeaderDelegate {
               opacity: (1 - shrinkOffset / 20).clamp(0, 1),
               child: Text(
                 '${context.strings.done} - 10',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
           ),

@@ -121,7 +121,7 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
               ),
               if (_selectedDate != null)
                 Text(
-                  formatDate(_selectedDate!),
+                  formatDate(_selectedDate!, context.strings.localeName),
                   style: AppTextStyle.subheadText.copyWith(
                     color: ColorPalette.lightColorBlue,
                   ),
@@ -201,21 +201,21 @@ class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
           PopupMenuItem(
             value: TaskPriority.none,
             child: Text(
-              TaskPriority.none.toNameString,
+              getLocalizedTaskPriority(context, TaskPriority.none),
               style: AppTextStyle.bodyText,
             ),
           ),
           PopupMenuItem(
             value: TaskPriority.low,
             child: Text(
-              TaskPriority.low.toNameString,
+              getLocalizedTaskPriority(context, TaskPriority.low),
               style: AppTextStyle.bodyText,
             ),
           ),
           PopupMenuItem(
             value: TaskPriority.high,
             child: Text(
-              TaskPriority.high.toNameString,
+              getLocalizedTaskPriority(context, TaskPriority.high),
               style: AppTextStyle.bodyText.copyWith(
                 color: ColorPalette.lightColorRed,
               ),
@@ -232,13 +232,24 @@ class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
         height: 28,
         alignment: Alignment.centerLeft,
         child: Text(
-          _selectedPriority.toNameString,
+          getLocalizedTaskPriority(context, _selectedPriority),
           style: const TextStyle(
             color: ColorPalette.lightLabelTertiary,
           ),
         ),
       ),
     );
+  }
+
+  String getLocalizedTaskPriority(BuildContext context, TaskPriority priority) {
+    switch (priority) {
+      case TaskPriority.none:
+        return context.strings.none;
+      case TaskPriority.low:
+        return context.strings.low;
+      case TaskPriority.high:
+        return context.strings.high;
+    }
   }
 }
 
@@ -284,9 +295,8 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {},
           child: Text(
             context.strings.saveCapsed,
-            style: const TextStyle(
-              color: ColorPalette.lightColorBlue,
-              fontWeight: FontWeight.w500,
+            style: AppTextStyle.buttonText.copyWith(
+              color: Theme.of(context).primaryColor,
             ),
           ),
         ),

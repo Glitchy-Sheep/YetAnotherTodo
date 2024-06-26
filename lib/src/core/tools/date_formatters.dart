@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart';
 
-String formatDate(DateTime date) {
+String formatDate(DateTime date, String locale) {
   return DateFormat(
     'dd MMMM yyyy',
-    'ru',
+    locale,
   ).format(date);
 }

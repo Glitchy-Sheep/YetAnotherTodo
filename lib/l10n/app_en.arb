@@ -6,6 +6,11 @@
     "finishUntil": "Finish until",
     "saveCapsed": "SAVE",
     "whatShouldBeDone": "What should be done...",
+
     "done": "Done",
-    "delete": "Delete"
+    "delete": "Delete",
+
+    "none": "None",
+    "low": "Low",
+    "high": "High"
 }
