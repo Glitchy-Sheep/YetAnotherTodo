@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/tools/app_localizations_alias.dart';
+
 class DynamicSliverAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
   final double collapsedHeight;
@@ -36,7 +38,7 @@ class DynamicSliverAppBar extends SliverPersistentHeaderDelegate {
           bottom: (46 - shrinkOffset).clamp(16, 46),
           left: (60 - shrinkOffset).clamp(16, 60),
           child: Text(
-            'Мои дела',
+            context.strings.myTodos,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontSize: (32 - shrinkOffset / 3).clamp(20, 32),
                 ),
@@ -52,7 +54,7 @@ class DynamicSliverAppBar extends SliverPersistentHeaderDelegate {
             child: Opacity(
               opacity: (1 - shrinkOffset / 20).clamp(0, 1),
               child: Text(
-                'Выполнено - 10',
+                '${context.strings.done} - 10',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Theme.of(context).colorScheme.tertiary,
                     ),
@@ -82,7 +84,6 @@ class VisibilityButton extends StatefulWidget {
 
   const VisibilityButton({required this.completedTasksVisibility, super.key});
 
-
   @override
   State<VisibilityButton> createState() => _VisibilityButtonState();
 }
@@ -92,10 +93,12 @@ class _VisibilityButtonState extends State<VisibilityButton> {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        setState(() {
-          widget.completedTasksVisibility.value =
-              !widget.completedTasksVisibility.value;
-        });
+        setState(
+          () {
+            widget.completedTasksVisibility.value =
+                !widget.completedTasksVisibility.value;
+          },
+        );
       },
       icon: Icon(
         widget.completedTasksVisibility.value

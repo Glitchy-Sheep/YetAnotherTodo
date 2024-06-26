@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/tools/app_localizations_alias.dart';
 import '../../../../core/tools/date_formatters.dart';
 import '../../../../core/tools/logger.dart';
 import '../../../../core/uikit/app_icons.dart';
@@ -27,28 +28,28 @@ class TodoCreateScreen extends StatelessWidget {
               children: [
                 Container(
                   margin: const EdgeInsets.all(16),
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _DescriptionInputArea(),
-                      SizedBox(height: 28),
+                      const _DescriptionInputArea(),
+                      const SizedBox(height: 28),
                       Text(
-                        'Важность',
+                        context.strings.importance,
                         style: AppTextStyle.bodyText,
                       ),
-                      _PriorityDropdownButton(),
-                      SizedBox(
+                      const _PriorityDropdownButton(),
+                      const SizedBox(
                         height: 16,
                       ),
-                      Divider(
+                      const Divider(
                         thickness: 1,
                         color: ColorPalette.lightSupportSeparator,
                         height: 16,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
-                      _DeadlineDatePicker(),
+                      const _DeadlineDatePicker(),
                     ],
                   ),
                 ),
@@ -63,15 +64,15 @@ class TodoCreateScreen extends StatelessWidget {
                   height: 50,
                   child: TextButton(
                     onPressed: () {},
-                    child: const Row(
+                    child: Row(
                       children: [
                         AppIcons.delete,
-                        SizedBox(
+                        const SizedBox(
                           width: 12,
                         ),
                         Text(
-                          'Удалить',
-                          style: TextStyle(
+                          context.strings.delete,
+                          style: const TextStyle(
                             color: ColorPalette.lightColorRed,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -111,8 +112,8 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Сделать до',
+              Text(
+                context.strings.finishUntil,
                 style: AppTextStyle.bodyText,
               ),
               const SizedBox(
@@ -252,7 +253,7 @@ class _DescriptionInputArea extends StatelessWidget {
       child: TextField(
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: 'Что надо сделать...',
+          hintText: context.strings.whatShouldBeDone,
           hintStyle: AppTextStyle.subheadText.copyWith(fontSize: 16),
         ),
         keyboardType: TextInputType.multiline,
@@ -281,9 +282,9 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         TextButton(
           onPressed: () {},
-          child: const Text(
-            'СОХРАНИТЬ',
-            style: TextStyle(
+          child: Text(
+            context.strings.saveCapsed,
+            style: const TextStyle(
               color: ColorPalette.lightColorBlue,
               fontWeight: FontWeight.w500,
             ),

@@ -1,0 +1,11 @@
+{
+    "@@locale": "en",
+
+    "myTodos": "My Todos",
+    "importance": "Importance",
+    "finishUntil": "Finish until",
+    "saveCapsed": "SAVE",
+    "whatShouldBeDone": "What should be done...",
+    "done": "Done",
+    "delete": "Delete"
+}
