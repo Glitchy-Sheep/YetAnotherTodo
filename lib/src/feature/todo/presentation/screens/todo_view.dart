@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/uikit/app_icons.dart';
-import '../../../../core/uikit/app_text_style.dart';
 import '../../../../core/uikit/colors.dart';
 import '../../domain/task.dart';
+import '../widgets/dynamic_appbar.dart';
 import '../widgets/task_tile.dart';
 import 'todo_create.dart';
 
@@ -13,16 +13,23 @@ class TodoViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: _AddTaskButton(
-        onPressed: () => onAddTaskPressed(context),
-      ),
-      backgroundColor: ColorPalette.ligthBackPrimary,
-      body: const SafeArea(
-        child: CustomScrollView(
+    return SafeArea(
+      child: Scaffold(
+        floatingActionButton: _AddTaskButton(
+          onPressed: () => onAddTaskPressed(context),
+        ),
+        backgroundColor: ColorPalette.ligthBackPrimary,
+        body: CustomScrollView(
           slivers: [
-            _TasksAppBar(),
-            SliverPadding(
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: DynamicSliverAppBar(
+                expandedHeight: 148,
+                collapsedHeight: 88,
+                completedTasksVisibility: ValueNotifier(true),
+              ),
+            ),
+            const SliverPadding(
               padding: EdgeInsets.all(16),
               sliver: _TaskList(),
             ),
@@ -59,39 +66,6 @@ class _AddTaskButton extends StatelessWidget {
           onPressed: onPressed,
           backgroundColor: ColorPalette.lightColorBlue,
           child: AppIcons.add,
-        ),
-      ),
-    );
-  }
-}
-
-class _TasksAppBar extends StatelessWidget {
-  static const _appBarSpaceHeight = 164.0;
-  static const _appBarCollapsedHeight = 88.0;
-  static const _appBarCollapseContentHeight = 80.0;
-
-  const _TasksAppBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverAppBar(
-      pinned: true,
-      shadowColor: Colors.black,
-      collapsedHeight: _appBarCollapsedHeight,
-      expandedHeight: _appBarSpaceHeight,
-      backgroundColor: ColorPalette.ligthBackPrimary,
-      surfaceTintColor: ColorPalette.ligthBackPrimary,
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: true,
-        expandedTitleScale: 1,
-        title: LayoutBuilder(
-          builder: (context, constraints) {
-            if (constraints.biggest.height >= _appBarCollapseContentHeight) {
-              return const _AppBarFullContent();
-            } else {
-              return const _AppBarCollapsedContent();
-            }
-          },
         ),
       ),
     );
@@ -136,69 +110,6 @@ class _TaskList extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
-  }
-}
-
-// The sliver app bar content when it is collapsed
-class _AppBarCollapsedContent extends StatelessWidget {
-  const _AppBarCollapsedContent();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsetsDirectional.only(
-        start: 16,
-        end: 24,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Мои дела',
-            style: AppTextStyle.mediumTitle,
-          ),
-          AppIcons.eyeIcon,
-        ],
-      ),
-    );
-  }
-}
-
-// The sliver app bar content when it's expanded
-class _AppBarFullContent extends StatelessWidget {
-  const _AppBarFullContent();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsetsDirectional.only(
-        start: 60,
-        end: 24,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Мои дела',
-            style: AppTextStyle.largeTitle,
-          ),
-          SizedBox(
-            height: 4,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Выполнено - 5',
-                style: AppTextStyle.subheadText,
-              ),
-              AppIcons.eyeIcon,
-            ],
-          ),
-        ],
       ),
     );
   }
