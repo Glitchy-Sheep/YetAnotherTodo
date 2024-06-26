@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/utils/date_formatters.dart';
+import '../../../../uikit/app_icons.dart';
 import '../../../../uikit/app_text_style.dart';
 import '../../../../uikit/colors.dart';
 import '../../domain/task.dart';
@@ -48,19 +49,13 @@ class _TaskTileState extends State<TaskTile> {
               ),
             );
           },
-          child: const Icon(
-            Icons.check,
-            color: ColorPalette.lightColorWhite,
-          ),
+          child: AppIcons.check,
         ),
       ),
       secondaryBackground: const _DismissContainer(
         dismissColor: ColorPalette.lightColorRed,
         alignment: Alignment.centerRight,
-        child: Icon(
-          Icons.close,
-          color: ColorPalette.lightColorWhite,
-        ),
+        child: AppIcons.closeWhite,
       ),
       child: _TaskContent(task: widget.task, subtitle: subtitle),
     );
@@ -115,10 +110,7 @@ class _TaskContent extends StatelessWidget {
           ),
         ],
       ),
-      trailing: const Icon(
-        Icons.info_outline,
-        color: ColorPalette.lightLabelTertiary,
-      ),
+      trailing: AppIcons.taskInfo,
       subtitle: subtitle,
     );
   }

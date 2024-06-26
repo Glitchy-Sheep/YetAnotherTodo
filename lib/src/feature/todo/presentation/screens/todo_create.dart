@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/utils/date_formatters.dart';
 import '../../../../core/utils/logger.dart';
+import '../../../../uikit/app_icons.dart';
 import '../../../../uikit/app_text_style.dart';
 import '../../../../uikit/colors.dart';
 import '../../domain/task.dart';
@@ -63,11 +64,7 @@ class TodoCreateScreen extends StatelessWidget {
                     onPressed: () {},
                     child: const Row(
                       children: [
-                        Icon(
-                          Icons.delete,
-                          color: ColorPalette.lightColorRed,
-                          size: 24,
-                        ),
+                        AppIcons.delete,
                         SizedBox(
                           width: 12,
                         ),
@@ -293,10 +290,7 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       backgroundColor: ColorPalette.ligthBackPrimary,
       leading: IconButton(
-        icon: const Icon(
-          Icons.close,
-          color: ColorPalette.lightLabelPrimary,
-        ),
+        icon: AppIcons.closeBlack,
         onPressed: () => Navigator.pop(context),
       ),
       actions: [

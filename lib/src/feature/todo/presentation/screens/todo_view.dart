@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../../../uikit/app_icons.dart';
 import '../../../../uikit/app_text_style.dart';
 import '../../../../uikit/colors.dart';
 import '../../domain/task.dart';
 import '../widgets/task_tile.dart';
 import 'todo_create.dart';
-
-
-const _eyeIcon = Icon(
-  Icons.remove_red_eye,
-  size: 24,
-  color: ColorPalette.lightColorBlue,
-);
 
 /// Main screen which shows the list of todos
 class TodoViewScreen extends StatelessWidget {
@@ -64,10 +58,7 @@ class _AddTaskButton extends StatelessWidget {
         child: FloatingActionButton(
           onPressed: onPressed,
           backgroundColor: ColorPalette.lightColorBlue,
-          child: const Icon(
-            Icons.add,
-            color: ColorPalette.lightColorWhite,
-          ),
+          child: AppIcons.add,
         ),
       ),
     );
@@ -168,7 +159,7 @@ class _AppBarCollapsedContent extends StatelessWidget {
             'Мои дела',
             style: AppTextStyle.mediumTitle,
           ),
-          _eyeIcon,
+          AppIcons.eyeIcon,
         ],
       ),
     );
@@ -204,7 +195,7 @@ class _AppBarFullContent extends StatelessWidget {
                 'Выполнено - 5',
                 style: AppTextStyle.subheadText,
               ),
-              _eyeIcon,
+              AppIcons.eyeIcon,
             ],
           ),
         ],
