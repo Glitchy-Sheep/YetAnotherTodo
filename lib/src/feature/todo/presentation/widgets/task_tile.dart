@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../core/utils/date_formatters.dart';
-import '../../../../uikit/app_icons.dart';
-import '../../../../uikit/app_text_style.dart';
-import '../../../../uikit/colors.dart';
+import '../../../../core/tools/date_formatters.dart';
+import '../../../../core/uikit/app_icons.dart';
+import '../../../../core/uikit/app_text_style.dart';
+import '../../../../core/uikit/colors.dart';
 import '../../domain/task.dart';
 import '../screens/todo_create.dart';
 

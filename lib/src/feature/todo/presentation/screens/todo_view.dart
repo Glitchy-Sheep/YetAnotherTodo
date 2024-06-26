@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../uikit/app_icons.dart';
-import '../../../../uikit/app_text_style.dart';
-import '../../../../uikit/colors.dart';
+import '../../../../core/uikit/app_icons.dart';
+import '../../../../core/uikit/app_text_style.dart';
+import '../../../../core/uikit/colors.dart';
 import '../../domain/task.dart';
 import '../widgets/task_tile.dart';
 import 'todo_create.dart';
