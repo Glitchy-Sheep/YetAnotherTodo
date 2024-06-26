@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../core/tools/app_localizations_alias.dart';
+import '../../../../core/tools/date_formatters.dart';
 import '../../../../core/uikit/app_icons.dart';
-import '../../../../core/uikit/app_text_style.dart';
-import '../../../../core/uikit/colors.dart';
 import '../../domain/task.dart';
 import 'dismiss_background.dart';
 import 'task_checkbox.dart';
@@ -25,20 +25,23 @@ class TaskTile extends StatefulWidget {
 class _TaskTileState extends State<TaskTile> {
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: UniqueKey(),
-      background: const DismissBackground(
-        dismissColor: ColorPalette.lightColorGreen,
-        alignment: Alignment.centerLeft,
-        child: AppIcons.check,
-      ),
-      secondaryBackground: const DismissBackground(
-        dismissColor: ColorPalette.lightColorRed,
-        alignment: Alignment.centerRight,
-        child: AppIcons.closeWhite,
-      ),
-      child: _TaskContent(
-        task: widget.task,
+    return ClipRRect(
+      clipBehavior: Clip.hardEdge,
+      child: Dismissible(
+        key: UniqueKey(),
+        background: DismissBackground(
+          dismissColor: Theme.of(context).colorScheme.secondary,
+          alignment: Alignment.centerLeft,
+          child: AppIcons.check,
+        ),
+        secondaryBackground: DismissBackground(
+          dismissColor: Theme.of(context).colorScheme.error,
+          alignment: Alignment.centerRight,
+          child: AppIcons.closeWhite,
+        ),
+        child: _TaskContent(
+          task: widget.task,
+        ),
       ),
     );
   }
@@ -96,7 +99,14 @@ class _TaskTitle extends StatelessWidget {
               'assets/icons/arrow_down.svg',
             ),
           ),
-        _TaskDescription(task: task),
+        Text(
+          task.description,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                decoration: task.isDone ? TextDecoration.lineThrough : null,
+                color:
+                    task.isDone ? Theme.of(context).colorScheme.tertiary : null,
+              ),
+        ),
       ],
     );
   }
@@ -110,30 +120,10 @@ class _TaskDeadlineSubtitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      task.description,
-      style: AppTextStyle.bodyText.copyWith(
-        decoration: task.isDone ? TextDecoration.lineThrough : null,
-        color: task.isDone ? ColorPalette.lightLabelTertiary : null,
-      ),
-    );
-  }
-}
-
-class _TaskDescription extends StatelessWidget {
-  final TaskEntity task;
-
-  const _TaskDescription({
-    required this.task,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      task.description,
-      style: AppTextStyle.bodyText.copyWith(
-        decoration: task.isDone ? TextDecoration.lineThrough : null,
-        color: task.isDone ? ColorPalette.lightLabelTertiary : null,
-      ),
+      formatDate(task.finishUntil!, context.strings.localeName),
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            decoration: task.isDone ? TextDecoration.lineThrough : null,
+          ),
     );
   }
 }

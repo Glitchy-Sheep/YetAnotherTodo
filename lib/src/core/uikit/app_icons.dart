@@ -46,6 +46,6 @@ abstract class AppIcons {
 
   static const Icon taskInfo = Icon(
     Icons.info_outline,
-    color: ColorPalette.lightLabelTertiary,
+    size: 24,
   );
 }

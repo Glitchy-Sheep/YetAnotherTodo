@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/tools/app_localizations_alias.dart';
 import '../../../../core/tools/date_formatters.dart';
-import '../../../../core/tools/logger.dart';
 import '../../../../core/uikit/app_icons.dart';
 import '../../../../core/uikit/app_text_style.dart';
 import '../../../../core/uikit/colors.dart';
@@ -14,27 +13,21 @@ class TodoCreateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: ColorPalette.ligthBackPrimary,
-      appBar: const _AddTaskAppBar(),
+      appBar: _AddTaskAppBar(),
       body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-            logger.i('Unfocus textfield');
-          },
-          child: const SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: TodoCreationForm(),
-                ),
-                SizedBox(height: 20),
-                Divider(),
-                _DeleteButton(),
-              ],
-            ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(16.0),
+                child: TodoCreationForm(),
+              ),
+              SizedBox(height: 20),
+              Divider(),
+              _DeleteButton(),
+            ],
           ),
         ),
       ),
@@ -83,8 +76,8 @@ class _DeleteButton extends StatelessWidget {
           ),
           Text(
             context.strings.delete,
-            style: const TextStyle(
-              color: ColorPalette.lightColorRed,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.error,
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
@@ -265,6 +258,7 @@ class _DescriptionInputArea extends StatelessWidget {
       decoration: AppDecorations.taskInputContainer,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: TextField(
+        onTapOutside: (event) => FocusScope.of(context).unfocus(),
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: context.strings.whatShouldBeDone,

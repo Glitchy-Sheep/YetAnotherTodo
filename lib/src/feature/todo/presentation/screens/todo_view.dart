@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/uikit/app_icons.dart';
-import '../../../../core/uikit/colors.dart';
 import '../../domain/task.dart';
 import '../widgets/dynamic_appbar.dart';
 import '../widgets/task_tile.dart';
@@ -13,13 +12,10 @@ class TodoViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: _AddTaskButton(
-        onPressed: () => onAddTaskPressed(context),
-      ),
-      backgroundColor: ColorPalette.ligthBackPrimary,
-      body: SafeArea(
-        child: CustomScrollView(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: CustomScrollView(
           slivers: [
             SliverPersistentHeader(
               pinned: true,
@@ -30,10 +26,13 @@ class TodoViewScreen extends StatelessWidget {
               ),
             ),
             const SliverPadding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               sliver: _TaskList(),
             ),
           ],
+        ),
+        floatingActionButton: _AddTaskFloatingActionButton(
+          onPressed: () => onAddTaskPressed(context),
         ),
       ),
     );
@@ -49,10 +48,10 @@ class TodoViewScreen extends StatelessWidget {
   }
 }
 
-class _AddTaskButton extends StatelessWidget {
+class _AddTaskFloatingActionButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
-  const _AddTaskButton({
+  const _AddTaskFloatingActionButton({
     required this.onPressed,
   });
 
@@ -64,7 +63,8 @@ class _AddTaskButton extends StatelessWidget {
       child: FittedBox(
         child: FloatingActionButton(
           onPressed: onPressed,
-          backgroundColor: ColorPalette.lightColorBlue,
+          backgroundColor:
+              Theme.of(context).floatingActionButtonTheme.backgroundColor,
           child: AppIcons.add,
         ),
       ),
@@ -78,13 +78,10 @@ class _TaskList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedSliver(
-      decoration: const BoxDecoration(
-        color: ColorPalette.lightBackElevated,
-        borderRadius: BorderRadius.all(
-          Radius.circular(8),
-        ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(8),
       ),
-      // Infinite list as a stub for the first stage
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (_, index) {

@@ -4,12 +4,17 @@ import 'app_text_style.dart';
 import 'colors.dart';
 
 abstract class AppThemeData {
+  // --------------------------
+  // LightTheme
+  // --------------------------
   static final lightTheme = ThemeData(
     useMaterial3: false,
 
+    brightness: Brightness.dark,
+
     // Basic color scheme
     colorScheme: const ColorScheme(
-      brightness: Brightness.light,
+      brightness: Brightness.dark,
       primary: ColorPalette.lightColorBlue,
       onPrimary: ColorPalette.lightColorWhite,
       secondary: ColorPalette.lightColorGreen,
@@ -18,22 +23,42 @@ abstract class AppThemeData {
       onError: ColorPalette.lightColorWhite,
       surface: ColorPalette.ligthBackPrimary,
       onSurface: ColorPalette.lightLabelPrimary,
+      tertiary: ColorPalette.lightLabelTertiary,
     ),
+
+    iconTheme: const IconThemeData(
+      color: ColorPalette.lightLabelTertiary,
+    ),
+
+    scaffoldBackgroundColor: ColorPalette.ligthBackPrimary,
+
     appBarTheme: const AppBarTheme(
       backgroundColor: ColorPalette.ligthBackPrimary,
+      surfaceTintColor: ColorPalette.ligthBackPrimary,
     ),
 
     // Typography
-    textTheme: const TextTheme(
-      titleLarge: AppTextStyle.largeTitle,
-      titleMedium: AppTextStyle.mediumTitle,
-      bodyMedium: AppTextStyle.bodyText,
-      bodySmall: AppTextStyle.subheadText,
-      bodyLarge: AppTextStyle.buttonText,
+    textTheme: TextTheme(
+      titleLarge: AppTextStyle.largeTitle.copyWith(
+        color: ColorPalette.lightLabelPrimary,
+      ),
+      titleMedium: AppTextStyle.mediumTitle.copyWith(
+        color: ColorPalette.lightLabelPrimary,
+      ),
+      bodyMedium: AppTextStyle.bodyText.copyWith(
+        color: ColorPalette.lightLabelPrimary,
+      ),
+      bodySmall: AppTextStyle.subheadText.copyWith(
+        color: ColorPalette.lightLabelTertiary,
+      ),
+      bodyLarge: AppTextStyle.buttonText.copyWith(
+        color: ColorPalette.lightLabelPrimary,
+      ),
     ),
 
     // Input decoration
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: ColorPalette.lightColorBlue,
       shape: CircleBorder(),
       sizeConstraints: BoxConstraints(
         minHeight: 56,
@@ -124,33 +149,62 @@ abstract class AppThemeData {
     ),
   );
 
+  // --------------------------
+  // Dark Theme
+  // --------------------------
+
   static final darkTheme = ThemeData(
     useMaterial3: false,
 
+    brightness: Brightness.light,
+
     // Basic color scheme
     colorScheme: const ColorScheme(
-      brightness: Brightness.dark,
+      brightness: Brightness.light,
       primary: ColorPalette.darkColorBlue,
       onPrimary: ColorPalette.darkColorWhite,
       secondary: ColorPalette.darkColorGreen,
       onSecondary: ColorPalette.darkColorWhite,
       error: ColorPalette.darkColorRed,
       onError: ColorPalette.darkColorWhite,
-      surface: ColorPalette.ligthBackPrimary,
-      onSurface: ColorPalette.darkBackPrimary,
+      surface: ColorPalette.darkBackSecondary,
+      onSurface: ColorPalette.darkLabelPrimary,
+      tertiary: ColorPalette.darkLabelTertiary,
+    ),
+
+    iconTheme: const IconThemeData(
+      color: ColorPalette.darkLabelTertiary,
+    ),
+
+    scaffoldBackgroundColor: ColorPalette.darkBackPrimary,
+
+    appBarTheme: const AppBarTheme(
+      backgroundColor: ColorPalette.darkBackSecondary,
+      surfaceTintColor: ColorPalette.darkBackPrimary,
     ),
 
     // Typography
-    textTheme: const TextTheme(
-      titleLarge: AppTextStyle.largeTitle,
-      titleMedium: AppTextStyle.mediumTitle,
-      bodyMedium: AppTextStyle.bodyText,
-      bodySmall: AppTextStyle.subheadText,
-      bodyLarge: AppTextStyle.buttonText,
+    textTheme: TextTheme(
+      titleLarge: AppTextStyle.largeTitle.copyWith(
+        color: ColorPalette.darkLabelPrimary,
+      ),
+      titleMedium: AppTextStyle.mediumTitle.copyWith(
+        color: ColorPalette.darkBackElevated,
+      ),
+      bodyMedium: AppTextStyle.bodyText.copyWith(
+        color: ColorPalette.darkLabelPrimary,
+      ),
+      bodySmall: AppTextStyle.subheadText.copyWith(
+        color: ColorPalette.darkLabelTertiary,
+      ),
+      bodyLarge: AppTextStyle.buttonText.copyWith(
+        color: ColorPalette.darkLabelPrimary,
+      ),
     ),
 
     // Input decoration
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: ColorPalette.darkColorBlue,
       shape: CircleBorder(),
       sizeConstraints: BoxConstraints(
         minHeight: 56,
@@ -212,6 +266,7 @@ abstract class AppThemeData {
     // List tile
     listTileTheme: const ListTileThemeData(
       horizontalTitleGap: 4.0,
+      iconColor: ColorPalette.darkLabelTertiary,
     ),
     dividerColor: ColorPalette.darkSupportSeparator,
     dividerTheme: const DividerThemeData(

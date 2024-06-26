@@ -17,12 +17,19 @@ class TaskCheckBox extends StatelessWidget {
     Color? fillColor;
     BorderSide? checkboxSide;
 
-    if (!task.isDone && task.priority == TaskPriority.high) {
-      fillColor = ColorPalette.lightColorRed.withOpacity(0.16);
-      checkboxSide = const BorderSide(
-        color: ColorPalette.lightColorRed,
-        width: 2,
-      );
+    if (!task.isDone) {
+      if (task.priority == TaskPriority.high) {
+        fillColor = Theme.of(context).colorScheme.error.withOpacity(0.16);
+        checkboxSide = BorderSide(
+          color: Theme.of(context).colorScheme.error,
+          width: 2,
+        );
+      } else {
+        checkboxSide = BorderSide(
+          color: Theme.of(context).dividerColor,
+          width: 2,
+        );
+      }
     }
 
     return Checkbox(

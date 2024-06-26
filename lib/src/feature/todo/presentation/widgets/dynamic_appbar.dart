@@ -30,9 +30,11 @@ class DynamicSliverAppBar extends SliverPersistentHeaderDelegate {
       children: [
         AppBar(
           scrolledUnderElevation: 4,
-          shadowColor: Theme.of(context).colorScheme.surface,
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          surfaceTintColor: Theme.of(context).colorScheme.surface,
+          backgroundColor: Color.lerp(
+            Theme.of(context).appBarTheme.backgroundColor,
+            Theme.of(context).appBarTheme.surfaceTintColor,
+            (1 - (shrinkOffset / expandedHeight)).clamp(0, 1),
+          ),
         ),
         Positioned(
           bottom: (46 - shrinkOffset).clamp(16, 46),

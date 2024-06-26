@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'colors.dart';
-
 /// App Text Style contains all
 /// typography styles used in the app
 
@@ -11,7 +9,6 @@ abstract class AppTextStyle {
     height: 38 / 32,
     fontWeight: FontWeight.w500,
     fontFamily: 'Roboto',
-    color: ColorPalette.lightLabelPrimary,
   );
 
   static const mediumTitle = TextStyle(
@@ -19,7 +16,6 @@ abstract class AppTextStyle {
     height: 32 / 20,
     fontWeight: FontWeight.w500,
     fontFamily: 'Roboto',
-    color: ColorPalette.lightLabelPrimary,
   );
 
   static const buttonText = TextStyle(
@@ -27,7 +23,6 @@ abstract class AppTextStyle {
     height: 24 / 14,
     fontWeight: FontWeight.w500,
     fontFamily: 'Roboto',
-    color: ColorPalette.lightLabelPrimary,
   );
 
   static const bodyText = TextStyle(
@@ -35,7 +30,6 @@ abstract class AppTextStyle {
     height: 20 / 16,
     fontWeight: FontWeight.w400,
     fontFamily: 'Roboto',
-    color: ColorPalette.lightLabelPrimary,
   );
 
   static const subheadText = TextStyle(
@@ -43,6 +37,5 @@ abstract class AppTextStyle {
     height: 20 / 14,
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w400,
-    color: ColorPalette.lightLabelTertiary,
   );
 }
