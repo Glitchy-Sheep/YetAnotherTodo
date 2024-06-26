@@ -17,7 +17,7 @@ abstract class AppThemeData {
       error: ColorPalette.lightColorRed,
       onError: ColorPalette.lightColorWhite,
       surface: ColorPalette.ligthBackPrimary,
-      onSurface: ColorPalette.ligthBackPrimary,
+      onSurface: ColorPalette.lightLabelPrimary,
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: ColorPalette.ligthBackPrimary,
@@ -83,13 +83,6 @@ abstract class AppThemeData {
           return ColorPalette.lightSupportOverlay;
         }
       }),
-      trackOutlineColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return Colors.transparent;
-        } else {
-          return ColorPalette.lightLabelTertiary;
-        }
-      }),
     ),
 
     // List tile
@@ -102,9 +95,32 @@ abstract class AppThemeData {
     ),
 
     // DatePicker (calendar)
-    datePickerTheme: const DatePickerThemeData(
+    datePickerTheme: DatePickerThemeData(
+      rangePickerElevation: 88,
       headerBackgroundColor: ColorPalette.lightColorBlue,
       headerForegroundColor: ColorPalette.lightColorWhite,
+      dayForegroundColor: WidgetStateColor.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return ColorPalette.lightColorWhite;
+          }
+          return ColorPalette.lightLabelPrimary;
+        },
+      ),
+      yearForegroundColor: WidgetStateColor.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return ColorPalette.lightColorWhite;
+          }
+          return ColorPalette.lightLabelPrimary;
+        },
+      ),
+      rangePickerHeaderForegroundColor: ColorPalette.lightLabelPrimary,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(16),
+        ),
+      ),
     ),
   );
 
@@ -205,7 +221,7 @@ abstract class AppThemeData {
     // DatePicker (calendar)
     datePickerTheme: const DatePickerThemeData(
       headerBackgroundColor: ColorPalette.darkColorBlue,
-      headerForegroundColor: ColorPalette.darkColorWhite,
+      headerForegroundColor: ColorPalette.darkLabelPrimary,
     ),
   );
 }

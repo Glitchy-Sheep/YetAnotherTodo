@@ -23,69 +23,73 @@ class TodoCreateScreen extends StatelessWidget {
             FocusScope.of(context).unfocus();
             logger.i('Unfocus textfield');
           },
-          child: SingleChildScrollView(
+          child: const SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const _DescriptionInputArea(),
-                      const SizedBox(height: 28),
-                      Text(
-                        context.strings.importance,
-                        style: AppTextStyle.bodyText,
-                      ),
-                      const _PriorityDropdownButton(),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      const Divider(
-                        thickness: 1,
-                        color: ColorPalette.lightSupportSeparator,
-                        height: 16,
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      const _DeadlineDatePicker(),
-                    ],
-                  ),
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: TodoCreationForm(),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Divider(
-                  thickness: 1,
-                  color: ColorPalette.lightSupportSeparator,
-                ),
-                SizedBox(
-                  height: 50,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Row(
-                      children: [
-                        AppIcons.delete,
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Text(
-                          context.strings.delete,
-                          style: const TextStyle(
-                            color: ColorPalette.lightColorRed,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                SizedBox(height: 20),
+                Divider(),
+                _DeleteButton(),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TodoCreationForm extends StatelessWidget {
+  const TodoCreationForm({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const _DescriptionInputArea(),
+        const SizedBox(height: 28),
+        Text(
+          context.strings.importance,
+          style: AppTextStyle.bodyText,
+        ),
+        const _PriorityDropdownButton(),
+        const SizedBox(height: 16),
+        const Divider(),
+        const SizedBox(height: 16),
+        const _DeadlineDatePicker(),
+      ],
+    );
+  }
+}
+
+class _DeleteButton extends StatelessWidget {
+  const _DeleteButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {},
+      child: Row(
+        children: [
+          AppIcons.delete,
+          const SizedBox(
+            width: 12,
+          ),
+          Text(
+            context.strings.delete,
+            style: const TextStyle(
+              color: ColorPalette.lightColorRed,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -116,16 +120,15 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
                 context.strings.finishUntil,
                 style: AppTextStyle.bodyText,
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              if (_selectedDate != null)
+              if (_selectedDate != null) ...[
+                const SizedBox(height: 10),
                 Text(
                   formatDate(_selectedDate!, context.strings.localeName),
                   style: AppTextStyle.subheadText.copyWith(
                     color: ColorPalette.lightColorBlue,
                   ),
                 ),
+              ],
             ],
           ),
         ),
@@ -133,15 +136,7 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
           width: 36,
           height: 20,
           child: Switch(
-            onChanged: (value) {
-              if (value) {
-                _onDeadlineDatePickerTap(context);
-              } else {
-                setState(() {
-                  _selectedDate = null;
-                });
-              }
-            },
+            onChanged: _onDeadlineSwitchChanged,
             value: _selectedDate != null,
           ),
         ),
@@ -149,19 +144,29 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
     );
   }
 
+  Future<void> _onDeadlineSwitchChanged(bool value) async {
+    if (value) {
+      await _onDeadlineDatePickerTap(context);
+    } else {
+      setState(() {
+        _selectedDate = null;
+      });
+    }
+  }
+
   Future<void> _onDeadlineDatePickerTap(BuildContext context) async {
     final date = await showDatePicker(
-      builder: (context, child) {
-        // Override theme to match exact color of the date picker
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: ColorPalette.lightColorBlue,
-            ),
-          ),
-          child: child!,
-        );
-      },
+      // builder: (context, child) {
+      //   // Override theme to match exact color of the date picker
+      //   return Theme(
+      //     data: Theme.of(context).copyWith(
+      //       colorScheme: const ColorScheme.light(
+      //         primary: ColorPalette.lightColorBlue,
+      //       ),
+      //     ),
+      //     child: child!,
+      //   );
+      // },
       context: context,
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(
@@ -233,9 +238,7 @@ class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
         alignment: Alignment.centerLeft,
         child: Text(
           getLocalizedTaskPriority(context, _selectedPriority),
-          style: const TextStyle(
-            color: ColorPalette.lightLabelTertiary,
-          ),
+          style: AppTextStyle.subheadText,
         ),
       ),
     );
@@ -267,9 +270,10 @@ class _DescriptionInputArea extends StatelessWidget {
           hintText: context.strings.whatShouldBeDone,
           hintStyle: AppTextStyle.subheadText.copyWith(fontSize: 16),
         ),
+        style: AppTextStyle.bodyText,
         keyboardType: TextInputType.multiline,
-        maxLines: 7,
         minLines: 4,
+        maxLines: null,
       ),
     );
   }

@@ -13,13 +13,13 @@ class TodoViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        floatingActionButton: _AddTaskButton(
-          onPressed: () => onAddTaskPressed(context),
-        ),
-        backgroundColor: ColorPalette.ligthBackPrimary,
-        body: CustomScrollView(
+    return Scaffold(
+      floatingActionButton: _AddTaskButton(
+        onPressed: () => onAddTaskPressed(context),
+      ),
+      backgroundColor: ColorPalette.ligthBackPrimary,
+      body: SafeArea(
+        child: CustomScrollView(
           slivers: [
             SliverPersistentHeader(
               pinned: true,
