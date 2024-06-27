@@ -43,6 +43,7 @@ abstract class AppIcons {
 
   static const Icon check = Icon(
     Icons.check,
+    color: ColorPalette.lightColorWhite,
   );
 
   static const Icon taskInfo = Icon(

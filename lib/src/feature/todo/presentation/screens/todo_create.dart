@@ -6,7 +6,7 @@ import '../../../../core/uikit/app_icons.dart';
 import '../../../../core/uikit/app_text_style.dart';
 import '../../../../core/uikit/colors.dart';
 import '../../../../core/uikit/decorations.dart';
-import '../../domain/task.dart';
+import '../../domain/entities/task_entity.dart';
 
 class TodoCreateScreen extends StatelessWidget {
   const TodoCreateScreen({super.key});

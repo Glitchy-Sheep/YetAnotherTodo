@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/tools/app_localizations_alias.dart';
 import '../../../../core/tools/date_formatters.dart';
 import '../../../../core/uikit/app_icons.dart';
-import '../../domain/task.dart';
+import '../../domain/entities/task_entity.dart';
 import 'dismiss_background.dart';
 import 'task_checkbox.dart';
 

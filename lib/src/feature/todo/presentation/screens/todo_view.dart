@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/uikit/app_icons.dart';
-import '../../domain/task.dart';
+import '../../domain/entities/task_entity.dart';
 import '../widgets/dynamic_appbar.dart';
 import '../widgets/task_tile.dart';
 import 'todo_create.dart';
