@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/tools/logger.dart';
-
 class AppScope extends InheritedWidget {
   final Dio dio;
 
