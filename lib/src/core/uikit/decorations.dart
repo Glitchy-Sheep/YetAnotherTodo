@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'colors.dart';
-
 abstract class AppDecorations {
   static const taskInputContainer = BoxDecoration(
-    color: ColorPalette.lightBackElevated,
     borderRadius: BorderRadius.all(
       Radius.circular(8),
     ),

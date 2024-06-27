@@ -20,7 +20,6 @@ abstract class AppIcons {
 
   static const Icon closeBlack = Icon(
     Icons.close,
-    color: ColorPalette.lightLabelPrimary,
   );
 
   static const Icon closeWhite = Icon(
@@ -28,20 +27,22 @@ abstract class AppIcons {
     color: ColorPalette.lightColorWhite,
   );
 
-  static const eyeIcon = Icon(
-    Icons.remove_red_eye,
+  static const visibleIcon = Icon(
+    Icons.visibility,
     size: 24,
-    color: ColorPalette.lightColorBlue,
+  );
+
+  static const hiddenIcon = Icon(
+    Icons.visibility_off,
+    size: 24,
   );
 
   static const Icon add = Icon(
     Icons.add,
-    color: ColorPalette.lightColorWhite,
   );
 
   static const Icon check = Icon(
     Icons.check,
-    color: ColorPalette.lightColorWhite,
   );
 
   static const Icon taskInfo = Icon(

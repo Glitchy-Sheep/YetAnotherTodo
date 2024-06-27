@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/tools/app_localizations_alias.dart';
+import '../../../../core/uikit/app_icons.dart';
 
 class DynamicSliverAppBar extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
@@ -100,12 +101,10 @@ class _VisibilityButtonState extends State<VisibilityButton> {
           },
         );
       },
-      icon: Icon(
-        widget.completedTasksVisibility.value
-            ? Icons.visibility_off
-            : Icons.visibility,
-        color: Theme.of(context).colorScheme.primary,
-      ),
+      icon: widget.completedTasksVisibility.value
+          ? AppIcons.visibleIcon
+          : AppIcons.hiddenIcon,
+      color: Theme.of(context).colorScheme.primary,
     );
   }
 }

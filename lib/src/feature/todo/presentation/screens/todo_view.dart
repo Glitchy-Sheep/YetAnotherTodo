@@ -26,7 +26,7 @@ class TodoViewScreen extends StatelessWidget {
               ),
             ),
             const SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.all(16),
               sliver: _TaskList(),
             ),
           ],
@@ -99,7 +99,7 @@ class _TaskList extends StatelessWidget {
               task: TaskEntity(
                 id: 1,
                 description: 'Нажать на галочку',
-                isDone: index % 2 == 0 ? true : false,
+                isDone: index.isEven,
                 finishUntil: index % 3 == 0 ? DateTime.now() : null,
                 priority: priority,
               ),

@@ -124,6 +124,12 @@ abstract class AppThemeData {
       rangePickerElevation: 88,
       headerBackgroundColor: ColorPalette.lightColorBlue,
       headerForegroundColor: ColorPalette.lightColorWhite,
+      backgroundColor: ColorPalette.lightBackSecondary,
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: AppTextStyle.subheadText.copyWith(
+          color: ColorPalette.lightLabelPrimary,
+        ),
+      ),
       dayForegroundColor: WidgetStateColor.resolveWith(
         (states) {
           if (states.contains(WidgetState.selected)) {
@@ -181,6 +187,9 @@ abstract class AppThemeData {
     appBarTheme: const AppBarTheme(
       backgroundColor: ColorPalette.darkBackSecondary,
       surfaceTintColor: ColorPalette.darkBackPrimary,
+      iconTheme: IconThemeData(
+        color: ColorPalette.darkLabelPrimary,
+      ),
     ),
 
     // Typography
@@ -189,7 +198,7 @@ abstract class AppThemeData {
         color: ColorPalette.darkLabelPrimary,
       ),
       titleMedium: AppTextStyle.mediumTitle.copyWith(
-        color: ColorPalette.darkBackElevated,
+        color: ColorPalette.darkLabelPrimary,
       ),
       bodyMedium: AppTextStyle.bodyText.copyWith(
         color: ColorPalette.darkLabelPrimary,
@@ -274,9 +283,38 @@ abstract class AppThemeData {
     ),
 
     // DatePicker (calendar)
-    datePickerTheme: const DatePickerThemeData(
+    datePickerTheme: DatePickerThemeData(
+      rangePickerElevation: 88,
       headerBackgroundColor: ColorPalette.darkColorBlue,
-      headerForegroundColor: ColorPalette.darkLabelPrimary,
+      headerForegroundColor: ColorPalette.darkColorWhite,
+      backgroundColor: ColorPalette.darkBackSecondary,
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: AppTextStyle.subheadText.copyWith(
+          color: ColorPalette.darkLabelPrimary,
+        ),
+      ),
+      dayForegroundColor: WidgetStateColor.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return ColorPalette.darkBackSecondary;
+          }
+          return ColorPalette.darkLabelPrimary;
+        },
+      ),
+      yearForegroundColor: WidgetStateColor.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return ColorPalette.darkBackSecondary;
+          }
+          return ColorPalette.darkLabelPrimary;
+        },
+      ),
+      rangePickerHeaderForegroundColor: ColorPalette.darkLabelPrimary,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(16),
+        ),
+      ),
     ),
   );
 }

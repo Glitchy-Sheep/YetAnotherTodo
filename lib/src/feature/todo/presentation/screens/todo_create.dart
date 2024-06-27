@@ -13,10 +13,10 @@ class TodoCreateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: ColorPalette.ligthBackPrimary,
-      appBar: _AddTaskAppBar(),
-      body: SafeArea(
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: const _AddTaskAppBar(),
+      body: const SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -71,9 +71,7 @@ class _DeleteButton extends StatelessWidget {
       child: Row(
         children: [
           AppIcons.delete,
-          const SizedBox(
-            width: 12,
-          ),
+          const SizedBox(width: 12),
           Text(
             context.strings.delete,
             style: TextStyle(
@@ -149,17 +147,6 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
 
   Future<void> _onDeadlineDatePickerTap(BuildContext context) async {
     final date = await showDatePicker(
-      // builder: (context, child) {
-      //   // Override theme to match exact color of the date picker
-      //   return Theme(
-      //     data: Theme.of(context).copyWith(
-      //       colorScheme: const ColorScheme.light(
-      //         primary: ColorPalette.lightColorBlue,
-      //       ),
-      //     ),
-      //     child: child!,
-      //   );
-      // },
       context: context,
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(
@@ -255,14 +242,19 @@ class _DescriptionInputArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: AppDecorations.taskInputContainer,
+      decoration: AppDecorations.taskInputContainer.copyWith(
+        color: Theme.of(context).colorScheme.surface,
+      ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: TextField(
         onTapOutside: (event) => FocusScope.of(context).unfocus(),
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: context.strings.whatShouldBeDone,
-          hintStyle: AppTextStyle.subheadText.copyWith(fontSize: 16),
+          hintStyle: AppTextStyle.subheadText.copyWith(
+            fontSize: 16,
+            color: Theme.of(context).colorScheme.tertiary,
+          ),
         ),
         style: AppTextStyle.bodyText,
         keyboardType: TextInputType.multiline,
@@ -283,7 +275,7 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: ColorPalette.ligthBackPrimary,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       leading: IconButton(
         icon: AppIcons.closeBlack,
         onPressed: () => Navigator.pop(context),
@@ -294,7 +286,7 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Text(
             context.strings.saveCapsed,
             style: AppTextStyle.buttonText.copyWith(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),
