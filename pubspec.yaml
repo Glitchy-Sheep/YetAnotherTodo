@@ -9,11 +9,13 @@ environment:
 description: A new Flutter project.
 
 dependencies:
+  bloc: ^8.1.4
   cupertino_icons: "^1.0.6"
 
   dio: ^5.4.3+1
   flutter:
     sdk: flutter
+  flutter_dotenv: ^5.1.0
   flutter_launcher_icons: "^0.13.1"
   flutter_localizations:
     sdk: flutter
@@ -33,6 +35,7 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
+    - config.env
     - assets/icons/
     - assets/app/
 

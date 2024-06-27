@@ -6,15 +6,11 @@ import '../../../core/tools/logger.dart';
 class AppScope extends InheritedWidget {
   final Dio dio;
 
-  AppScope({
+  const AppScope({
     required super.child,
     required this.dio,
     super.key,
-  }) {
-    dio.get('https://beta.mrdekk.ru/todo').then((value) {
-      logger.i('Got data: ${value.data}');
-    });
-  }
+  });
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
