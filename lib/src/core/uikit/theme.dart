@@ -10,11 +10,11 @@ abstract class AppThemeData {
   static final lightTheme = ThemeData(
     useMaterial3: false,
 
-    brightness: Brightness.dark,
+    brightness: Brightness.light,
 
     // Basic color scheme
     colorScheme: const ColorScheme(
-      brightness: Brightness.dark,
+      brightness: Brightness.light,
       primary: ColorPalette.lightColorBlue,
       onPrimary: ColorPalette.lightColorWhite,
       secondary: ColorPalette.lightColorGreen,
@@ -35,6 +35,9 @@ abstract class AppThemeData {
     appBarTheme: const AppBarTheme(
       backgroundColor: ColorPalette.ligthBackPrimary,
       surfaceTintColor: ColorPalette.ligthBackPrimary,
+      iconTheme: IconThemeData(
+        color: ColorPalette.lightLabelPrimary,
+      ),
     ),
 
     // Typography
@@ -162,11 +165,11 @@ abstract class AppThemeData {
   static final darkTheme = ThemeData(
     useMaterial3: false,
 
-    brightness: Brightness.light,
+    brightness: Brightness.dark,
 
     // Basic color scheme
     colorScheme: const ColorScheme(
-      brightness: Brightness.light,
+      brightness: Brightness.dark,
       primary: ColorPalette.darkColorBlue,
       onPrimary: ColorPalette.darkColorWhite,
       secondary: ColorPalette.darkColorGreen,
