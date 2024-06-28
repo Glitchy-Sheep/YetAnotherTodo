@@ -16,6 +16,7 @@ class AppDioConfigurator {
     required Iterable<Interceptor> interceptors,
     required String url,
     String? proxyUrl,
+    bool enableLog = true,
   }) {
     const timeout = Duration(seconds: 30);
 
@@ -49,7 +50,7 @@ class AppDioConfigurator {
 
     dio.interceptors.addAll(interceptors);
 
-    if (kDebugMode) {
+    if (kDebugMode && enableLog) {
       dio.interceptors.add(
         LogInterceptor(
           requestBody: true,
