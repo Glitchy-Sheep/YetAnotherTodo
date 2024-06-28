@@ -97,7 +97,7 @@ class _TaskList extends StatelessWidget {
 
             return TaskTile(
               task: TaskEntity(
-                id: 1,
+                id: '1',
                 description: 'Нажать на галочку',
                 isDone: index.isEven,
                 finishUntil: index % 3 == 0 ? DateTime.now() : null,

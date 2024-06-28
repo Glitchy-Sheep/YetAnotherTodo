@@ -1,23 +1,22 @@
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'task_entity.freezed.dart';
+
 /// Entity representing a task
 /// which can be done or undone ([isDone])
 /// and has a [description] that can be edited
 /// each [TaskEntity] can have an optional [finishUntil]
-class TaskEntity {
-  // For reordering in the list
-  final int id;
-  final String description;
-  final bool isDone;
-
-  final DateTime? finishUntil;
-  final TaskPriority? priority;
-
-  TaskEntity({
-    required this.id,
-    required this.description,
-    required this.isDone,
-    this.finishUntil,
-    this.priority,
-  });
+@freezed
+class TaskEntity with _$TaskEntity {
+  const factory TaskEntity({
+    // For reordering in the list
+    required String id,
+    required String description,
+    required bool isDone,
+    DateTime? finishUntil,
+    @Default(TaskPriority.none) TaskPriority priority,
+  }) = _TaskEntity;
 }
 
 /// Priority of the task
