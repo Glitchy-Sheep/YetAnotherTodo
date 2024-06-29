@@ -22,7 +22,13 @@ part 'database_impl.g.dart';
   ],
 )
 class AppDatabaseImpl extends _$AppDatabaseImpl {
-  AppDatabaseImpl() : super(_openConnection());
+  static final AppDatabaseImpl _instance = AppDatabaseImpl._internal();
+
+  AppDatabaseImpl._internal() : super(_openConnection());
+
+  factory AppDatabaseImpl() {
+    return _instance;
+  }
 
   AppDatabaseImpl.forTesting(super.e);
 
