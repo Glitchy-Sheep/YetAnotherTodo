@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
+
 import 'package:yet_another_todo/src/core/tools/app_localizations_alias.dart';
 import 'package:yet_another_todo/src/core/tools/logger.dart';
 import 'package:yet_another_todo/src/core/uikit/app_text_style.dart';
@@ -23,49 +23,56 @@ class TodoViewScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: CustomScrollView(
-          slivers: [
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: DynamicSliverAppBar(
-                expandedHeight: 148,
-                collapsedHeight: 88,
-                completedTasksVisibility: ValueNotifier(
-                  context.preferences.isCompletedTasksVissible,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            AppScope.of(context).todoBloc.add(
+                  const TodoEvent.loadTodos(),
+                );
+          },
+          child: CustomScrollView(
+            slivers: [
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: DynamicSliverAppBar(
+                  expandedHeight: 148,
+                  collapsedHeight: 88,
+                  completedTasksVisibility: ValueNotifier(
+                    context.preferences.isCompletedTasksVissible,
+                  ),
                 ),
               ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.all(16),
-              sliver: BlocBuilder<TodoBloc, TodoState>(
-                bloc: AppScope.of(context).todoBloc,
-                builder: (context, state) {
-                  return state.map(
-                    initial: (state) => const SliverToBoxAdapter(
-                      child: Center(
-                        child: CircularProgressIndicator(),
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: BlocBuilder<TodoBloc, TodoState>(
+                  bloc: AppScope.of(context).todoBloc,
+                  builder: (context, state) {
+                    return state.map(
+                      initial: (state) => const SliverToBoxAdapter(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
-                    ),
-                    loadingTasks: (state) => const SliverToBoxAdapter(
-                      child: Center(
-                        child: CircularProgressIndicator(),
+                      loadingTasks: (state) => const SliverToBoxAdapter(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
-                    ),
-                    tasksLoaded: (state) => DecoratedSliver(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: BorderRadius.circular(8),
+                      tasksLoaded: (state) => DecoratedSliver(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        sliver: _TaskList(tasks: state.tasks),
                       ),
-                      sliver: _TaskList(tasks: state.tasks),
-                    ),
-                    error: (state) => const SliverToBoxAdapter(
-                      child: Text('Error occurred'),
-                    ),
-                  );
-                },
+                      error: (state) => const SliverToBoxAdapter(
+                        child: Text('Error occurred'),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         floatingActionButton: _AddTaskFloatingActionButton(
           onPressed: () => onAddTaskPressed(context),
