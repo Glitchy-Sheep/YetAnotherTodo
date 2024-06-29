@@ -1,6 +1,6 @@
 import 'package:yet_another_todo/src/feature/todo/domain/entities/task_entity.dart';
 
-abstract interface class TodoRepository {
+abstract interface class TodoRepositoryApi {
   Future<List<TaskEntity>> getTodos();
   Future<TaskEntity?> getTodoById(int id);
   Future<void> addTodo(TaskEntity todo);

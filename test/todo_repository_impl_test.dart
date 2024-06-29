@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:yet_another_todo/src/core/api/dio_configuration.dart';
 import 'package:yet_another_todo/src/core/api/interceptors/auth_interceptor.dart';
 import 'package:yet_another_todo/src/core/tools/logger.dart';
-import 'package:yet_another_todo/src/feature/todo/data/repository/todo_repository_impl.dart';
+import 'package:yet_another_todo/src/feature/todo/data/repository/api_todo_repository_impl.dart';
 import 'package:yet_another_todo/src/feature/todo/domain/entities/task_entity.dart';
 
 import 'test_tools.dart';
@@ -23,7 +23,7 @@ void main() async {
     enableLog: false,
   );
 
-  final tasksRepository = TodoRepositoryImpl(
+  final tasksRepository = TodoRepositoryApiImpl(
     baseDioClient: dio,
   );
 

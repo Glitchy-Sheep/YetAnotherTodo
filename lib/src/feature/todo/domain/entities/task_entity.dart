@@ -24,6 +24,10 @@ enum TaskPriority {
   none,
   low,
   high;
+  // UPDATE IT ONLY TO THE END
+  // because it is used by database
+  // otherwise you'll need to write migrations:
+  // https://drift.simonbinder.eu/docs/advanced-features/type_converters/#implicit-enum-converters
 
   String get toNameString {
     return switch (this) {

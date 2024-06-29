@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:yet_another_todo/src/core/database/database.dart';
+import 'package:yet_another_todo/src/core/database/database_impl.dart';
 
 import '../../core/api/dio_configuration.dart';
 import '../../core/api/interceptors/auth_interceptor.dart';
@@ -26,7 +26,7 @@ class YetAnotherTodoApp extends StatelessWidget {
         ],
         url: dotenv.env['API_BASE_URL']!,
       ),
-      db: AppDatabase(),
+      db: AppDatabaseImpl(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppThemeData.lightTheme,

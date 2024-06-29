@@ -7,11 +7,11 @@ import 'package:yet_another_todo/src/feature/todo/data/models/get_todo_list_resp
 import 'package:yet_another_todo/src/feature/todo/domain/entities/task_entity.dart';
 import 'package:yet_another_todo/src/feature/todo/domain/repository/todo_repository.dart';
 
-class TodoRepositoryImpl implements TodoRepository {
+class TodoRepositoryApiImpl implements TodoRepositoryApi {
   final Dio _dioClient;
   final Dio _revisionDioClient;
 
-  TodoRepositoryImpl({
+  TodoRepositoryApiImpl({
     required Dio baseDioClient,
     // Make a copy of baseDioClient
   })  : _dioClient = baseDioClient,
