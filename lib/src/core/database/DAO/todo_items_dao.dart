@@ -15,10 +15,16 @@ class TodoDao extends DatabaseAccessor<AppDatabaseImpl> with _$TodoDaoMixin {
 
   // Create
   Future<void> insertTodoItem(TodoItem todoItem) =>
-      into(todoItems).insert(todoItem);
+      into(todoItems).insert(todoItem, mode: InsertMode.insertOrReplace);
 
   // Read
   Future<List<TodoItem>> getAllTodoItems() => select(todoItems).get();
+
+  Future<TodoItem?> getTodoById(String id) => (select(todoItems)
+        ..where(
+          (todo) => todo.id.equals(id),
+        ))
+      .getSingleOrNull();
 
   // Update
   Future<bool> updateTodoItem(TodoItem todoItem) =>
@@ -27,4 +33,9 @@ class TodoDao extends DatabaseAccessor<AppDatabaseImpl> with _$TodoDaoMixin {
   // Delete
   Future<int> deleteTodoItem(TodoItem todoItem) =>
       delete(todoItems).delete(todoItem);
+
+  Future<int> deleteAll() => delete(todoItems).go();
+
+  Future<void> deleteByTodoId(String id) =>
+      (delete(todoItems)..where((tbl) => tbl.id.equals(id))).go();
 }

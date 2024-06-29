@@ -24,6 +24,8 @@ part 'database_impl.g.dart';
 class AppDatabaseImpl extends _$AppDatabaseImpl {
   AppDatabaseImpl() : super(_openConnection());
 
+  AppDatabaseImpl.forTesting(super.e);
+
   @override
   int get schemaVersion => 1;
 }

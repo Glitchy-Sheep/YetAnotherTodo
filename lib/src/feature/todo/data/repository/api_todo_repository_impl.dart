@@ -5,7 +5,7 @@ import 'package:yet_another_todo/src/feature/todo/data/mappers/task_mapper.dart'
 import 'package:yet_another_todo/src/feature/todo/data/models/get_todo_by_id_response.dart';
 import 'package:yet_another_todo/src/feature/todo/data/models/get_todo_list_response.dart';
 import 'package:yet_another_todo/src/feature/todo/domain/entities/task_entity.dart';
-import 'package:yet_another_todo/src/feature/todo/domain/repository/todo_repository.dart';
+import 'package:yet_another_todo/src/feature/todo/domain/repository/api_todo_repository.dart';
 
 class TodoRepositoryApiImpl implements TodoRepositoryApi {
   final Dio _dioClient;
@@ -78,7 +78,7 @@ class TodoRepositoryApiImpl implements TodoRepositoryApi {
   }
 
   @override
-  Future<TaskEntity?> getTodoById(int id) async {
+  Future<TaskEntity?> getTodoById(String id) async {
     final response = await _dioClient.get(
       '/list/$id',
     );
