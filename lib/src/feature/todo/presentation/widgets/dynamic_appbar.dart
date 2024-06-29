@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yet_another_todo/src/feature/app/di/app_scope.dart';
+import 'package:yet_another_todo/src/feature/app/preferences.dart';
+import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc.dart';
 
 import '../../../../core/tools/app_localizations_alias.dart';
 import '../../../../core/uikit/app_icons.dart';
@@ -56,9 +60,22 @@ class DynamicSliverAppBar extends SliverPersistentHeaderDelegate {
             ),
             child: Opacity(
               opacity: (1 - shrinkOffset / 20).clamp(0, 1),
-              child: Text(
-                '${context.strings.done} - 10',
-                style: Theme.of(context).textTheme.bodySmall,
+              child: BlocBuilder<TodoBloc, TodoState>(
+                bloc: AppScope.of(context).todoBloc,
+                builder: (context, state) {
+                  return state.mapOrNull(
+                        tasksLoaded: (value) => Text(
+                          '${context.strings.done} - ${value.tasks.where((t) => t.isDone).length}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ) ??
+                      Container();
+
+                  // return Text(
+                  //   '${context.strings.done} - 10',
+                  //   style: Theme.of(context).textTheme.bodySmall,
+                  // );
+                },
               ),
             ),
           ),
@@ -96,6 +113,8 @@ class _VisibilityButtonState extends State<VisibilityButton> {
       onPressed: () {
         setState(
           () {
+            // Seems messy, should be refactored
+            context.preferences.toggleCompletedTasksVissible();
             widget.completedTasksVisibility.value =
                 !widget.completedTasksVisibility.value;
           },

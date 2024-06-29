@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yet_another_todo/src/core/database/database_impl.dart';
+import 'package:yet_another_todo/src/feature/app/preferences.dart';
 
 import '../../core/api/dio_configuration.dart';
 import '../../core/api/interceptors/auth_interceptor.dart';
@@ -12,7 +14,9 @@ import 'di/app_scope.dart';
 
 /// The entry point of the app
 class YetAnotherTodoApp extends StatelessWidget {
-  const YetAnotherTodoApp({super.key});
+  final SharedPreferences sharedPrefs;
+
+  const YetAnotherTodoApp({required this.sharedPrefs, super.key});
 
   // All the DI will be done in the [YetAnotherTodoApp] class
   @override
@@ -27,20 +31,23 @@ class YetAnotherTodoApp extends StatelessWidget {
         url: dotenv.env['API_BASE_URL']!,
       ),
       db: AppDatabaseImpl(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: AppThemeData.lightTheme,
-        darkTheme: AppThemeData.darkTheme,
-        // Override the default localization delegate
-        // so the app is consistent with its language.
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          AppLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: const TodoViewScreen(),
+      child: AppPreferencesScope(
+        preferences: sharedPrefs,
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: AppThemeData.lightTheme,
+          darkTheme: AppThemeData.darkTheme,
+          // Override the default localization delegate
+          // so the app is consistent with its language.
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            AppLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const TodoViewScreen(),
+        ),
       ),
     );
   }
