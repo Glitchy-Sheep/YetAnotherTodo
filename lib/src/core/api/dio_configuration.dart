@@ -29,11 +29,7 @@ class AppDioConfigurator {
       ..sendTimeout = timeout;
 
     (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
-      final client = HttpClient()
-        // Temporary decision to bypass SSL/TLS certificate verification
-        ..badCertificateCallback = (_, __, ___) {
-          return true;
-        };
+      final client = HttpClient();
 
       if (proxyUrl != null && proxyUrl.isNotEmpty) {
         client

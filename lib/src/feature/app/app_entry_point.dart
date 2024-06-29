@@ -23,7 +23,7 @@ class YetAnotherTodoApp extends StatelessWidget {
             token: dotenv.env['API_TOKEN']!,
           ),
         ],
-        url: 'https://beta.mrdekk.ru/todo',
+        url: dotenv.env['API_BASE_URL']!,
       ),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
