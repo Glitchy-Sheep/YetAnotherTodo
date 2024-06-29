@@ -1,12 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:yet_another_todo/src/core/database/database.dart';
 
 class AppScope extends InheritedWidget {
   final Dio dio;
+  final AppDatabase db;
 
   const AppScope({
     required super.child,
     required this.dio,
+    required this.db,
     super.key,
   });
 

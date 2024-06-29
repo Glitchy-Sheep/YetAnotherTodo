@@ -18,8 +18,10 @@ void main() {
   };
 
   runZonedGuarded(
-    () {
-      dotenv.load(fileName: 'config.env');
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+
+      await dotenv.load(fileName: 'config.env');
       logger.i('ENV FILE LOADED');
 
       // App entry point
