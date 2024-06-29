@@ -1,6 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:yet_another_todo/src/core/api/auth_interceptor.dart';
+import 'package:yet_another_todo/src/core/api/interceptors/auth_interceptor.dart';
 import 'package:yet_another_todo/src/core/api/dio_configuration.dart';
 import 'package:yet_another_todo/src/core/tools/logger.dart';
 import 'package:yet_another_todo/src/feature/todo/data/repository/todo_repository_impl.dart';

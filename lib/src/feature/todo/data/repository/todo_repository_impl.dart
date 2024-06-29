@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:yet_another_todo/src/core/api/last_known_revision_interceptor.dart';
+import 'package:yet_another_todo/src/core/api/interceptors/last_known_revision_interceptor.dart';
 import 'package:yet_another_todo/src/core/tools/logger.dart';
 import 'package:yet_another_todo/src/feature/todo/data/mappers/task_mapper.dart';
 import 'package:yet_another_todo/src/feature/todo/data/models/get_todo_by_id_response.dart';

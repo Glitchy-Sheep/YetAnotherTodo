@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import '../../core/api/auth_interceptor.dart';
+import '../../core/api/interceptors/auth_interceptor.dart';
 import '../../core/api/dio_configuration.dart';
 import '../../core/uikit/theme.dart';
 import '../todo/presentation/screens/todo_view.dart';
