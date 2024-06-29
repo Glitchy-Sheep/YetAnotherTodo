@@ -21,7 +21,7 @@ abstract class AppThemeData {
       onSecondary: ColorPalette.lightColorWhite,
       error: ColorPalette.lightColorRed,
       onError: ColorPalette.lightColorWhite,
-      surface: ColorPalette.ligthBackPrimary,
+      surface: ColorPalette.lightBackElevated,
       onSurface: ColorPalette.lightLabelPrimary,
       tertiary: ColorPalette.lightLabelTertiary,
     ),
@@ -115,7 +115,7 @@ abstract class AppThemeData {
 
     // List tile
     listTileTheme: const ListTileThemeData(
-      horizontalTitleGap: 4.0,
+      horizontalTitleGap: 4,
     ),
     dividerColor: ColorPalette.lightSupportSeparator,
     dividerTheme: const DividerThemeData(
@@ -277,7 +277,7 @@ abstract class AppThemeData {
 
     // List tile
     listTileTheme: const ListTileThemeData(
-      horizontalTitleGap: 4.0,
+      horizontalTitleGap: 4,
       iconColor: ColorPalette.darkLabelTertiary,
     ),
     dividerColor: ColorPalette.darkSupportSeparator,

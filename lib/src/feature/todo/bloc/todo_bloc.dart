@@ -9,6 +9,8 @@ part 'todo_event.dart';
 part 'todo_state.dart';
 part 'todo_bloc.freezed.dart';
 
+const String _loggerPrefix = '[BLoC - TODO]';
+
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   final TodoRepositoryApi todoRepositoryApi;
   final TodoRepositoryDb todoRepositoryDb;
@@ -30,18 +32,29 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     );
   }
 
-  Future<void> _onAddTodo(_AddTodo event, Emitter<TodoState> emit) async {}
+  Future<void> _onAddTodo(_AddTodo event, Emitter<TodoState> emit) async {
+    await todoRepositoryDb.addTodo(event.todoToAdd);
+  }
+
   Future<void> _onDeleteTodo(
       _DeleteTodo event, Emitter<TodoState> emit) async {}
+
   Future<void> _onEditTodo(_EditTodo event, Emitter<TodoState> emit) async {}
+
   Future<void> _onLoadTodo(_LoadTodo event, Emitter<TodoState> emit) async {
-    logger.i('Trying to load todos from db...');
+    logger.i('$_loggerPrefix: Loading todos from db...');
+
+    emit(const TodoState.loadingTasks());
+    final todos = await todoRepositoryDb.getTodos();
+    emit(TodoState.tasksLoaded(todos));
   }
 
   Future<void> _onMarkTodoAsDone(
       _MarkTodoAsDone event, Emitter<TodoState> emit) async {}
+
   Future<void> _onMarkTodoAsUndone(
       _MarkTodoAsUndone event, Emitter<TodoState> emit) async {}
+
   Future<void> _onSyncWithServer(
       _SyncWithServer event, Emitter<TodoState> emit) async {}
 }

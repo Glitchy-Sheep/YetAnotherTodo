@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
+import 'package:yet_another_todo/src/core/tools/app_localizations_alias.dart';
+import 'package:yet_another_todo/src/core/tools/logger.dart';
+import 'package:yet_another_todo/src/core/uikit/app_text_style.dart';
+import 'package:yet_another_todo/src/feature/app/di/app_scope.dart';
+import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc.dart';
+import 'package:yet_another_todo/src/feature/todo/domain/entities/task_entity.dart';
 
 import '../../../../core/uikit/app_icons.dart';
-import '../../domain/entities/task_entity.dart';
 import '../widgets/dynamic_appbar.dart';
 import '../widgets/task_tile.dart';
 import 'todo_create.dart';
@@ -25,9 +32,35 @@ class TodoViewScreen extends StatelessWidget {
                 completedTasksVisibility: ValueNotifier(true),
               ),
             ),
-            const SliverPadding(
-              padding: EdgeInsets.all(16),
-              sliver: _TaskList(),
+            SliverPadding(
+              padding: const EdgeInsets.all(16),
+              sliver: BlocBuilder<TodoBloc, TodoState>(
+                bloc: AppScope.of(context).todoBloc,
+                builder: (context, state) {
+                  return state.map(
+                    initial: (state) => const SliverToBoxAdapter(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    loadingTasks: (state) => const SliverToBoxAdapter(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    tasksLoaded: (state) => DecoratedSliver(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      sliver: _TaskList(tasks: state.tasks),
+                    ),
+                    error: (state) => const SliverToBoxAdapter(
+                      child: Text('Error occurred'),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -73,41 +106,88 @@ class _AddTaskFloatingActionButton extends StatelessWidget {
 }
 
 class _TaskList extends StatelessWidget {
-  const _TaskList();
+  const _TaskList({
+    required this.tasks,
+  });
+
+  final List<TaskEntity> tasks;
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedSliver(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (_, index) {
-            // Some stub data to show all the cases
-            final TaskPriority priority;
-            if (index % 3 == 0) {
-              priority = TaskPriority.high;
-            } else if (index % 4 == 0) {
-              priority = TaskPriority.low;
-            } else {
-              priority = TaskPriority.none;
-            }
-
-            return TaskTile(
-              task: TaskEntity(
-                id: '1',
-                description: 'Нажать на галочку',
-                isDone: index.isEven,
-                finishUntil: index % 3 == 0 ? DateTime.now() : null,
-                priority: priority,
-              ),
-              onCheck: (newValue) {},
-            );
-          },
+    return SliverMainAxisGroup(
+      slivers: [
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (_, index) {
+              return TaskTile(
+                task: tasks[index],
+                onCheck: (newValue) {
+                  // MarkTodoAsDone
+                },
+              );
+            },
+            childCount: tasks.length,
+          ),
         ),
+        const SliverToBoxAdapter(
+          child: _FastTaskCreationField(),
+        )
+      ],
+    );
+  }
+}
+
+class _FastTaskCreationField extends StatefulWidget {
+  const _FastTaskCreationField({super.key});
+
+  @override
+  State<_FastTaskCreationField> createState() => _FastTaskCreationFieldState();
+}
+
+class _FastTaskCreationFieldState extends State<_FastTaskCreationField> {
+  final textController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(
+        left: 52,
+        top: 12,
+        bottom: 12,
+        right: 12,
+      ),
+      child: TextField(
+        controller: textController,
+        decoration: InputDecoration.collapsed(
+          hintText: context.strings.newTodo,
+          hintStyle: AppTextStyle.subheadText,
+        ),
+        style: AppTextStyle.bodyText,
+        onSubmitted: (newValue) => onSubmitted(context, newValue),
       ),
     );
+  }
+
+  void onSubmitted(BuildContext context, String value) {
+    if (value.isEmpty) {
+      logger.i('Fast task creation cancelled (empty value)');
+      return;
+    }
+
+    logger.i('Fast task creation submitted');
+
+    AppScope.of(context).todoBloc
+      ..add(
+        TodoEvent.addTodo(
+          TaskEntity(
+            id: AppScope.of(context).uuidGenerator.v4(),
+            description: value,
+            isDone: false,
+          ),
+        ),
+      )
+      ..add(const TodoEvent.loadTodos());
+
+    textController.clear();
   }
 }

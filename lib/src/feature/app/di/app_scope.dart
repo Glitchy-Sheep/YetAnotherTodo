@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'package:yet_another_todo/src/core/database/database_impl.dart';
 import 'package:yet_another_todo/src/core/tools/logger.dart';
 import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc.dart';
@@ -11,6 +12,8 @@ import 'package:yet_another_todo/src/feature/todo/domain/repository/db_todo_repo
 class AppScope extends InheritedWidget {
   final TodoRepositoryApi _todoApiRepository;
   final TodoRepositoryDb _todoDbRepository;
+
+  final Uuid uuidGenerator = const Uuid();
 
   late final TodoBloc todoBloc;
 
@@ -24,7 +27,7 @@ class AppScope extends InheritedWidget {
     todoBloc = TodoBloc(
       todoRepositoryApi: _todoApiRepository,
       todoRepositoryDb: _todoDbRepository,
-    );
+    )..add(const TodoEvent.loadTodos());
 
     logger.i('App scope initialized');
   }
