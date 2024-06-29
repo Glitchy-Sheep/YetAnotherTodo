@@ -1,7 +1,8 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:yet_another_todo/src/core/api/interceptors/auth_interceptor.dart';
+
 import 'package:yet_another_todo/src/core/api/dio_configuration.dart';
+import 'package:yet_another_todo/src/core/api/interceptors/auth_interceptor.dart';
 import 'package:yet_another_todo/src/core/tools/logger.dart';
 import 'package:yet_another_todo/src/feature/todo/data/repository/todo_repository_impl.dart';
 import 'package:yet_another_todo/src/feature/todo/domain/entities/task_entity.dart';
@@ -67,14 +68,29 @@ void main() async {
 
     final todoToEdit = generateRandomTodoTask();
 
+    logger.i('$loggerPrefix: adding task to the backend');
     await tasksRepository.addTodo(todoToEdit);
 
+    logger.i('$loggerPrefix: get updated tasks on the backend');
     final allTasks = await tasksRepository.getTodos();
     expect(allTasks, contains(todoToEdit));
 
-    final editedTodo = todoToEdit.copyWith(isDone: !todoToEdit.isDone);
+    final isDoneBeforeUpdate = todoToEdit.isDone;
+    final expectedIsDoneAfterUpdate = !isDoneBeforeUpdate;
+    final editedTodo = todoToEdit.copyWith(isDone: expectedIsDoneAfterUpdate);
 
+    logger.i('$loggerPrefix: edit task on the backend');
     await tasksRepository.editTodo(todoToEdit.id, editedTodo);
+
+    logger.i('$loggerPrefix: get updated tasks on the backend');
+    final allTasksAfterEdit = await tasksRepository.getTodos();
+    final updatedTask = allTasksAfterEdit.firstWhere(
+      (element) => element.id == todoToEdit.id,
+    );
+    expect(updatedTask.isDone, expectedIsDoneAfterUpdate);
+    logger.i(
+      'task.isDone updated successfully from $isDoneBeforeUpdate -> $expectedIsDoneAfterUpdate',
+    );
   });
 
   test('delete all todos', () async {
