@@ -40,6 +40,14 @@ class _TaskTileState extends State<TaskTile> {
                 );
           } else if (direction == DismissDirection.startToEnd) {
             // Check as done and delete
+            // but there is no reason to mark it as done
+            // because the mechanism will delete it anyway
+            //
+            // I definitely can just toggle the checkbox
+            // but it would be strange, why do we need the checkbox itself then
+            AppScope.of(context).todoBloc.add(
+                  TodoEvent.deleteTodo(widget.task.id),
+                );
           }
         },
         background: DismissBackground(
