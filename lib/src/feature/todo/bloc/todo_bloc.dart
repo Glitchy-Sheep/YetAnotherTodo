@@ -35,8 +35,13 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     await todoRepositoryDb.addTodo(event.todoToAdd);
   }
 
-  Future<void> _onDeleteTodo(
-      _DeleteTodo event, Emitter<TodoState> emit) async {}
+  Future<void> _onDeleteTodo(_DeleteTodo event, Emitter<TodoState> emit) async {
+    await todoRepositoryDb.deleteTodo(event.id);
+
+    final todos = await todoRepositoryDb.getTodos();
+
+    emit(TodoState.tasksLoaded(todos));
+  }
 
   Future<void> _onEditTodo(_EditTodo event, Emitter<TodoState> emit) async {}
 

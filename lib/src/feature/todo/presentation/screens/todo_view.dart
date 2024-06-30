@@ -18,6 +18,14 @@ import 'todo_create.dart';
 class TodoViewScreen extends StatelessWidget {
   const TodoViewScreen({super.key});
 
+  // TODO: Something is slightly wrong with "update tasks" process,
+  // for some reason the screen blinks sometimes
+  //
+  // it happends on update tasks, I think it's because of rebuild during emits
+  // or something like that. I'm not sure how to fix it now.
+  //
+  // Maybe I need to pass key somewhere, but for now I'm not sure.
+  // If you know how to do it properly, please let me know.
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -141,6 +149,7 @@ class _TaskList extends StatelessWidget {
           delegate: SliverChildBuilderDelegate(
             (_, index) {
               return TaskTile(
+                key: ValueKey(tasks[index].id),
                 task: tasks[index],
                 onCheck: (newValue) {
                   // MarkTodoAsDone

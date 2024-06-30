@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:yet_another_todo/src/core/tools/logger.dart';
 import 'package:yet_another_todo/src/feature/app/di/app_scope.dart';
 import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc.dart';
 
@@ -30,7 +31,17 @@ class _TaskTileState extends State<TaskTile> {
     return ClipRRect(
       clipBehavior: Clip.hardEdge,
       child: Dismissible(
-        key: UniqueKey(),
+        key: ValueKey(widget.task.id),
+        onDismissed: (direction) {
+          if (direction == DismissDirection.endToStart) {
+            // Just delete
+            AppScope.of(context).todoBloc.add(
+                  TodoEvent.deleteTodo(widget.task.id),
+                );
+          } else if (direction == DismissDirection.startToEnd) {
+            // Check as done and delete
+          }
+        },
         background: DismissBackground(
           dismissColor: Theme.of(context).colorScheme.secondary,
           alignment: Alignment.centerLeft,
