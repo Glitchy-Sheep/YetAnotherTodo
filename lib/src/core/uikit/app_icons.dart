@@ -14,7 +14,6 @@ abstract class AppIcons {
 
   static const Icon delete = Icon(
     Icons.delete,
-    color: ColorPalette.lightColorRed,
     size: 24,
   );
 

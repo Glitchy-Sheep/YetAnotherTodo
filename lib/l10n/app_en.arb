@@ -14,5 +14,6 @@
     "low": "Low",
     "high": "High",
 
-    "newTodo": "New"
+    "newTodo": "New",
+    "enterDescription": "Enter the task description"
 }
