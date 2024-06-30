@@ -13,8 +13,6 @@ class AppScope extends InheritedWidget {
   final TodoRepositoryApi _todoApiRepository;
   final TodoRepositoryDb _todoDbRepository;
 
-  final Uuid uuidGenerator = const Uuid();
-
   late final TodoBloc todoBloc;
 
   AppScope({
