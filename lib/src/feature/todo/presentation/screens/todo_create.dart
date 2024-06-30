@@ -103,6 +103,8 @@ class _TodoCreateScreenState extends State<TodoCreateScreen> {
       return;
     }
 
+    logger.i('adding todo: $_editingTask');
+
     AppScope.of(context).todoBloc
       ..add(
         TodoEvent.addTodo(
@@ -204,7 +206,7 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
   late final ValueChanged<DateTime?> onDeadlineChanged =
       widget.onDeadlineChanged;
 
-  DateTime? selectedDate = DateTime.now();
+  DateTime? selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -251,6 +253,7 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
     } else {
       setState(() {
         selectedDate = null;
+        onDeadlineChanged(null);
       });
     }
   }
