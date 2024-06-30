@@ -70,4 +70,9 @@ class TodoRepositoryDbImpl implements TodoRepositoryDb {
         )
         .toList();
   }
+
+  @override
+  Future<void> deleteAllTodos() {
+    return _db.todoDao.deleteAll();
+  }
 }

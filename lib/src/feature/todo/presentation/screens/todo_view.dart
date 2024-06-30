@@ -35,7 +35,7 @@ class TodoViewScreen extends StatelessWidget {
         body: RefreshIndicator(
           onRefresh: () async {
             AppScope.of(context).todoBloc.add(
-                  const TodoEvent.loadTodos(),
+                  const TodoEvent.syncWithServer(),
                 );
           },
           child: CustomScrollView(

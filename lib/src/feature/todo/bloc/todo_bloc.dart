@@ -33,10 +33,12 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
   Future<void> _onAddTodo(_AddTodo event, Emitter<TodoState> emit) async {
     await todoRepositoryDb.addTodo(event.todoToAdd);
+    await todoRepositoryApi.addTodo(event.todoToAdd);
   }
 
   Future<void> _onDeleteTodo(_DeleteTodo event, Emitter<TodoState> emit) async {
     await todoRepositoryDb.deleteTodo(event.id);
+    await todoRepositoryApi.deleteTodo(event.id);
 
     final todos = await todoRepositoryDb.getTodos();
 
@@ -63,6 +65,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     final toggledTodo = todo.copyWith(isDone: !todo.isDone);
 
     await todoRepositoryDb.editTodo(toggledTodo.id, toggledTodo);
+    await todoRepositoryApi.editTodo(toggledTodo.id, toggledTodo);
 
     // Damn that's bad
     final todos = await todoRepositoryDb.getTodos();
@@ -71,5 +74,16 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   }
 
   Future<void> _onSyncWithServer(
-      _SyncWithServer event, Emitter<TodoState> emit) async {}
+      _SyncWithServer event, Emitter<TodoState> emit) async {
+    await todoRepositoryDb.deleteAllTodos();
+
+    final todosFromServer = await todoRepositoryApi.getTodos();
+
+    for (final todo in todosFromServer) {
+      logger.i('ADDING TODO FROM SERVER: $todo');
+      await todoRepositoryDb.addTodo(todo);
+    }
+
+    emit(TodoState.tasksLoaded(todosFromServer));
+  }
 }

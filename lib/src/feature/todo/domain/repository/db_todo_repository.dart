@@ -7,4 +7,5 @@ abstract interface class TodoRepositoryDb {
   Future<void> addTodo(TaskEntity todo);
   Future<void> editTodo(String id, TaskEntity todo);
   Future<void> deleteTodo(String id);
+  Future<void> deleteAllTodos();
 }
