@@ -25,8 +25,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         deleteTodo: (event) => _onDeleteTodo(event, emit),
         editTodo: (event) => _onEditTodo(event, emit),
         loadTodos: (event) => _onLoadTodo(event, emit),
-        markTodoAsDone: (event) => _onMarkTodoAsDone(event, emit),
-        markTodoAsUndone: (event) => _onMarkTodoAsUndone(event, emit),
+        toggleIsDone: (event) => _onMarkTodoAsDone(event, emit),
         syncWithServer: (event) => _onSyncWithServer(event, emit),
       ),
     );
@@ -50,10 +49,21 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   }
 
   Future<void> _onMarkTodoAsDone(
-      _MarkTodoAsDone event, Emitter<TodoState> emit) async {}
+      _ToggleIsDone event, Emitter<TodoState> emit) async {
+    final todo = await todoRepositoryDb.getTodoById(event.id);
+    if (todo == null) {
+      return;
+    }
 
-  Future<void> _onMarkTodoAsUndone(
-      _MarkTodoAsUndone event, Emitter<TodoState> emit) async {}
+    final toggledTodo = todo.copyWith(isDone: !todo.isDone);
+
+    await todoRepositoryDb.editTodo(toggledTodo.id, toggledTodo);
+
+    // Damn that's bad
+    final todos = await todoRepositoryDb.getTodos();
+
+    emit(TodoState.tasksLoaded(todos));
+  }
 
   Future<void> _onSyncWithServer(
       _SyncWithServer event, Emitter<TodoState> emit) async {}

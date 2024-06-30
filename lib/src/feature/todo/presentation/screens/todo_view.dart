@@ -46,6 +46,9 @@ class TodoViewScreen extends StatelessWidget {
                 sliver: BlocBuilder<TodoBloc, TodoState>(
                   bloc: AppScope.of(context).todoBloc,
                   builder: (context, state) {
+                    final isDoneTasksVisible =
+                        context.preferences.isCompletedTasksVissible;
+
                     return state.map(
                       initial: (state) => const SliverToBoxAdapter(
                         child: Center(
@@ -62,7 +65,15 @@ class TodoViewScreen extends StatelessWidget {
                           color: Theme.of(context).colorScheme.surface,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        sliver: _TaskList(tasks: state.tasks),
+                        sliver: _TaskList(
+                          tasks: isDoneTasksVisible
+                              ? state.tasks
+                              : state.tasks
+                                  .where(
+                                    (task) => !task.isDone,
+                                  )
+                                  .toList(),
+                        ),
                       ),
                       error: (state) => const SliverToBoxAdapter(
                         child: Text('Error occurred'),

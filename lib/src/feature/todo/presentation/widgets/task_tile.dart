@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:yet_another_todo/src/feature/app/di/app_scope.dart';
+import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc.dart';
 
 import '../../../../core/tools/app_localizations_alias.dart';
 import '../../../../core/tools/date_formatters.dart';
@@ -60,7 +62,19 @@ class _TaskContent extends StatelessWidget {
       horizontalTitleGap: 0,
       leading: TaskCheckBox(
         task: task,
-        onCheck: (newValue) async {},
+        onCheck: (newValue) async {
+          AppScope.of(context).todoBloc
+            ..add(
+              TodoEvent.toggleIsDone(
+                task.id,
+              ),
+            )
+            ..add(
+              // This is pretty bad, but now it is what it is...
+              // I'm gonna use it as a shortcut, later on we can refactor it
+              const TodoEvent.loadTodos(),
+            );
+        },
       ),
       title: _TaskTitle(task: task),
       trailing: AppIcons.taskInfo,

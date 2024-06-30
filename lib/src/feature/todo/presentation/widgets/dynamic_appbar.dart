@@ -117,6 +117,9 @@ class _VisibilityButtonState extends State<VisibilityButton> {
             context.preferences.toggleCompletedTasksVissible();
             widget.completedTasksVisibility.value =
                 !widget.completedTasksVisibility.value;
+
+            // Still pretty bad...
+            AppScope.of(context).todoBloc.add(const TodoEvent.loadTodos());
           },
         );
       },
