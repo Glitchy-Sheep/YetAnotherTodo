@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yet_another_todo/src/core/tools/logger.dart';
+import '../../core/tools/logger.dart';
 
 class AppPreferencesScope extends InheritedWidget {
   final SharedPreferences _preferences;

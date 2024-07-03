@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:yet_another_todo/src/core/api/interceptors/last_known_revision_interceptor.dart';
-import 'package:yet_another_todo/src/core/tools/logger.dart';
-import 'package:yet_another_todo/src/feature/todo/data/mappers/task_mapper.dart';
-import 'package:yet_another_todo/src/feature/todo/data/models/get_todo_by_id_response.dart';
-import 'package:yet_another_todo/src/feature/todo/data/models/get_todo_list_response.dart';
-import 'package:yet_another_todo/src/feature/todo/domain/entities/task_entity.dart';
-import 'package:yet_another_todo/src/feature/todo/domain/repository/api_todo_repository.dart';
+
+import '../../../../core/api/interceptors/last_known_revision_interceptor.dart';
+import '../../../../core/tools/logger.dart';
+import '../../domain/entities/task_entity.dart';
+import '../../domain/repository/api_todo_repository.dart';
+import '../mappers/task_mapper.dart';
+import '../models/get_todo_by_id_response.dart';
+import '../models/get_todo_list_response.dart';
 
 class TodoRepositoryApiImpl implements TodoRepositoryApi {
   final Dio _dioClient;

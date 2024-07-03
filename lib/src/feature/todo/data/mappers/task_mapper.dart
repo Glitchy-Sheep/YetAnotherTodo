@@ -1,7 +1,7 @@
 // task_mapper.dart
 
-import 'package:yet_another_todo/src/feature/todo/data/models/todo_model.dart';
-import 'package:yet_another_todo/src/feature/todo/domain/entities/task_entity.dart';
+import '../../domain/entities/task_entity.dart';
+import '../models/todo_model.dart';
 
 /// This class is responsible for mapping DataModels from Entity
 /// and vice versa, so we can easily use them in different places

@@ -1,11 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yet_another_todo/src/core/tools/logger.dart';
-import 'package:yet_another_todo/src/feature/app/di/app_scope.dart';
-import 'package:yet_another_todo/src/feature/todo/bloc/create_task_form_cubit.dart';
-import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc/todo_bloc.dart';
 
 import '../../../../core/tools/app_localizations_alias.dart';
 import '../../../../core/tools/date_formatters.dart';
@@ -13,6 +7,9 @@ import '../../../../core/uikit/app_icons.dart';
 import '../../../../core/uikit/app_text_style.dart';
 import '../../../../core/uikit/colors.dart';
 import '../../../../core/uikit/decorations.dart';
+import '../../../app/di/app_scope.dart';
+import '../../bloc/create_task_form_cubit.dart';
+import '../../bloc/todo_bloc/todo_bloc.dart';
 import '../../domain/entities/task_entity.dart';
 
 class TodoCreateScreen extends StatelessWidget {
@@ -126,7 +123,6 @@ class _DeleteButton extends StatelessWidget {
 class _DeadlineDatePicker extends StatelessWidget {
   const _DeadlineDatePicker({
     required this.selectedDate,
-    super.key,
   });
 
   final DateTime? selectedDate;
@@ -203,7 +199,6 @@ class _DeadlineDatePicker extends StatelessWidget {
 class _PriorityDropdownButton extends StatelessWidget {
   const _PriorityDropdownButton({
     required this.selectedPriority,
-    super.key,
   });
 
   final TaskPriority selectedPriority;

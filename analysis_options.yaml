@@ -8,8 +8,6 @@ analyzer:
     strict-casts: true
     strict-raw-types: true
   errors:
-    # Ignore because of: I use relative imports in all my code
-    always_use_package_imports: ignore
     avoid_dynamic_calls: error
     avoid_empty_else: error
     avoid_print: error
@@ -55,7 +53,6 @@ linter:
     unnecessary_late: true
 
     # Error rules.
-    always_use_package_imports: true
     avoid_dynamic_calls: true
     avoid_empty_else: true
     avoid_print: true
@@ -208,7 +205,7 @@ linter:
     prefer_mixin: true
     prefer_null_aware_method_calls: true
     prefer_null_aware_operators: true
-    prefer_relative_imports: false
+    prefer_relative_imports: true
     prefer_single_quotes: true
     prefer_spread_collections: true
     prefer_typing_uninitialized_variables: true

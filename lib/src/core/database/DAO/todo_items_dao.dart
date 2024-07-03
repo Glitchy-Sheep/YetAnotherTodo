@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:yet_another_todo/src/core/database/database_impl.dart';
-import 'package:yet_another_todo/src/core/database/tables/todo_items.dart';
+import '../database_impl.dart';
+import '../tables/todo_items.dart';
 
 part 'todo_items_dao.g.dart';
 

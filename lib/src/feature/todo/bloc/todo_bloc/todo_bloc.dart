@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:yet_another_todo/src/core/tools/logger.dart';
-import 'package:yet_another_todo/src/feature/todo/domain/entities/task_entity.dart';
-import 'package:yet_another_todo/src/feature/todo/domain/repository/api_todo_repository.dart';
-import 'package:yet_another_todo/src/feature/todo/domain/repository/db_todo_repository.dart';
+import '../../../../core/tools/logger.dart';
+import '../../domain/entities/task_entity.dart';
+import '../../domain/repository/api_todo_repository.dart';
+import '../../domain/repository/db_todo_repository.dart';
 
 part 'todo_event.dart';
 part 'todo_state.dart';

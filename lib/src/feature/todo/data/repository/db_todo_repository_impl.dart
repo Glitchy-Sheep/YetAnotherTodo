@@ -1,6 +1,6 @@
-import 'package:yet_another_todo/src/core/database/database_impl.dart';
-import 'package:yet_another_todo/src/feature/todo/domain/entities/task_entity.dart';
-import 'package:yet_another_todo/src/feature/todo/domain/repository/db_todo_repository.dart';
+import '../../../../core/database/database_impl.dart';
+import '../../domain/entities/task_entity.dart';
+import '../../domain/repository/db_todo_repository.dart';
 
 class TodoRepositoryDbImpl implements TodoRepositoryDb {
   final AppDatabaseImpl _db;

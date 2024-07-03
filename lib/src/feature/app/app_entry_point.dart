@@ -3,14 +3,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yet_another_todo/src/core/database/database_impl.dart';
-import 'package:yet_another_todo/src/feature/app/preferences.dart';
 
 import '../../core/api/dio_configuration.dart';
 import '../../core/api/interceptors/auth_interceptor.dart';
+import '../../core/database/database_impl.dart';
 import '../../core/uikit/theme.dart';
 import '../todo/presentation/screens/todo_view.dart';
 import 'di/app_scope.dart';
+import 'preferences.dart';
 
 /// The entry point of the app
 class YetAnotherTodoApp extends StatelessWidget {

@@ -7,9 +7,10 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3/sqlite3.dart' show sqlite3;
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
-import 'package:yet_another_todo/src/core/database/DAO/todo_items_dao.dart';
-import 'package:yet_another_todo/src/core/database/tables/todo_items.dart';
-import 'package:yet_another_todo/src/feature/todo/domain/entities/task_entity.dart';
+
+import '../../feature/todo/domain/entities/task_entity.dart';
+import 'DAO/todo_items_dao.dart';
+import 'tables/todo_items.dart';
 
 part 'database_impl.g.dart';
 
