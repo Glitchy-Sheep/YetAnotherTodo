@@ -28,12 +28,4 @@ enum TaskPriority {
   // because it is used by database
   // otherwise you'll need to write migrations:
   // https://drift.simonbinder.eu/docs/advanced-features/type_converters/#implicit-enum-converters
-
-  String get toNameString {
-    return switch (this) {
-      TaskPriority.none => 'Нет',
-      TaskPriority.low => 'Низкий',
-      TaskPriority.high => '!! Высокий'
-    };
-  }
 }
