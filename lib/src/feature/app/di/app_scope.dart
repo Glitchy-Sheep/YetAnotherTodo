@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:yet_another_todo/src/core/database/database_impl.dart';
 import 'package:yet_another_todo/src/core/tools/logger.dart';
-import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc.dart';
+import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc/todo_bloc.dart';
 import 'package:yet_another_todo/src/feature/todo/data/repository/api_todo_repository_impl.dart';
 import 'package:yet_another_todo/src/feature/todo/data/repository/db_todo_repository_impl.dart';
 import 'package:yet_another_todo/src/feature/todo/domain/repository/api_todo_repository.dart';

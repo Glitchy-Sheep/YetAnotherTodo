@@ -7,7 +7,7 @@ import 'package:yet_another_todo/src/core/tools/uuid_generator.dart';
 import 'package:yet_another_todo/src/core/uikit/app_text_style.dart';
 import 'package:yet_another_todo/src/feature/app/di/app_scope.dart';
 import 'package:yet_another_todo/src/feature/app/preferences.dart';
-import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc.dart';
+import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc/todo_bloc.dart';
 import 'package:yet_another_todo/src/feature/todo/domain/entities/task_entity.dart';
 
 import '../../../../core/uikit/app_icons.dart';

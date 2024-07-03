@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yet_another_todo/src/core/tools/logger.dart';
-import 'package:yet_another_todo/src/core/tools/uuid_generator.dart';
 import 'package:yet_another_todo/src/feature/app/di/app_scope.dart';
-import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc.dart';
+import 'package:yet_another_todo/src/feature/todo/bloc/create_task_form_cubit.dart';
+import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc/todo_bloc.dart';
 
 import '../../../../core/tools/app_localizations_alias.dart';
 import '../../../../core/tools/date_formatters.dart';
@@ -12,7 +15,7 @@ import '../../../../core/uikit/colors.dart';
 import '../../../../core/uikit/decorations.dart';
 import '../../domain/entities/task_entity.dart';
 
-class TodoCreateScreen extends StatefulWidget {
+class TodoCreateScreen extends StatelessWidget {
   const TodoCreateScreen({
     super.key,
     this.taskToEdit,
@@ -20,142 +23,69 @@ class TodoCreateScreen extends StatefulWidget {
 
   final TaskEntity? taskToEdit;
 
-  @override
-  State<TodoCreateScreen> createState() => _TodoCreateScreenState();
-}
-
-class _TodoCreateScreenState extends State<TodoCreateScreen> {
-  late final bool isNewTask;
-
-  late TaskEntity _editingTask;
-
-  @override
-  void initState() {
-    super.initState();
-
-    isNewTask = widget.taskToEdit == null;
-
-    if (widget.taskToEdit == null) {
-      _editingTask = TaskEntity(
-        id: UuidGenerator.v4(),
-        description: '',
-        isDone: false,
-        createdAt: DateTime.now(),
-        changedAt: DateTime.now(),
-      );
-    } else {
-      _editingTask = widget.taskToEdit!;
-    }
-  }
-
+  // late final bool isNewTask;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: _AddTaskAppBar(
-        onSubmit: onSubmit,
+    return BlocProvider(
+      create: (context) => CreateTaskFormCubit(
+        task: taskToEdit,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: TodoCreationForm(
-                  onDeadlineChanged: onDeadlineChanged,
-                  onDescriptionChanged: onDescriptionChanged,
-                  onPriorityChanged: onPriorityChanged,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        appBar: const _AddTaskAppBar(),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: TodoCreationForm(),
                 ),
-              ),
-              const SizedBox(height: 20),
-              const Divider(),
-              _DeleteButton(
-                isActive: !isNewTask,
-              ),
-            ],
+                const SizedBox(height: 20),
+                const Divider(),
+                _DeleteButton(isActive: taskToEdit != null),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-
-  void onDescriptionChanged(String description) {
-    _editingTask = _editingTask.copyWith(description: description);
-    logger.i('New description: ${_editingTask.description}');
-  }
-
-  void onPriorityChanged(TaskPriority priority) {
-    _editingTask = _editingTask.copyWith(priority: priority);
-    logger.i('New priority: ${_editingTask.priority}');
-  }
-
-  void onDeadlineChanged(DateTime? date) {
-    _editingTask = _editingTask.copyWith(finishUntil: date);
-    logger.i('New deadline: ${_editingTask.finishUntil}');
-  }
-
-  void onSubmit() {
-    if (_editingTask.description.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.strings.enterDescription),
-          duration: const Duration(milliseconds: 600),
-        ),
-      );
-      return;
-    }
-
-    logger.i('adding todo: $_editingTask');
-
-    AppScope.of(context).todoBloc
-      ..add(
-        TodoEvent.addTodo(
-          _editingTask,
-        ),
-      )
-      ..add(
-        const TodoEvent.loadTodos(),
-      );
-    Navigator.of(context).pop();
-  }
 }
 
 class TodoCreationForm extends StatelessWidget {
-  final ValueChanged<TaskPriority> onPriorityChanged;
-  final ValueChanged<String> onDescriptionChanged;
-  final ValueChanged<DateTime?> onDeadlineChanged;
-
   const TodoCreationForm({
-    required this.onPriorityChanged,
-    required this.onDescriptionChanged,
-    required this.onDeadlineChanged,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _DescriptionInputArea(
-          onDescriptionChanged: onDescriptionChanged,
-        ),
-        const SizedBox(height: 28),
-        Text(
-          context.strings.importance,
-          style: AppTextStyle.bodyText,
-        ),
-        _PriorityDropdownButton(
-          onPriorityChanged: onPriorityChanged,
-        ),
-        const SizedBox(height: 16),
-        const Divider(),
-        const SizedBox(height: 16),
-        _DeadlineDatePicker(
-          onDeadlineChanged: onDeadlineChanged,
-        ),
-      ],
+    return BlocBuilder<CreateTaskFormCubit, CreateTaskFormState>(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const _DescriptionInputArea(),
+            const SizedBox(height: 28),
+            const _PriorityLable(),
+            _PriorityDropdownButton(selectedPriority: state.priority),
+            const SizedBox(height: 16),
+            const Divider(),
+            const SizedBox(height: 16),
+            _DeadlineDatePicker(selectedDate: state.deadline),
+          ],
+        );
+      },
     );
+  }
+}
+
+class _PriorityLable extends StatelessWidget {
+  const _PriorityLable();
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(context.strings.importance, style: AppTextStyle.bodyText);
   }
 }
 
@@ -193,22 +123,13 @@ class _DeleteButton extends StatelessWidget {
   }
 }
 
-class _DeadlineDatePicker extends StatefulWidget {
-  final ValueChanged<DateTime?> onDeadlineChanged;
-
+class _DeadlineDatePicker extends StatelessWidget {
   const _DeadlineDatePicker({
-    required this.onDeadlineChanged,
+    required this.selectedDate,
+    super.key,
   });
 
-  @override
-  State<_DeadlineDatePicker> createState() => _DeadlineDatePickerState();
-}
-
-class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
-  late final ValueChanged<DateTime?> onDeadlineChanged =
-      widget.onDeadlineChanged;
-
-  DateTime? selectedDate;
+  final DateTime? selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +163,10 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
           width: 36,
           height: 20,
           child: Switch(
-            onChanged: onDeadlineSwitchChanged,
+            onChanged: (newValue) => onDeadlineSwitchChanged(
+              context,
+              newValue: newValue,
+            ),
             value: selectedDate != null,
           ),
         ),
@@ -250,14 +174,12 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
     );
   }
 
-  Future<void> onDeadlineSwitchChanged(bool value) async {
-    if (value) {
+  Future<void> onDeadlineSwitchChanged(BuildContext context,
+      {required bool newValue}) async {
+    if (newValue) {
       await onDeadlineDatePickerTap(context);
     } else {
-      setState(() {
-        selectedDate = null;
-        onDeadlineChanged(null);
-      });
+      context.read<CreateTaskFormCubit>().onDeadlineChanged(null);
     }
   }
 
@@ -271,31 +193,20 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
     );
 
     if (date != null) {
-      setState(() {
-        selectedDate = date;
-        onDeadlineChanged(date);
-      });
+      if (context.mounted) {
+        context.read<CreateTaskFormCubit>().onDeadlineChanged(date);
+      }
     }
   }
 }
 
-class _PriorityDropdownButton extends StatefulWidget {
-  final ValueChanged<TaskPriority> onPriorityChanged;
-
+class _PriorityDropdownButton extends StatelessWidget {
   const _PriorityDropdownButton({
-    required this.onPriorityChanged,
+    required this.selectedPriority,
+    super.key,
   });
 
-  @override
-  State<_PriorityDropdownButton> createState() =>
-      _PriorityDropdownButtonState();
-}
-
-class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
-  TaskPriority selectedPriority = TaskPriority.basic;
-
-  late final ValueChanged<TaskPriority> onPriorityChanged =
-      widget.onPriorityChanged;
+  final TaskPriority selectedPriority;
 
   @override
   Widget build(BuildContext context) {
@@ -332,12 +243,7 @@ class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
           ),
         ];
       },
-      onSelected: (value) {
-        setState(() {
-          selectedPriority = value;
-          onPriorityChanged(value);
-        });
-      },
+      onSelected: context.read<CreateTaskFormCubit>().onPriorityChanged,
       child: Container(
         height: 28,
         alignment: Alignment.centerLeft,
@@ -362,11 +268,7 @@ class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
 }
 
 class _DescriptionInputArea extends StatelessWidget {
-  const _DescriptionInputArea({
-    this.onDescriptionChanged,
-  });
-
-  final ValueChanged<String>? onDescriptionChanged;
+  const _DescriptionInputArea();
 
   @override
   Widget build(BuildContext context) {
@@ -376,7 +278,7 @@ class _DescriptionInputArea extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: TextField(
-        onChanged: onDescriptionChanged,
+        onChanged: context.read<CreateTaskFormCubit>().onDescriptionChanged,
         onTapOutside: (event) => FocusScope.of(context).unfocus(),
         decoration: InputDecoration(
           border: InputBorder.none,
@@ -396,14 +298,10 @@ class _DescriptionInputArea extends StatelessWidget {
 }
 
 class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final VoidCallback onSubmit;
-
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
-  const _AddTaskAppBar({
-    required this.onSubmit,
-  });
+  const _AddTaskAppBar();
 
   @override
   Widget build(BuildContext context) {
@@ -416,7 +314,7 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         TextButton(
-          onPressed: onSubmit,
+          onPressed: () => onSubmit(context),
           child: Text(
             context.strings.saveCapsed,
             style: AppTextStyle.buttonText.copyWith(
@@ -426,5 +324,22 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ],
     );
+  }
+
+  void onSubmit(BuildContext context) {
+    final formCubit = context.read<CreateTaskFormCubit>();
+
+    if (formCubit.isSubmitAllowed()) {
+      final todoToAdd = formCubit.toTaskEntity();
+
+      AppScope.of(context).todoBloc
+        ..add(
+          TodoEvent.addTodo(todoToAdd),
+        )
+        ..add(
+          const TodoEvent.loadTodos(),
+        );
+      Navigator.of(context).pop();
+    }
   }
 }

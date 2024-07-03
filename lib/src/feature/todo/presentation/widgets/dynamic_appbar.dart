@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yet_another_todo/src/feature/app/di/app_scope.dart';
 import 'package:yet_another_todo/src/feature/app/preferences.dart';
-import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc.dart';
+import 'package:yet_another_todo/src/feature/todo/bloc/todo_bloc/todo_bloc.dart';
 
 import '../../../../core/tools/app_localizations_alias.dart';
 import '../../../../core/uikit/app_icons.dart';
