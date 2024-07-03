@@ -17,5 +17,7 @@ TaskEntity generateRandomTodoTask() {
     id: id,
     description: 'Test task',
     isDone: false,
+    createdAt: DateTime.now(),
+    changedAt: DateTime.now(),
   );
 }

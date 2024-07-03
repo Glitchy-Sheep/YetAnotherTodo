@@ -14,16 +14,21 @@ class TaskEntity with _$TaskEntity {
     required String id,
     required String description,
     required bool isDone,
+    required DateTime createdAt,
+    required DateTime changedAt,
     DateTime? finishUntil,
-    @Default(TaskPriority.none) TaskPriority priority,
+    @Default(TaskPriority.basic) TaskPriority priority,
   }) = _TaskEntity;
 }
 
 /// Priority of the task
 enum TaskPriority {
-  none,
+  @JsonValue('basic')
+  basic,
+  @JsonValue('low')
   low,
-  high;
+  @JsonValue('important')
+  important;
   // UPDATE IT ONLY TO THE END
   // because it is used by database
   // otherwise you'll need to write migrations:

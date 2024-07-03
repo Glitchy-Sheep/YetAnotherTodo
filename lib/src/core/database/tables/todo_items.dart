@@ -8,6 +8,8 @@ class TodoItems extends Table {
   BoolColumn get isDone => boolean()();
   DateTimeColumn get deadline => dateTime().nullable()();
   IntColumn get priority => intEnum<TaskPriority>()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get changedAt => dateTime()();
 
   @override
   Set<Column> get primaryKey => {id};

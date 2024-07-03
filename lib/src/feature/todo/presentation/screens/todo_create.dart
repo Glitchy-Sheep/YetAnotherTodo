@@ -40,6 +40,8 @@ class _TodoCreateScreenState extends State<TodoCreateScreen> {
         id: UuidGenerator.v4(),
         description: '',
         isDone: false,
+        createdAt: DateTime.now(),
+        changedAt: DateTime.now(),
       );
     } else {
       _editingTask = widget.taskToEdit!;
@@ -289,7 +291,7 @@ class _PriorityDropdownButton extends StatefulWidget {
 }
 
 class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
-  TaskPriority selectedPriority = TaskPriority.none;
+  TaskPriority selectedPriority = TaskPriority.basic;
 
   late final ValueChanged<TaskPriority> onPriorityChanged =
       widget.onPriorityChanged;
@@ -305,9 +307,9 @@ class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
       itemBuilder: (context) {
         return [
           PopupMenuItem(
-            value: TaskPriority.none,
+            value: TaskPriority.basic,
             child: Text(
-              getLocalizedTaskPriority(context, TaskPriority.none),
+              getLocalizedTaskPriority(context, TaskPriority.basic),
               style: AppTextStyle.bodyText,
             ),
           ),
@@ -319,9 +321,9 @@ class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
             ),
           ),
           PopupMenuItem(
-            value: TaskPriority.high,
+            value: TaskPriority.important,
             child: Text(
-              getLocalizedTaskPriority(context, TaskPriority.high),
+              getLocalizedTaskPriority(context, TaskPriority.important),
               style: AppTextStyle.bodyText.copyWith(
                 color: ColorPalette.lightColorRed,
               ),
@@ -348,11 +350,11 @@ class _PriorityDropdownButtonState extends State<_PriorityDropdownButton> {
 
   String getLocalizedTaskPriority(BuildContext context, TaskPriority priority) {
     switch (priority) {
-      case TaskPriority.none:
+      case TaskPriority.basic:
         return context.strings.none;
       case TaskPriority.low:
         return context.strings.low;
-      case TaskPriority.high:
+      case TaskPriority.important:
         return context.strings.high;
     }
   }

@@ -16,6 +16,8 @@ class TodoRepositoryDbImpl implements TodoRepositoryDb {
         isDone: todo.isDone,
         priority: todo.priority,
         deadline: todo.finishUntil,
+        createdAt: todo.createdAt,
+        changedAt: todo.changedAt,
       ),
     );
   }
@@ -34,6 +36,8 @@ class TodoRepositoryDbImpl implements TodoRepositoryDb {
         isDone: todo.isDone,
         priority: todo.priority,
         deadline: todo.finishUntil,
+        createdAt: todo.createdAt,
+        changedAt: todo.changedAt,
       ),
     );
   }
@@ -51,6 +55,8 @@ class TodoRepositoryDbImpl implements TodoRepositoryDb {
       isDone: todo.isDone,
       priority: todo.priority,
       finishUntil: todo.deadline,
+      createdAt: todo.createdAt,
+      changedAt: todo.changedAt,
     );
   }
 
@@ -66,6 +72,8 @@ class TodoRepositoryDbImpl implements TodoRepositoryDb {
             isDone: todoItem.isDone,
             finishUntil: todoItem.deadline,
             priority: todoItem.priority,
+            createdAt: todoItem.createdAt,
+            changedAt: todoItem.changedAt,
           ),
         )
         .toList();

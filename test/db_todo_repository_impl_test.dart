@@ -32,6 +32,8 @@ void main() async {
         description: newTodo.description,
         isDone: newTodo.isDone,
         priority: newTodo.priority,
+        createdAt: newTodo.createdAt,
+        changedAt: newTodo.changedAt,
       ),
     );
 
@@ -50,6 +52,8 @@ void main() async {
         description: newTodo.description,
         isDone: newTodo.isDone,
         priority: newTodo.priority,
+        createdAt: newTodo.createdAt,
+        changedAt: newTodo.changedAt,
       ),
     );
 
@@ -69,6 +73,8 @@ void main() async {
       description: editedTodo.description,
       isDone: editedTodo.isDone,
       priority: editedTodo.priority,
+      createdAt: editedTodo.createdAt,
+      changedAt: editedTodo.changedAt,
     ));
 
     final todoAfterEdit = await db.todoDao.getTodoById(newTodo.id);
@@ -89,6 +95,8 @@ void main() async {
         description: newTodo.description,
         isDone: newTodo.isDone,
         priority: newTodo.priority,
+        createdAt: newTodo.createdAt,
+        changedAt: newTodo.changedAt,
       ),
     );
 
@@ -118,6 +126,8 @@ void main() async {
           description: newTodo.description,
           isDone: newTodo.isDone,
           priority: newTodo.priority,
+          createdAt: newTodo.createdAt,
+          changedAt: newTodo.changedAt,
         ),
       );
 

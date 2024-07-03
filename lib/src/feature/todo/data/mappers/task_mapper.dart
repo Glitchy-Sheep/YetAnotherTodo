@@ -12,7 +12,9 @@ class TaskMapper {
       description: model.text,
       isDone: model.isDone,
       finishUntil: model.deadline,
-      priority: _mapPriority(model.importance),
+      priority: model.importance,
+      changedAt: model.changedAtUnixTimestamp,
+      createdAt: model.createdAtUnixTimestamp,
     );
   }
 
@@ -20,30 +22,13 @@ class TaskMapper {
     return TodoModel(
       id: entity.id,
       text: entity.description,
-      importance: _mapImportance(entity.priority),
+      importance: entity.priority,
       deadline: entity.finishUntil,
       isDone: entity.isDone,
       color: null,
-      createdAtUnixTimestamp: DateTime.now().millisecondsSinceEpoch,
-      changedAtUnixTimestamp: DateTime.now().millisecondsSinceEpoch,
+      createdAtUnixTimestamp: entity.createdAt,
+      changedAtUnixTimestamp: entity.changedAt,
       lastUpdatedBy: 'device_id',
     );
-  }
-
-  static TaskPriority _mapPriority(String importance) {
-    return switch (importance) {
-      'low' => TaskPriority.low,
-      'important' => TaskPriority.high,
-      'basic' => TaskPriority.none,
-      _ => TaskPriority.none
-    };
-  }
-
-  static String _mapImportance(TaskPriority priority) {
-    return switch (priority) {
-      TaskPriority.low => 'low',
-      TaskPriority.high => 'important',
-      TaskPriority.none => 'basic',
-    };
   }
 }

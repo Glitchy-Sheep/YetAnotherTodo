@@ -10,7 +10,7 @@ import '../../domain/entities/task_entity.dart';
 import 'dismiss_background.dart';
 import 'task_checkbox.dart';
 
-class TaskTile extends StatefulWidget {
+class TaskTile extends StatelessWidget {
   final TaskEntity task;
   final ValueChanged<bool?> onCheck;
 
@@ -21,21 +21,16 @@ class TaskTile extends StatefulWidget {
   });
 
   @override
-  State<TaskTile> createState() => _TaskTileState();
-}
-
-class _TaskTileState extends State<TaskTile> {
-  @override
   Widget build(BuildContext context) {
     return ClipRRect(
       clipBehavior: Clip.hardEdge,
       child: Dismissible(
-        key: ValueKey(widget.task.id),
+        key: ValueKey(task.id),
         onDismissed: (direction) {
           if (direction == DismissDirection.endToStart) {
             // Just delete
             AppScope.of(context).todoBloc.add(
-                  TodoEvent.deleteTodo(widget.task.id),
+                  TodoEvent.deleteTodo(task.id),
                 );
           } else if (direction == DismissDirection.startToEnd) {
             // Check as done and delete
@@ -45,7 +40,7 @@ class _TaskTileState extends State<TaskTile> {
             // I definitely can just toggle the checkbox
             // but it would be strange, why do we need the checkbox itself then
             AppScope.of(context).todoBloc.add(
-                  TodoEvent.deleteTodo(widget.task.id),
+                  TodoEvent.deleteTodo(task.id),
                 );
           }
         },
@@ -60,7 +55,7 @@ class _TaskTileState extends State<TaskTile> {
           child: AppIcons.closeWhite,
         ),
         child: _TaskContent(
-          task: widget.task,
+          task: task,
         ),
       ),
     );
@@ -117,7 +112,7 @@ class _TaskTitle extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        if (task.priority == TaskPriority.high)
+        if (task.priority == TaskPriority.important)
           Padding(
             padding: const EdgeInsets.only(right: 4),
             child: SvgPicture.asset(

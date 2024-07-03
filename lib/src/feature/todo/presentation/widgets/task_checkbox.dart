@@ -18,7 +18,7 @@ class TaskCheckBox extends StatelessWidget {
     BorderSide? checkboxSide;
 
     if (!task.isDone) {
-      if (task.priority == TaskPriority.high) {
+      if (task.priority == TaskPriority.important) {
         fillColor = Theme.of(context).colorScheme.error.withOpacity(0.16);
         checkboxSide = BorderSide(
           color: Theme.of(context).colorScheme.error,

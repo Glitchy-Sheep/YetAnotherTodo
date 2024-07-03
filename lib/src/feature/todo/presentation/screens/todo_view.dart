@@ -169,7 +169,7 @@ class _TaskList extends StatelessWidget {
 }
 
 class _FastTaskCreationField extends StatefulWidget {
-  const _FastTaskCreationField({super.key});
+  const _FastTaskCreationField();
 
   @override
   State<_FastTaskCreationField> createState() => _FastTaskCreationFieldState();
@@ -214,6 +214,8 @@ class _FastTaskCreationFieldState extends State<_FastTaskCreationField> {
             id: UuidGenerator.v4(),
             description: value,
             isDone: false,
+            createdAt: DateTime.now(),
+            changedAt: DateTime.now(),
           ),
         ),
       )
