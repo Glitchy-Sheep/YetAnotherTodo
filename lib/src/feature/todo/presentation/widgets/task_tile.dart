@@ -147,7 +147,8 @@ class _TaskDeadlineSubtitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      formatDate(task.finishUntil!, context.strings.localeName),
+      DateFormatters.toDayMonthYear(
+          task.finishUntil!, context.strings.localeName),
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
             decoration: task.isDone ? TextDecoration.lineThrough : null,
           ),

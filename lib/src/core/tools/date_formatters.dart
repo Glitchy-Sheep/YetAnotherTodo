@@ -1,8 +1,10 @@
 import 'package:intl/intl.dart';
 
-String formatDate(DateTime date, String locale) {
-  return DateFormat(
-    'dd MMMM yyyy',
-    locale,
-  ).format(date);
+abstract class DateFormatters {
+  static String toDayMonthYear(DateTime date, String locale) {
+    return DateFormat(
+      'dd MMMM yyyy',
+      locale,
+    ).format(date);
+  }
 }

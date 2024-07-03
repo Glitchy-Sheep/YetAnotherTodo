@@ -228,7 +228,8 @@ class _DeadlineDatePickerState extends State<_DeadlineDatePicker> {
               if (selectedDate != null) ...[
                 const SizedBox(height: 10),
                 Text(
-                  formatDate(selectedDate!, context.strings.localeName),
+                  DateFormatters.toDayMonthYear(
+                      selectedDate!, context.strings.localeName),
                   style: AppTextStyle.subheadText.copyWith(
                     color: ColorPalette.lightColorBlue,
                   ),
