@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'src/core/database/database_impl.dart';
 import 'src/core/tools/logger.dart';
 import 'src/feature/app/app_entry_point.dart';
 
@@ -26,9 +27,13 @@ void main() {
       logger.i('ENV FILE LOADED');
 
       final sharedPrefs = await SharedPreferences.getInstance();
+      final db = AppDatabaseImpl();
 
       // App entry point
-      runApp(YetAnotherTodoApp(sharedPrefs: sharedPrefs));
+      runApp(YetAnotherTodoApp(
+        sharedPrefs: sharedPrefs,
+        db: db
+      ));
     },
     (error, stackTrace) {
       logger.e('$error \n $stackTrace \n');

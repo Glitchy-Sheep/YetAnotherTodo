@@ -15,8 +15,13 @@ import 'preferences.dart';
 /// The entry point of the app
 class YetAnotherTodoApp extends StatelessWidget {
   final SharedPreferences sharedPrefs;
+  final AppDatabaseImpl db;
 
-  const YetAnotherTodoApp({required this.sharedPrefs, super.key});
+  const YetAnotherTodoApp({
+    required this.db,
+    required this.sharedPrefs,
+    super.key,
+  });
 
   // All the DI will be done in the [YetAnotherTodoApp] class
   @override
@@ -30,7 +35,7 @@ class YetAnotherTodoApp extends StatelessWidget {
         ],
         url: dotenv.env['API_BASE_URL']!,
       ),
-      db: AppDatabaseImpl(),
+      db: db,
       child: AppPreferencesScope(
         preferences: sharedPrefs,
         child: MaterialApp(
