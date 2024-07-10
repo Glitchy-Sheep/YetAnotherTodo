@@ -20,7 +20,7 @@ class TodoCreateScreen extends StatelessWidget {
     this.taskToEdit,
   });
 
-  static const String routeName = '/todo_create';
+  static const String routeName = '/create';
 
   final TaskEntity? taskToEdit;
 
