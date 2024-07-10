@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,8 +16,12 @@ import '../widgets/task_tile.dart';
 import 'todo_create.dart';
 
 /// Main screen which shows the list of todos
+
+@RoutePage()
 class TodoViewScreen extends StatelessWidget {
   const TodoViewScreen({super.key});
+
+  static const String routeName = '/tasks';
 
   // TODO: Something is slightly wrong with "update tasks" process,
   // for some reason the screen blinks sometimes
@@ -101,12 +106,7 @@ class TodoViewScreen extends StatelessWidget {
   }
 
   void onAddTaskPressed(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute<TodoCreateScreen>(
-        builder: (context) => const TodoCreateScreen(),
-      ),
-    );
+    context.router.pushNamed(TodoCreateScreen.routeName);
   }
 }
 

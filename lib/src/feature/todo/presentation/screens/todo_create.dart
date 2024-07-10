@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,11 +13,14 @@ import '../../bloc/create_task_form_cubit.dart';
 import '../../bloc/todo_bloc/todo_bloc.dart';
 import '../../domain/entities/task_entity.dart';
 
+@RoutePage()
 class TodoCreateScreen extends StatelessWidget {
   const TodoCreateScreen({
     super.key,
     this.taskToEdit,
   });
+
+  static const String routeName = '/todo_create';
 
   final TaskEntity? taskToEdit;
 
@@ -305,7 +309,7 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       leading: IconButton(
         icon: AppIcons.closeBlack,
-        onPressed: () => Navigator.pop(context),
+        onPressed: () => context.router.maybePop(),
       ),
       actions: [
         TextButton(

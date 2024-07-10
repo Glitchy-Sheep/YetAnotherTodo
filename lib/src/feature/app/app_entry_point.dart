@@ -7,8 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/api/dio_configuration.dart';
 import '../../core/api/interceptors/auth_interceptor.dart';
 import '../../core/database/database_impl.dart';
+import '../../core/router/router.dart';
 import '../../core/uikit/theme.dart';
-import '../todo/presentation/screens/todo_view.dart';
 import 'di/app_scope.dart';
 import 'preferences.dart';
 
@@ -16,12 +16,13 @@ import 'preferences.dart';
 class YetAnotherTodoApp extends StatelessWidget {
   final SharedPreferences sharedPrefs;
   final AppDatabaseImpl db;
+  final AppRouter _appRouter;
 
-  const YetAnotherTodoApp({
+  YetAnotherTodoApp({
     required this.db,
     required this.sharedPrefs,
     super.key,
-  });
+  }) : _appRouter = AppRouter();
 
   // All the DI will be done in the [YetAnotherTodoApp] class
   @override
@@ -38,7 +39,8 @@ class YetAnotherTodoApp extends StatelessWidget {
       db: db,
       child: AppPreferencesScope(
         preferences: sharedPrefs,
-        child: MaterialApp(
+        child: MaterialApp.router(
+          routerConfig: _appRouter.config(),
           debugShowCheckedModeBanner: false,
           theme: AppThemeData.lightTheme,
           darkTheme: AppThemeData.darkTheme,
@@ -51,7 +53,6 @@ class YetAnotherTodoApp extends StatelessWidget {
             AppLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const TodoViewScreen(),
         ),
       ),
     );
