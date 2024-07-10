@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../../core/tools/logger.dart';
-import '../../../core/tools/uuid_generator.dart';
-import '../domain/entities/task_entity.dart';
+import '../../../../core/tools/logger.dart';
+import '../../../../core/tools/uuid_generator.dart';
+import '../../domain/entities/task_entity.dart';
 
 part 'create_task_form_cubit.freezed.dart';
 
