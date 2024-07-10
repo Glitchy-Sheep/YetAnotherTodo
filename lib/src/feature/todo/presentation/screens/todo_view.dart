@@ -19,10 +19,10 @@ class TodoViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: RefreshIndicator(
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SafeArea(
+        child: RefreshIndicator(
           onRefresh: () async {
             AppScope.of(context).todoBloc.add(
                   const TodoEvent.syncWithServer(),
@@ -84,9 +84,9 @@ class TodoViewScreen extends StatelessWidget {
             ],
           ),
         ),
-        floatingActionButton: _AddTaskFloatingActionButton(
-          onPressed: () => onAddTaskPressed(context),
-        ),
+      ),
+      floatingActionButton: _AddTaskFloatingActionButton(
+        onPressed: () => onAddTaskPressed(context),
       ),
     );
   }
