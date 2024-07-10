@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/uikit/colors.dart';
+import '../../../../core/uikit/uikit.dart';
 import '../../domain/entities/task_entity.dart';
 
 class TaskCheckBox extends StatelessWidget {

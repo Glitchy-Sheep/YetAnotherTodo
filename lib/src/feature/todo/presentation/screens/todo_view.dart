@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/router/router.dart';
-import '../../../../core/tools/app_localizations_alias.dart';
-import '../../../../core/tools/logger.dart';
-import '../../../../core/tools/uuid_generator.dart';
-import '../../../../core/uikit/app_icons.dart';
-import '../../../../core/uikit/app_text_style.dart';
+import '../../../../core/tools/tools.dart';
+import '../../../../core/uikit/uikit.dart';
 import '../../../app/di/app_scope.dart';
 import '../../../app/preferences.dart';
 import '../../bloc/todo_bloc/todo_bloc.dart';

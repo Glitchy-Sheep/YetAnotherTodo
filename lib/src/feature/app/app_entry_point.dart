@@ -8,7 +8,7 @@ import '../../core/api/dio_configuration.dart';
 import '../../core/api/interceptors/auth_interceptor.dart';
 import '../../core/database/database_impl.dart';
 import '../../core/router/router.dart';
-import '../../core/uikit/theme.dart';
+import '../../core/uikit/uikit.dart';
 import 'di/app_scope.dart';
 import 'preferences.dart';
 

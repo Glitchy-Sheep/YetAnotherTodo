@@ -2,12 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/tools/app_localizations_alias.dart';
-import '../../../../core/tools/date_formatters.dart';
-import '../../../../core/uikit/app_icons.dart';
-import '../../../../core/uikit/app_text_style.dart';
-import '../../../../core/uikit/colors.dart';
-import '../../../../core/uikit/decorations.dart';
+import '../../../../core/tools/tools.dart';
+import '../../../../core/uikit/uikit.dart';
 import '../../../app/di/app_scope.dart';
 import '../../bloc/create_task_form/create_task_form_cubit.dart';
 import '../../bloc/todo_bloc/todo_bloc.dart';

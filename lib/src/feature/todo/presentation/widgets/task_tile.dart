@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../core/tools/app_localizations_alias.dart';
-import '../../../../core/tools/date_formatters.dart';
-import '../../../../core/uikit/app_icons.dart';
+import '../../../../core/tools/tools.dart';
+import '../../../../core/uikit/uikit.dart';
 import '../../../app/di/app_scope.dart';
 import '../../bloc/todo_bloc/todo_bloc.dart';
 import '../../domain/entities/task_entity.dart';
