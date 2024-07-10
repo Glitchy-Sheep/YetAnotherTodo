@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../feature/todo/domain/entities/task_entity.dart';
 import '../../feature/todo/presentation/screens/todo_create.dart';
 import '../../feature/todo/presentation/screens/todo_view.dart';
+import 'paths.dart';
 
 part 'router.gr.dart';
 
@@ -11,7 +12,14 @@ part 'router.gr.dart';
 class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(path: TodoViewScreen.routeName, page: TodoViewRoute.page, initial: true),
-        AutoRoute(path: TodoCreateScreen.routeName, page: TodoCreateRoute.page),
+        AutoRoute(
+          page: TodoViewRoute.page,
+          path: AppRouterPaths.homeTodo,
+          initial: true,
+        ),
+        AutoRoute(
+          page: TodoCreateRoute.page,
+          path: AppRouterPaths.createTodo,
+        ),
       ];
 }

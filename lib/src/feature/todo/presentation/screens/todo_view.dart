@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/router/router.dart';
 import '../../../../core/tools/app_localizations_alias.dart';
 import '../../../../core/tools/logger.dart';
 import '../../../../core/tools/uuid_generator.dart';
@@ -13,7 +14,6 @@ import '../../bloc/todo_bloc/todo_bloc.dart';
 import '../../domain/entities/task_entity.dart';
 import '../widgets/dynamic_appbar.dart';
 import '../widgets/task_tile.dart';
-import 'todo_create.dart';
 
 /// Main screen which shows the list of todos
 
@@ -106,7 +106,8 @@ class TodoViewScreen extends StatelessWidget {
   }
 
   void onAddTaskPressed(BuildContext context) {
-    context.router.pushNamed(TodoCreateScreen.routeName);
+    logger.i('Pushed create route');
+    context.router.push(TodoCreateRoute());
   }
 }
 
