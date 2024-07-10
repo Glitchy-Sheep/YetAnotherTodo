@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../core/tools/tools.dart';
+import '../../../app/app_settings.dart';
 import '../../domain/entities/task_entity.dart';
 import '../../domain/repository/api_todo_repository.dart';
 import '../../domain/repository/db_todo_repository.dart';
@@ -14,10 +15,12 @@ const String _loggerPrefix = '[BLoC - TODO]';
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   final TodoRepositoryApi todoRepositoryApi;
   final TodoRepositoryDb todoRepositoryDb;
+  final AppSettingsRepository appSettingsRepository;
 
   TodoBloc({
     required this.todoRepositoryApi,
     required this.todoRepositoryDb,
+    required this.appSettingsRepository,
   }) : super(const _Initial()) {
     on<TodoEvent>(
       (event, emit) => event.map<Future<void>>(

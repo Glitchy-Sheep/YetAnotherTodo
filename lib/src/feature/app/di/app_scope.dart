@@ -27,6 +27,7 @@ class AppScope extends InheritedWidget {
     todoBloc = TodoBloc(
       todoRepositoryApi: _todoApiRepository,
       todoRepositoryDb: _todoDbRepository,
+      appSettingsRepository: _appSettingsRepository,
     );
   }
 
