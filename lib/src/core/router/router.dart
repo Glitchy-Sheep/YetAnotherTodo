@@ -14,12 +14,16 @@ class AppRouter extends _$AppRouter {
   List<AutoRoute> get routes => [
         AutoRoute(
           page: TodoViewRoute.page,
-          path: AppRouterPaths.homeTodo,
+          path: AppRouterPaths.homeTodoView,
           initial: true,
         ),
         AutoRoute(
           page: TodoCreateRoute.page,
-          path: AppRouterPaths.createTodo,
+          path: AppRouterPaths.createNewTodo,
         ),
+        AutoRoute(
+          page: TodoCreateRoute.page,
+          path: AppRouterPaths.editTodo,
+        )
       ];
 }

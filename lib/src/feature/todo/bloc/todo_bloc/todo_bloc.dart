@@ -79,6 +79,13 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     emit(TodoState.tasksLoaded(todos));
   }
 
+  /// Sync `Todo` tasks with server by this algorithm:
+  /// ------------------------------------------------------
+  /// 1. Get updated list of `Todo` tasks + revision update
+  /// 2. Merge new Todos with existing ones in DB
+  /// 3. Doing stuff locally from time to time (without sync and connection)
+  /// 4. When we need to sync with server, form a PATCH request with all the current changes
+  /// 5. Send PATCH request and wait for server response in which we have updated data
   Future<void> _onSyncWithServer(
       _SyncWithServer event, Emitter<TodoState> emit) async {
     await todoRepositoryDb.deleteAllTodos();

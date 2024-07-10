@@ -1,4 +1,5 @@
 abstract class AppRouterPaths {
-  static const String homeTodo = '/todo';
-  static const String createTodo = '$homeTodo/create';
+  static const String homeTodoView = '/my_todos';
+  static const String createNewTodo = '$homeTodoView/new';
+  static const String editTodo = '$homeTodoView/:id';
 }
