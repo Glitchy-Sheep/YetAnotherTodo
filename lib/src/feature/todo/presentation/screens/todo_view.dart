@@ -6,7 +6,6 @@ import '../../../../core/router/router.dart';
 import '../../../../core/tools/tools.dart';
 import '../../../../core/uikit/uikit.dart';
 import '../../../app/di/app_scope.dart';
-import '../../../app/preferences.dart';
 import '../../bloc/todo_bloc/todo_bloc.dart';
 import '../../domain/entities/task_entity.dart';
 import '../widgets/dynamic_appbar.dart';
@@ -20,14 +19,6 @@ class TodoViewScreen extends StatelessWidget {
 
   static const String routeName = '/tasks';
 
-  // TODO: Something is slightly wrong with "update tasks" process,
-  // for some reason the screen blinks sometimes
-  //
-  // it happends on update tasks, I think it's because of rebuild during emits
-  // or something like that. I'm not sure how to fix it now.
-  //
-  // Maybe I need to pass key somewhere, but for now I'm not sure.
-  // If you know how to do it properly, please let me know.
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -47,7 +38,7 @@ class TodoViewScreen extends StatelessWidget {
                   expandedHeight: 148,
                   collapsedHeight: 88,
                   completedTasksVisibility: ValueNotifier(
-                    context.preferences.isCompletedTasksVissible,
+                    context.settings.isCompletedTasksVissible,
                   ),
                 ),
               ),
@@ -57,7 +48,7 @@ class TodoViewScreen extends StatelessWidget {
                   bloc: AppScope.of(context).todoBloc,
                   builder: (context, state) {
                     final isDoneTasksVisible =
-                        context.preferences.isCompletedTasksVissible;
+                        context.settings.isCompletedTasksVissible;
 
                     return state.map(
                       initial: (state) => const SliverToBoxAdapter(

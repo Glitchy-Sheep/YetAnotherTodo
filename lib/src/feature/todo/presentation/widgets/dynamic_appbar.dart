@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/tools/app_localizations_alias.dart';
 import '../../../../core/uikit/uikit.dart';
 import '../../../app/di/app_scope.dart';
-import '../../../app/preferences.dart';
 import '../../bloc/todo_bloc/todo_bloc.dart';
 
 class DynamicSliverAppBar extends SliverPersistentHeaderDelegate {
@@ -114,7 +113,7 @@ class _VisibilityButtonState extends State<VisibilityButton> {
         setState(
           () {
             // Seems messy, should be refactored
-            context.preferences.toggleCompletedTasksVissible();
+            context.settings.toggleCompletedTasksVissible();
             widget.completedTasksVisibility.value =
                 !widget.completedTasksVisibility.value;
 

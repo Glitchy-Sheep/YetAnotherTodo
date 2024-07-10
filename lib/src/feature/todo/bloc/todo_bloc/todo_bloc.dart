@@ -29,6 +29,8 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         syncWithServer: (event) => _onSyncWithServer(event, emit),
       ),
     );
+
+    add(const TodoEvent.loadTodos());
   }
 
   Future<void> _onAddTodo(_AddTodo event, Emitter<TodoState> emit) async {
