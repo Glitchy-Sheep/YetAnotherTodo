@@ -17,8 +17,6 @@ import '../widgets/task_tile.dart';
 class TodoViewScreen extends StatelessWidget {
   const TodoViewScreen({super.key});
 
-  static const String routeName = '/tasks';
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
