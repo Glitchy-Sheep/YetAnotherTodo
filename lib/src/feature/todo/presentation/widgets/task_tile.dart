@@ -75,17 +75,11 @@ class _TaskContent extends StatelessWidget {
       leading: TaskCheckBox(
         task: task,
         onCheck: (newValue) async {
-          AppScope.of(context).todoBloc
-            ..add(
-              TodoEvent.toggleIsDone(
-                task.id,
-              ),
-            )
-            ..add(
-              // This is pretty bad, but now it is what it is...
-              // I'm gonna use it as a shortcut, later on we can refactor it
-              const TodoEvent.loadTodos(),
-            );
+          AppScope.of(context).todoBloc.add(
+                TodoEvent.toggleIsDone(
+                  task.id,
+                ),
+              );
         },
       ),
       title: _TaskTitle(task: task),

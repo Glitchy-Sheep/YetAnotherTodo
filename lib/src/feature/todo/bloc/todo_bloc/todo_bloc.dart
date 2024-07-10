@@ -34,6 +34,8 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   Future<void> _onAddTodo(_AddTodo event, Emitter<TodoState> emit) async {
     await todoRepositoryDb.addTodo(event.todoToAdd);
     await todoRepositoryApi.addTodo(event.todoToAdd);
+    final todos = await todoRepositoryDb.getTodos();
+    emit(TodoState.tasksLoaded(todos));
   }
 
   Future<void> _onDeleteTodo(_DeleteTodo event, Emitter<TodoState> emit) async {
@@ -67,7 +69,6 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     await todoRepositoryDb.editTodo(toggledTodo.id, toggledTodo);
     await todoRepositoryApi.editTodo(toggledTodo.id, toggledTodo);
 
-    // Damn that's bad
     final todos = await todoRepositoryDb.getTodos();
 
     emit(TodoState.tasksLoaded(todos));
