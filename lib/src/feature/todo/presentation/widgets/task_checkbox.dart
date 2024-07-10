@@ -14,23 +14,8 @@ class TaskCheckBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color? fillColor;
-    BorderSide? checkboxSide;
-
-    if (!task.isDone) {
-      if (task.priority == TaskPriority.important) {
-        fillColor = Theme.of(context).colorScheme.error.withOpacity(0.16);
-        checkboxSide = BorderSide(
-          color: Theme.of(context).colorScheme.error,
-          width: 2,
-        );
-      } else {
-        checkboxSide = BorderSide(
-          color: Theme.of(context).dividerColor,
-          width: 2,
-        );
-      }
-    }
+    final fillColor = getCheckboxFillColor(task, context);
+    final checkboxSide = getCheckboxSide(task, context);
 
     return Checkbox(
       value: task.isDone,
@@ -42,5 +27,27 @@ class TaskCheckBox extends StatelessWidget {
       ),
       side: checkboxSide,
     );
+  }
+
+  Color? getCheckboxFillColor(TaskEntity task, BuildContext context) {
+    if (!task.isDone && task.priority == TaskPriority.important) {
+      return Theme.of(context).colorScheme.error.withOpacity(0.16);
+    } else {
+      return null;
+    }
+  }
+
+  BorderSide? getCheckboxSide(TaskEntity task, BuildContext context) {
+    if (!task.isDone && task.priority == TaskPriority.important) {
+      return BorderSide(
+        color: Theme.of(context).colorScheme.error,
+        width: 2,
+      );
+    } else {
+      return BorderSide(
+        color: Theme.of(context).dividerColor,
+        width: 2,
+      );
+    }
   }
 }
