@@ -127,6 +127,8 @@ class _DeadlineDatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentDate = selectedDate;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -140,11 +142,13 @@ class _DeadlineDatePicker extends StatelessWidget {
                 context.strings.finishUntil,
                 style: AppTextStyle.bodyText,
               ),
-              if (selectedDate != null) ...[
+              if (currentDate != null) ...[
                 const SizedBox(height: 10),
                 Text(
                   DateFormatters.toDayMonthYear(
-                      selectedDate!, context.strings.localeName),
+                    currentDate,
+                    context.strings.localeName,
+                  ),
                   style: AppTextStyle.subheadText.copyWith(
                     color: ColorPalette.lightColorBlue,
                   ),
