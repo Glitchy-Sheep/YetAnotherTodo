@@ -40,7 +40,7 @@ abstract class _$AppRouter extends RootStackRouter {
 class TodoCreateRoute extends PageRouteInfo<TodoCreateRouteArgs> {
   TodoCreateRoute({
     Key? key,
-    TaskEntity? taskToEdit,
+    String? taskToEdit,
     List<PageRouteInfo>? children,
   }) : super(
           TodoCreateRoute.name,
@@ -65,7 +65,7 @@ class TodoCreateRouteArgs {
 
   final Key? key;
 
-  final TaskEntity? taskToEdit;
+  final String? taskToEdit;
 
   @override
   String toString() {

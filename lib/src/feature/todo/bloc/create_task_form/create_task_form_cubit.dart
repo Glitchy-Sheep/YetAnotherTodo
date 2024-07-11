@@ -2,24 +2,46 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../core/tools/tools.dart';
 import '../../domain/entities/task_entity.dart';
+import '../../domain/repository/db_todo_repository.dart';
 
 part 'create_task_form_cubit.freezed.dart';
 
 const String _loggerPrefix = '[CUBIT - CREATE TASK FORM]';
 
-/// Cubit for managing the state of the create task form
 class CreateTaskFormCubit extends Cubit<CreateTaskFormState> {
-  final TaskEntity? taskToEdit;
+  final String? taskToEditId;
+  final TodoRepositoryDb todoRepository;
 
-  CreateTaskFormCubit({TaskEntity? task})
-      : taskToEdit = task,
-        super(
-          CreateTaskFormState(
-            description: task?.description ?? '',
-            priority: task?.priority ?? TaskPriority.basic,
-            deadline: task?.finishUntil,
-          ),
-        );
+  static const _defaultFormState = CreateTaskFormState(
+    description: '',
+    priority: TaskPriority.basic,
+  );
+
+  CreateTaskFormCubit({
+    required this.todoRepository,
+    this.taskToEditId,
+  }) : super(_defaultFormState) {
+    _init();
+  }
+
+  Future<void> _init() async {
+    final taskId = taskToEditId;
+
+    if (taskId != null) {
+      final task = await todoRepository.getTodoById(taskId);
+      if (task == null) {
+        throw Exception('Task with id $taskId not found');
+      }
+
+      emit(
+        CreateTaskFormState(
+          description: task.description,
+          priority: task.priority,
+          deadline: task.finishUntil,
+        ),
+      );
+    }
+  }
 
   bool isSubmitAllowed() {
     return state.description.isNotEmpty;
@@ -28,28 +50,25 @@ class CreateTaskFormCubit extends Cubit<CreateTaskFormState> {
   TaskEntity toTaskEntity() {
     return TaskEntity(
       id: UuidGenerator.v4(),
-      description: taskToEdit?.description ?? state.description,
-      isDone: taskToEdit?.isDone ?? false,
-      priority: taskToEdit?.priority ?? state.priority,
-      finishUntil: taskToEdit?.finishUntil ?? state.deadline,
-      changedAt: taskToEdit?.changedAt ?? DateTime.now(),
-      createdAt: taskToEdit?.createdAt ?? DateTime.now(),
+      description: state.description,
+      isDone: false, // Assuming default value, adjust as necessary
+      priority: state.priority,
+      finishUntil: state.deadline,
+      changedAt: DateTime.now(), // Assuming default value, adjust as necessary
+      createdAt: DateTime.now(), // Assuming default value, adjust as necessary
     );
   }
 
-  void onDescriptionChanged(String description) {
-    logger.i('$_loggerPrefix: Description changed: $description');
-    emit(state.copyWith(description: description));
+  void onDescriptionChanged(String value) {
+    emit(state.copyWith(description: value));
   }
 
-  void onPriorityChanged(TaskPriority priority) {
-    logger.i('$_loggerPrefix: Priority changed: $priority');
-    emit(state.copyWith(priority: priority));
+  void onPriorityChanged(TaskPriority value) {
+    emit(state.copyWith(priority: value));
   }
 
-  void onDeadlineChanged(DateTime? deadline) {
-    logger.i('$_loggerPrefix: Deadline changed: $deadline');
-    emit(state.copyWith(deadline: deadline));
+  void onDeadlineChanged(DateTime? value) {
+    emit(state.copyWith(deadline: value));
   }
 }
 

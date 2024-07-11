@@ -16,14 +16,16 @@ class TodoCreateScreen extends StatelessWidget {
     this.taskToEdit,
   });
 
-  final TaskEntity? taskToEdit;
+  final String? taskToEdit;
 
-  // late final bool isNewTask;
   @override
   Widget build(BuildContext context) {
+    final tasksDbRepo = context.appScope.todoDbRepository;
+
     return BlocProvider(
       create: (context) => CreateTaskFormCubit(
-        task: taskToEdit,
+        taskToEditId: taskToEdit,
+        todoRepository: tasksDbRepo,
       ),
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -60,7 +62,7 @@ class TodoCreationForm extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const _DescriptionInputArea(),
+            _DescriptionInputArea(description: state.description),
             const SizedBox(height: 28),
             const _PriorityLable(),
             _PriorityDropdownButton(selectedPriority: state.priority),
@@ -264,8 +266,19 @@ class _PriorityDropdownButton extends StatelessWidget {
   }
 }
 
-class _DescriptionInputArea extends StatelessWidget {
-  const _DescriptionInputArea();
+class _DescriptionInputArea extends StatefulWidget {
+  final String description;
+
+  const _DescriptionInputArea({
+    required this.description,
+  });
+
+  @override
+  State<_DescriptionInputArea> createState() => _DescriptionInputAreaState();
+}
+
+class _DescriptionInputAreaState extends State<_DescriptionInputArea> {
+  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -274,21 +287,29 @@ class _DescriptionInputArea extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: TextField(
-        onChanged: context.read<CreateTaskFormCubit>().onDescriptionChanged,
-        onTapOutside: (event) => FocusScope.of(context).unfocus(),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: context.strings.whatShouldBeDone,
-          hintStyle: AppTextStyle.subheadText.copyWith(
-            fontSize: 16,
-            color: Theme.of(context).colorScheme.tertiary,
+      child: BlocListener<CreateTaskFormCubit, CreateTaskFormState>(
+        listener: (context, state) {
+          setState(() {
+            controller.text = state.description;
+          });
+        },
+        child: TextFormField(
+          controller: controller,
+          onChanged: context.read<CreateTaskFormCubit>().onDescriptionChanged,
+          onTapOutside: (event) => FocusScope.of(context).unfocus(),
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: context.strings.whatShouldBeDone,
+            hintStyle: AppTextStyle.subheadText.copyWith(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.tertiary,
+            ),
           ),
+          style: AppTextStyle.bodyText,
+          keyboardType: TextInputType.multiline,
+          minLines: 4,
+          maxLines: null,
         ),
-        style: AppTextStyle.bodyText,
-        keyboardType: TextInputType.multiline,
-        minLines: 4,
-        maxLines: null,
       ),
     );
   }

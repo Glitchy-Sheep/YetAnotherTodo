@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../core/router/router.dart';
 import '../../../../core/tools/tools.dart';
 import '../../../../core/uikit/uikit.dart';
 import '../../../app/di/app_scope.dart';
@@ -83,12 +85,21 @@ class _TaskContent extends StatelessWidget {
         },
       ),
       title: _TaskTitle(task: task),
-      trailing: AppIcons.taskInfo,
+      trailing: GestureDetector(
+        onTap: () => onTaskEditClicked(context),
+        child: AppIcons.taskInfo,
+      ),
       subtitle: task.finishUntil == null
           ? null
           : _TaskDeadlineSubtitle(
               task: task,
             ),
+    );
+  }
+
+  Future<void> onTaskEditClicked(BuildContext context) async {
+    await context.router.push(
+      TodoCreateRoute(taskToEdit: task.id),
     );
   }
 }
