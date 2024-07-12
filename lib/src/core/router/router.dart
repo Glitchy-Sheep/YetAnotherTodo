@@ -20,5 +20,9 @@ class AppRouter extends _$AppRouter {
           page: TodoCreateRoute.page,
           path: AppRouterPaths.createNewTodo,
         ),
+        AutoRoute(
+          page: TodoCreateRoute.page,
+          path: AppRouterPaths.editTodo,
+        ),
       ];
 }
