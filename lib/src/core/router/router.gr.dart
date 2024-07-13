@@ -15,12 +15,12 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
-    TodoCreateRoute.name: (routeData) {
-      final args = routeData.argsAs<TodoCreateRouteArgs>(
-          orElse: () => const TodoCreateRouteArgs());
+    TodoEditOrCreateRoute.name: (routeData) {
+      final args = routeData.argsAs<TodoEditOrCreateRouteArgs>(
+          orElse: () => const TodoEditOrCreateRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: TodoEditAndCreateScreen(
+        child: TodoEditOrCreateScreen(
           key: args.key,
           taskToEdit: args.taskToEdit,
         ),
@@ -36,29 +36,29 @@ abstract class _$AppRouter extends RootStackRouter {
 }
 
 /// generated route for
-/// [TodoEditAndCreateScreen]
-class TodoCreateRoute extends PageRouteInfo<TodoCreateRouteArgs> {
-  TodoCreateRoute({
+/// [TodoEditOrCreateScreen]
+class TodoEditOrCreateRoute extends PageRouteInfo<TodoEditOrCreateRouteArgs> {
+  TodoEditOrCreateRoute({
     Key? key,
     String? taskToEdit,
     List<PageRouteInfo>? children,
   }) : super(
-          TodoCreateRoute.name,
-          args: TodoCreateRouteArgs(
+          TodoEditOrCreateRoute.name,
+          args: TodoEditOrCreateRouteArgs(
             key: key,
             taskToEdit: taskToEdit,
           ),
           initialChildren: children,
         );
 
-  static const String name = 'TodoCreateRoute';
+  static const String name = 'TodoEditOrCreateRoute';
 
-  static const PageInfo<TodoCreateRouteArgs> page =
-      PageInfo<TodoCreateRouteArgs>(name);
+  static const PageInfo<TodoEditOrCreateRouteArgs> page =
+      PageInfo<TodoEditOrCreateRouteArgs>(name);
 }
 
-class TodoCreateRouteArgs {
-  const TodoCreateRouteArgs({
+class TodoEditOrCreateRouteArgs {
+  const TodoEditOrCreateRouteArgs({
     this.key,
     this.taskToEdit,
   });
@@ -69,7 +69,7 @@ class TodoCreateRouteArgs {
 
   @override
   String toString() {
-    return 'TodoCreateRouteArgs{key: $key, taskToEdit: $taskToEdit}';
+    return 'TodoEditOrCreateRouteArgs{key: $key, taskToEdit: $taskToEdit}';
   }
 }
 

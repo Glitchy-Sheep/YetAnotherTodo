@@ -10,8 +10,8 @@ import '../../bloc/todo_bloc/todo_bloc.dart';
 import '../../domain/entities/task_entity.dart';
 
 @RoutePage()
-class TodoEditAndCreateScreen extends StatelessWidget {
-  const TodoEditAndCreateScreen({
+class TodoEditOrCreateScreen extends StatelessWidget {
+  const TodoEditOrCreateScreen({
     super.key,
     this.taskToEdit,
   });

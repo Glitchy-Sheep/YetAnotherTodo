@@ -47,7 +47,7 @@ class TodoViewScreen extends StatelessWidget {
 
   void onAddTaskPressed(BuildContext context) {
     logger.i('Pushed create route');
-    context.router.push(TodoCreateRoute());
+    context.router.push(TodoEditOrCreateRoute());
   }
 }
 

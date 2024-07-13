@@ -86,7 +86,7 @@ class _TaskListTileContent extends StatelessWidget {
 
   Future<void> onTaskEditClicked(BuildContext context) async {
     await context.router.push(
-      TodoCreateRoute(taskToEdit: task.id),
+      TodoEditOrCreateRoute(taskToEdit: task.id),
     );
   }
 

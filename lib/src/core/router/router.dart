@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import '../../feature/todo/presentation/screens/todo_edit_and_create_screen.dart';
+import '../../feature/todo/presentation/screens/todo_edit_or_create_screen.dart';
 import '../../feature/todo/presentation/screens/todo_view.dart';
 import 'paths.dart';
 
@@ -17,11 +17,11 @@ class AppRouter extends _$AppRouter {
           initial: true,
         ),
         AutoRoute(
-          page: TodoCreateRoute.page,
+          page: TodoEditOrCreateRoute.page,
           path: AppRouterPaths.createNewTodo,
         ),
         AutoRoute(
-          page: TodoCreateRoute.page,
+          page: TodoEditOrCreateRoute.page,
           path: AppRouterPaths.editTodo,
         ),
       ];

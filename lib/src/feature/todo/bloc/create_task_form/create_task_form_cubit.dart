@@ -9,12 +9,18 @@ part 'create_task_form_cubit.freezed.dart';
 const String _loggerPrefix = '[CUBIT - CREATE TASK FORM]';
 
 class CreateTaskFormCubit extends Cubit<CreateTaskFormState> {
+  bool _isNewTask = true;
   final String? taskToEditId;
   final TodoRepositoryDb todoRepository;
 
-  static const _defaultFormState = CreateTaskFormState(
+  // Assume that new task if not done
+  // and has not deadline and title yet
+  static final _defaultFormState = CreateTaskFormState(
+    id: UuidGenerator.v4(),
     description: '',
     priority: TaskPriority.basic,
+    isDone: false,
+    createdAt: DateTime.now(),
   );
 
   CreateTaskFormCubit({
@@ -28,6 +34,8 @@ class CreateTaskFormCubit extends Cubit<CreateTaskFormState> {
     final taskId = taskToEditId;
 
     if (taskId != null) {
+      _isNewTask = false;
+
       final task = await todoRepository.getTodoById(taskId);
       if (task == null) {
         throw Exception('Task with id $taskId not found');
@@ -35,9 +43,12 @@ class CreateTaskFormCubit extends Cubit<CreateTaskFormState> {
 
       emit(
         CreateTaskFormState(
+          id: task.id,
           description: task.description,
           priority: task.priority,
           deadline: task.finishUntil,
+          isDone: task.isDone,
+          createdAt: task.createdAt,
         ),
       );
     }
@@ -48,14 +59,16 @@ class CreateTaskFormCubit extends Cubit<CreateTaskFormState> {
   }
 
   TaskEntity toTaskEntity() {
+    final commitTime = DateTime.now();
+
     return TaskEntity(
-      id: UuidGenerator.v4(),
+      id: state.id,
       description: state.description,
-      isDone: false, // Assuming default value, adjust as necessary
+      isDone: state.isDone,
       priority: state.priority,
       finishUntil: state.deadline,
-      changedAt: DateTime.now(), // Assuming default value, adjust as necessary
-      createdAt: DateTime.now(), // Assuming default value, adjust as necessary
+      changedAt: commitTime,
+      createdAt: _isNewTask ? commitTime : state.createdAt,
     );
   }
 
@@ -78,6 +91,9 @@ class CreateTaskFormState with _$CreateTaskFormState {
 
   // Default form state
   const factory CreateTaskFormState({
+    required String id,
+    required DateTime createdAt,
+    required bool isDone,
     required String description,
     required TaskPriority priority,
     DateTime? deadline,
