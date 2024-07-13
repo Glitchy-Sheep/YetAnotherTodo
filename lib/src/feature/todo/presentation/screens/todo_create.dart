@@ -108,10 +108,8 @@ class _DeleteButton extends StatelessWidget {
           const SizedBox(width: 12),
           Text(
             context.strings.delete,
-            style: TextStyle(
+            style: AppTextStyle.bodyText.copyWith(
               color: color,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
             ),
           ),
         ],
