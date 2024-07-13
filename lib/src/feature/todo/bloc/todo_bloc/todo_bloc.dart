@@ -38,21 +38,19 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
   Future<void> _onAddTodo(_AddTodo event, Emitter<TodoState> emit) async {
     await todoRepositoryDb.addTodo(event.todoToAdd);
-    await todoRepositoryApi.addTodo(event.todoToAdd);
     final todos = await todoRepositoryDb.getTodos();
     emit(TodoState.tasksLoaded(todos));
   }
 
   Future<void> _onDeleteTodo(_DeleteTodo event, Emitter<TodoState> emit) async {
     await todoRepositoryDb.deleteTodo(event.id);
-    await todoRepositoryApi.deleteTodo(event.id);
-
     final todos = await todoRepositoryDb.getTodos();
-
     emit(TodoState.tasksLoaded(todos));
   }
 
-  Future<void> _onEditTodo(_EditTodo event, Emitter<TodoState> emit) async {}
+  Future<void> _onEditTodo(_EditTodo event, Emitter<TodoState> emit) async {
+    // TODO: Implement editing in db
+  }
 
   Future<void> _onLoadTodo(_LoadTodo event, Emitter<TodoState> emit) async {
     logger.i('$_loggerPrefix: Loading todos from db...');
@@ -68,14 +66,9 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     if (todo == null) {
       return;
     }
-
     final toggledTodo = todo.copyWith(isDone: !todo.isDone);
-
     await todoRepositoryDb.editTodo(toggledTodo.id, toggledTodo);
-    await todoRepositoryApi.editTodo(toggledTodo.id, toggledTodo);
-
     final todos = await todoRepositoryDb.getTodos();
-
     emit(TodoState.tasksLoaded(todos));
   }
 
@@ -89,14 +82,6 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   Future<void> _onSyncWithServer(
       _SyncWithServer event, Emitter<TodoState> emit) async {
     await todoRepositoryDb.deleteAllTodos();
-
-    final todosFromServer = await todoRepositoryApi.getTodos();
-
-    for (final todo in todosFromServer) {
-      logger.i('ADDING TODO FROM SERVER: $todo');
-      await todoRepositoryDb.addTodo(todo);
-    }
-
-    emit(TodoState.tasksLoaded(todosFromServer));
+    // Before sync we must to make sure that app can work locally
   }
 }
