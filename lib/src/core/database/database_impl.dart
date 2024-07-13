@@ -9,7 +9,9 @@ import 'package:sqlite3/sqlite3.dart' show sqlite3;
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 import '../../feature/todo/domain/entities/task_entity.dart';
+import 'DAO/revision_dao.dart';
 import 'DAO/todo_items_dao.dart';
+import 'tables/revision.dart';
 import 'tables/todo_items.dart';
 
 part 'database_impl.g.dart';
@@ -17,9 +19,11 @@ part 'database_impl.g.dart';
 @DriftDatabase(
   daos: [
     TodoDao,
+    RevisionDao,
   ],
   tables: [
     TodoTable,
+    RevisionTable,
   ],
 )
 class AppDatabaseImpl extends _$AppDatabaseImpl {
