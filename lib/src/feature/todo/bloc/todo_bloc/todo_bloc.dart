@@ -28,7 +28,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         deleteTodo: (event) => _onDeleteTodo(event, emit),
         editTodo: (event) => _onEditTodo(event, emit),
         loadTodos: (event) => _onLoadTodo(event, emit),
-        toggleIsDone: (event) => _onMarkTodoAsDone(event, emit),
+        toggleIsDone: (event) => _onToggleTodo(event, emit),
         syncWithServer: (event) => _onSyncWithServer(event, emit),
       ),
     );
@@ -64,16 +64,20 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     logger.i('$_loggerPrefix: Tasks loaded: ${todos.length}');
   }
 
-  Future<void> _onMarkTodoAsDone(
+  Future<void> _onToggleTodo(
       _ToggleIsDone event, Emitter<TodoState> emit) async {
     final todo = await todoRepositoryDb.getTodoById(event.id);
     if (todo == null) {
       return;
     }
+
     final toggledTodo = todo.copyWith(isDone: !todo.isDone);
     await todoRepositoryDb.editTodo(toggledTodo.id, toggledTodo);
+
     final todos = await todoRepositoryDb.getTodos();
     emit(TodoState.tasksLoaded(todos));
+    logger.i(
+        '$_loggerPrefix: Todo toggled: ${toggledTodo.id} = ${toggledTodo.isDone}');
   }
 
   /// Sync `Todo` tasks with server by this algorithm:
