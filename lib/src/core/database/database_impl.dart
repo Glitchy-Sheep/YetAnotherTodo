@@ -19,7 +19,7 @@ part 'database_impl.g.dart';
     TodoDao,
   ],
   tables: [
-    TodoItems,
+    TodoTable,
   ],
 )
 class AppDatabaseImpl extends _$AppDatabaseImpl {

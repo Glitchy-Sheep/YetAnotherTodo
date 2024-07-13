@@ -4,46 +4,59 @@ import '../tables/todo_items.dart';
 
 part 'todo_items_dao.g.dart';
 
-@DriftAccessor(tables: [TodoItems])
+@DriftAccessor(tables: [TodoTable])
 class TodoDao extends DatabaseAccessor<AppDatabaseImpl> with _$TodoDaoMixin {
   final AppDatabaseImpl db;
 
   TodoDao(this.db) : super(db);
 
-  Future<void> insertTodoItem(TodoItem todoItem) async =>
-      into(todoItems).insert(
+  /// -----------------------
+  /// Create
+  /// -----------------------
+  Future<TodoDbModel> insertTodoItem(TodoDbModel todoItem) async =>
+      into(todoTable).insertReturning(
         todoItem,
         mode: InsertMode.insertOrReplace,
       );
 
-  Future<void> insertTodoItems(List<TodoItem> itemsToInsert) async =>
+  Future<void> insertTodoItems(List<TodoDbModel> itemsToInsert) async =>
+      // Using batch for performance
       batch((batch) {
         batch.insertAll(
-          todoItems,
+          todoTable,
           itemsToInsert,
           mode: InsertMode.insertOrReplace,
         );
       });
 
-  // Read
-  Future<List<TodoItem>> getAllTodoItems() async => select(todoItems).get();
+  /// -----------------------
+  /// Read
+  /// -----------------------
+  Future<List<TodoDbModel>> getAllTodoItems() async => select(todoTable).get();
 
-  Future<TodoItem?> getTodoById(String id) async => (select(todoItems)
+  Future<TodoDbModel?> getTodoById(String id) async => (select(todoTable)
         ..where(
           (todo) => todo.id.equals(id),
         ))
       .getSingleOrNull();
 
-  // Update
-  Future<bool> updateTodoItem(TodoItem todoItem) async =>
-      update(todoItems).replace(todoItem);
+  /// -----------------------
+  /// Update
+  /// -----------------------
+  Future<bool> updateTodoItem(TodoDbModel todoItem) async =>
+      update(todoTable).replace(todoItem);
 
-  // Delete
-  Future<int> deleteTodoItem(TodoItem todoItem) async =>
-      delete(todoItems).delete(todoItem);
+  /// -----------------------
+  /// Delete
+  /// -----------------------
+  Future<int> deleteTodoItem(TodoDbModel todoItem) async =>
+      delete(todoTable).delete(todoItem);
 
-  Future<int> deleteAll() async => delete(todoItems).go();
+  Future<int> deleteAll() async => delete(todoTable).go();
 
-  Future<void> deleteByTodoId(String id) async =>
-      (delete(todoItems)..where((tbl) => tbl.id.equals(id))).go();
+  Future<void> deleteByTodoId(String id) async => (delete(todoTable)
+        ..where(
+          (tbl) => tbl.id.equals(id),
+        ))
+      .go();
 }

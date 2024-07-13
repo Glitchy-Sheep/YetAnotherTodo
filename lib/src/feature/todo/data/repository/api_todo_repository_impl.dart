@@ -8,11 +8,11 @@ import '../mappers/task_mapper.dart';
 import '../models/get_todo_by_id_response.dart';
 import '../models/get_todo_list_response.dart';
 
-class TodoRepositoryApiImpl implements TodoRepositoryApi {
+class TodoApiRepositoryImpl implements TodoApiRepository {
   final Dio _dioClient;
   final Dio _revisionDioClient;
 
-  TodoRepositoryApiImpl({
+  TodoApiRepositoryImpl({
     required Dio baseDioClient,
     // Make a copy of baseDioClient
   })  : _dioClient = baseDioClient,
@@ -47,7 +47,7 @@ class TodoRepositoryApiImpl implements TodoRepositoryApi {
     await _dioClient.post(
       '/list',
       data: {
-        'element': TaskMapper.toModel(todo).toJson(),
+        'element': TaskMapper.fromEntityToModel(todo).toJson(),
       },
     );
   }
@@ -73,7 +73,7 @@ class TodoRepositoryApiImpl implements TodoRepositoryApi {
     await _dioClient.put(
       '/list/$id',
       data: {
-        'element': TaskMapper.toModel(todo).toJson(),
+        'element': TaskMapper.fromEntityToModel(todo).toJson(),
       },
     );
   }
@@ -88,7 +88,7 @@ class TodoRepositoryApiImpl implements TodoRepositoryApi {
       response.data as Map<String, dynamic>,
     );
 
-    return TaskMapper.toEntity(responseModel.element);
+    return TaskMapper.fromModelToEntity(responseModel.element);
   }
 
   @override
@@ -100,7 +100,7 @@ class TodoRepositoryApiImpl implements TodoRepositoryApi {
 
     return allTodos.list
         .map(
-          TaskMapper.toEntity,
+          TaskMapper.fromModelToEntity,
         )
         .toList();
   }

@@ -13,8 +13,8 @@ part 'todo_bloc.freezed.dart';
 const String _loggerPrefix = '[BLoC - TODO]';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
-  final TodoRepositoryApi todoRepositoryApi;
-  final TodoRepositoryDb todoRepositoryDb;
+  final TodoApiRepository todoRepositoryApi;
+  final TodoDbRepository todoRepositoryDb;
   final AppSettingsRepository appSettingsRepository;
 
   TodoBloc({

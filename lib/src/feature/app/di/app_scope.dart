@@ -9,8 +9,8 @@ import '../../todo/domain/repository/db_todo_repository.dart';
 import '../app_settings.dart';
 
 class AppScope extends InheritedWidget {
-  final TodoRepositoryApi _todoApiRepository;
-  final TodoRepositoryDb todoDbRepository;
+  final TodoApiRepository _todoApiRepository;
+  final TodoDbRepository todoDbRepository;
   final AppSettingsRepository _appSettingsRepository;
 
   late final TodoBloc todoBloc;
@@ -21,8 +21,8 @@ class AppScope extends InheritedWidget {
     required AppDatabaseImpl db,
     required AppSettingsRepository appSettingsRepository,
     super.key,
-  })  : _todoApiRepository = TodoRepositoryApiImpl(baseDioClient: dio),
-        todoDbRepository = TodoRepositoryDbImpl(db),
+  })  : _todoApiRepository = TodoApiRepositoryImpl(baseDioClient: dio),
+        todoDbRepository = TodoDbRepositoryImpl(db),
         _appSettingsRepository = appSettingsRepository {
     todoBloc = TodoBloc(
       todoRepositoryApi: _todoApiRepository,

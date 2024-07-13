@@ -11,7 +11,7 @@ const String _loggerPrefix = '[CUBIT - CREATE TASK FORM]';
 class CreateTaskFormCubit extends Cubit<CreateTaskFormState> {
   bool _isNewTask = true;
   final String? taskToEditId;
-  final TodoRepositoryDb todoRepository;
+  final TodoDbRepository todoRepository;
 
   // Assume that new task if not done
   // and has not deadline and title yet

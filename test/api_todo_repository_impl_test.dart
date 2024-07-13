@@ -23,7 +23,7 @@ void main() async {
     enableLog: false,
   );
 
-  final tasksRepository = TodoRepositoryApiImpl(
+  final tasksRepository = TodoApiRepositoryImpl(
     baseDioClient: dio,
   );
 

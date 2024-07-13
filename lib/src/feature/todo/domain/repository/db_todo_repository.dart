@@ -1,6 +1,6 @@
 import '../entities/task_entity.dart';
 
-abstract interface class TodoRepositoryDb {
+abstract interface class TodoDbRepository {
   Future<List<TaskEntity>> getTodos();
   Future<TaskEntity?> getTodoById(String id);
 

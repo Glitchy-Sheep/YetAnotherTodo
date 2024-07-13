@@ -1,24 +1,21 @@
 import '../../../../core/database/database_impl.dart';
 import '../../domain/entities/task_entity.dart';
 import '../../domain/repository/db_todo_repository.dart';
+import '../mappers/task_mapper.dart';
 
-class TodoRepositoryDbImpl implements TodoRepositoryDb {
+class TodoDbRepositoryImpl implements TodoDbRepository {
   final AppDatabaseImpl _db;
 
-  TodoRepositoryDbImpl(this._db);
+  TodoDbRepositoryImpl(this._db);
 
   @override
-  Future<void> addTodo(TaskEntity todo) async {
-    await _db.todoDao.insertTodoItem(
-      TodoItem(
-        id: todo.id,
-        description: todo.description,
-        isDone: todo.isDone,
-        priority: todo.priority,
-        deadline: todo.finishUntil,
-        createdAt: todo.createdAt,
-        changedAt: todo.changedAt,
-      ),
+  Future<TaskEntity> addTodo(TaskEntity todo) async {
+    final insertedTodo = await _db.todoDao.insertTodoItem(
+      TaskMapper.fromEntityToDbModel(todo),
+    );
+
+    return TaskMapper.fromDbModelToEntity(
+      insertedTodo,
     );
   }
 
@@ -30,7 +27,7 @@ class TodoRepositoryDbImpl implements TodoRepositoryDb {
   @override
   Future<void> editTodo(String id, TaskEntity todo) async {
     await _db.todoDao.updateTodoItem(
-      TodoItem(
+      TodoDbModel(
         id: id,
         description: todo.description,
         isDone: todo.isDone,

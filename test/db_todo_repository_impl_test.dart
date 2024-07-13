@@ -27,7 +27,7 @@ void main() async {
     logger.i('$loggerPrefix: Generated todo with id ${newTodo.id}');
 
     await db.todoDao.insertTodoItem(
-      TodoItem(
+      TodoDbModel(
         id: newTodo.id,
         description: newTodo.description,
         isDone: newTodo.isDone,
@@ -47,7 +47,7 @@ void main() async {
 
     final newTodo = generateRandomTodoTask();
     await db.todoDao.insertTodoItem(
-      TodoItem(
+      TodoDbModel(
         id: newTodo.id,
         description: newTodo.description,
         isDone: newTodo.isDone,
@@ -68,7 +68,7 @@ void main() async {
       isDone: !newTodo.isDone,
     );
 
-    await db.todoDao.updateTodoItem(TodoItem(
+    await db.todoDao.updateTodoItem(TodoDbModel(
       id: newTodo.id,
       description: editedTodo.description,
       isDone: editedTodo.isDone,
@@ -90,7 +90,7 @@ void main() async {
     final newTodo = generateRandomTodoTask();
 
     await db.todoDao.insertTodoItem(
-      TodoItem(
+      TodoDbModel(
         id: newTodo.id,
         description: newTodo.description,
         isDone: newTodo.isDone,
@@ -121,7 +121,7 @@ void main() async {
 
       final newTodo = generateRandomTodoTask();
       await db.todoDao.insertTodoItem(
-        TodoItem(
+        TodoDbModel(
           id: newTodo.id,
           description: newTodo.description,
           isDone: newTodo.isDone,
