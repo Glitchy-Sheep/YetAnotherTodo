@@ -40,24 +40,28 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     await todoRepositoryDb.addTodo(event.todoToAdd);
     final todos = await todoRepositoryDb.getTodos();
     emit(TodoState.tasksLoaded(todos));
+    logger.i('Todo added: ${event.todoToAdd.id}');
   }
 
   Future<void> _onDeleteTodo(_DeleteTodo event, Emitter<TodoState> emit) async {
     await todoRepositoryDb.deleteTodo(event.id);
     final todos = await todoRepositoryDb.getTodos();
     emit(TodoState.tasksLoaded(todos));
+    logger.i('$_loggerPrefix: Todo deleted: ${event.id}');
   }
 
   Future<void> _onEditTodo(_EditTodo event, Emitter<TodoState> emit) async {
-    // TODO: Implement editing in db
+    await todoRepositoryDb.editTodo(event.editedTodo.id, event.editedTodo);
+    final todos = await todoRepositoryDb.getTodos();
+    emit(TodoState.tasksLoaded(todos));
+    logger.i('$_loggerPrefix: Todo edited: ${event.editedTodo.id}');
   }
 
   Future<void> _onLoadTodo(_LoadTodo event, Emitter<TodoState> emit) async {
-    logger.i('$_loggerPrefix: Loading todos from db...');
-
     emit(const TodoState.loadingTasks());
     final todos = await todoRepositoryDb.getTodos();
     emit(TodoState.tasksLoaded(todos));
+    logger.i('$_loggerPrefix: Tasks loaded: ${todos.length}');
   }
 
   Future<void> _onMarkTodoAsDone(

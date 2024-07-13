@@ -20,7 +20,7 @@ abstract class _$AppRouter extends RootStackRouter {
           orElse: () => const TodoCreateRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: TodoCreateScreen(
+        child: TodoEditAndCreateScreen(
           key: args.key,
           taskToEdit: args.taskToEdit,
         ),
@@ -36,7 +36,7 @@ abstract class _$AppRouter extends RootStackRouter {
 }
 
 /// generated route for
-/// [TodoCreateScreen]
+/// [TodoEditAndCreateScreen]
 class TodoCreateRoute extends PageRouteInfo<TodoCreateRouteArgs> {
   TodoCreateRoute({
     Key? key,

@@ -10,8 +10,8 @@ import '../../bloc/todo_bloc/todo_bloc.dart';
 import '../../domain/entities/task_entity.dart';
 
 @RoutePage()
-class TodoCreateScreen extends StatelessWidget {
-  const TodoCreateScreen({
+class TodoEditAndCreateScreen extends StatelessWidget {
+  const TodoEditAndCreateScreen({
     super.key,
     this.taskToEdit,
   });
@@ -100,7 +100,7 @@ class _DeleteButton extends StatelessWidget {
         : Theme.of(context).colorScheme.tertiary;
 
     return TextButton(
-      onPressed: isActive ? () {} : null,
+      onPressed: isActive ? () => _onDeletePressed(context) : null,
       child: Row(
         children: [
           // Workaround for color change
@@ -115,6 +115,19 @@ class _DeleteButton extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _onDeletePressed(BuildContext context) {
+    final todoBloc = context.appScope.todoBloc;
+    final todoToDelete = context.read<CreateTaskFormCubit>().toTaskEntity();
+
+    todoBloc.add(
+      TodoEvent.deleteTodo(
+        todoToDelete.id,
+      ),
+    );
+
+    context.router.maybePop();
   }
 }
 

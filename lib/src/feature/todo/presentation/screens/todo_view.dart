@@ -28,58 +28,12 @@ class TodoViewScreen extends StatelessWidget {
                   const TodoEvent.syncWithServer(),
                 );
           },
-          child: CustomScrollView(
+          child: const CustomScrollView(
             slivers: [
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: DynamicSliverAppBar(
-                  expandedHeight: 148,
-                  collapsedHeight: 88,
-                  completedTasksVisibility: ValueNotifier(
-                    context.settings.isCompletedTasksVissible,
-                  ),
-                ),
-              ),
+              _SliverTodoViewAppBar(),
               SliverPadding(
-                padding: const EdgeInsets.all(16),
-                sliver: BlocBuilder<TodoBloc, TodoState>(
-                  bloc: AppScope.of(context).todoBloc,
-                  builder: (context, state) {
-                    final isDoneTasksVisible =
-                        context.settings.isCompletedTasksVissible;
-
-                    return state.map(
-                      initial: (state) => const SliverToBoxAdapter(
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                      loadingTasks: (state) => const SliverToBoxAdapter(
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                      tasksLoaded: (state) => DecoratedSliver(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        sliver: _TaskList(
-                          tasks: isDoneTasksVisible
-                              ? state.tasks
-                              : state.tasks
-                                  .where(
-                                    (task) => !task.isDone,
-                                  )
-                                  .toList(),
-                        ),
-                      ),
-                      error: (state) => const SliverToBoxAdapter(
-                        child: Text('Error occurred'),
-                      ),
-                    );
-                  },
-                ),
+                padding: EdgeInsets.all(16),
+                sliver: _SliverTodoListView(),
               ),
             ],
           ),
@@ -94,6 +48,66 @@ class TodoViewScreen extends StatelessWidget {
   void onAddTaskPressed(BuildContext context) {
     logger.i('Pushed create route');
     context.router.push(TodoCreateRoute());
+  }
+}
+
+class _SliverTodoListView extends StatelessWidget {
+  const _SliverTodoListView();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<TodoBloc, TodoState>(
+      bloc: AppScope.of(context).todoBloc,
+      builder: (context, state) {
+        final isDoneTasksVisible = context.settings.isCompletedTasksVissible;
+
+        return state.map(
+          initial: (state) => const SliverToBoxAdapter(
+            child: Center(child: CircularProgressIndicator()),
+          ),
+          loadingTasks: (state) => const SliverToBoxAdapter(
+            child: Center(child: CircularProgressIndicator()),
+          ),
+          tasksLoaded: (state) => DecoratedSliver(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            sliver: _TaskList(
+              tasks: isDoneTasksVisible
+                  ? state.tasks
+                  : state.tasks
+                      .where(
+                        (task) => !task.isDone,
+                      )
+                      .toList(),
+            ),
+          ),
+          error: (state) => const SliverToBoxAdapter(
+            // TODO: Handle the error accordingly
+            child: Text('Error occurred'),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _SliverTodoViewAppBar extends StatelessWidget {
+  const _SliverTodoViewAppBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: DynamicSliverAppBar(
+        expandedHeight: 148,
+        collapsedHeight: 88,
+        completedTasksVisibility: ValueNotifier(
+          context.settings.isCompletedTasksVissible,
+        ),
+      ),
+    );
   }
 }
 
@@ -139,7 +153,11 @@ class _TaskList extends StatelessWidget {
                 key: ValueKey(tasks[index].id),
                 task: tasks[index],
                 onCheck: (newValue) {
-                  // MarkTodoAsDone
+                  context.appScope.todoBloc.add(
+                    TodoEvent.toggleIsDone(
+                      tasks[index].id,
+                    ),
+                  );
                 },
               );
             },

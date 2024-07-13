@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../core/router/router.dart';
 import '../../../../core/tools/tools.dart';
@@ -29,20 +28,13 @@ class TaskTile extends StatelessWidget {
         key: ValueKey(task.id),
         onDismissed: (direction) {
           if (direction == DismissDirection.endToStart) {
-            // Just delete
-            AppScope.of(context).todoBloc.add(
-                  TodoEvent.deleteTodo(task.id),
-                );
+            context.appScope.todoBloc.add(
+              TodoEvent.deleteTodo(task.id),
+            );
           } else if (direction == DismissDirection.startToEnd) {
-            // Check as done and delete
-            // but there is no reason to mark it as done
-            // because the mechanism will delete it anyway
-            //
-            // I definitely can just toggle the checkbox
-            // but it would be strange, why do we need the checkbox itself then
-            AppScope.of(context).todoBloc.add(
-                  TodoEvent.deleteTodo(task.id),
-                );
+            context.appScope.todoBloc.add(
+              TodoEvent.deleteTodo(task.id),
+            );
           }
         },
         background: DismissBackground(
@@ -55,7 +47,7 @@ class TaskTile extends StatelessWidget {
           alignment: Alignment.centerRight,
           child: AppIcons.closeWhite,
         ),
-        child: _TaskContent(
+        child: _TaskListTileContent(
           task: task,
         ),
       ),
@@ -63,44 +55,49 @@ class TaskTile extends StatelessWidget {
   }
 }
 
-class _TaskContent extends StatelessWidget {
+class _TaskListTileContent extends StatelessWidget {
   final TaskEntity task;
 
-  const _TaskContent({
+  const _TaskListTileContent({
     required this.task,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      horizontalTitleGap: 0,
-      leading: TaskCheckBox(
-        task: task,
-        onCheck: (newValue) async {
-          AppScope.of(context).todoBloc.add(
-                TodoEvent.toggleIsDone(
-                  task.id,
-                ),
-              );
-        },
-      ),
-      title: _TaskTitle(task: task),
-      trailing: GestureDetector(
-        onTap: () => onTaskEditClicked(context),
-        child: AppIcons.taskInfo,
-      ),
-      subtitle: task.finishUntil == null
-          ? null
-          : _TaskDeadlineSubtitle(
-              task: task,
-            ),
-    );
+        horizontalTitleGap: 0,
+        leading: TaskCheckBox(
+          task: task,
+          onCheck: (newValue) async {
+            context.appScope.todoBloc.add(
+              TodoEvent.toggleIsDone(
+                task.id,
+              ),
+            );
+          },
+        ),
+        title: _TaskTitle(task: task),
+        trailing: GestureDetector(
+          onTap: () => onTaskEditClicked(context),
+          child: AppIcons.taskInfo,
+        ),
+        subtitle: generateTaskTileSubtitle(task));
   }
 
   Future<void> onTaskEditClicked(BuildContext context) async {
     await context.router.push(
       TodoCreateRoute(taskToEdit: task.id),
     );
+  }
+
+  _TaskDeadlineSubtitle? generateTaskTileSubtitle(TaskEntity task) {
+    if (task.finishUntil == null) {
+      return null;
+    } else {
+      return _TaskDeadlineSubtitle(
+        task: task,
+      );
+    }
   }
 }
 
@@ -124,22 +121,14 @@ class _TaskTitle extends StatelessWidget {
             WidgetSpan(
               child: Padding(
                 padding: const EdgeInsets.only(right: 4),
-                child: SvgPicture.asset(
-                  'assets/icons/exclamation_marks.svg',
-                  width: 16,
-                  height: 16,
-                ),
+                child: AppIcons.exclamationMarks,
               ),
             ),
           if (task.priority == TaskPriority.low)
             WidgetSpan(
               child: Padding(
                 padding: const EdgeInsets.only(right: 4),
-                child: SvgPicture.asset(
-                  'assets/icons/arrow_down.svg',
-                  width: 16,
-                  height: 16,
-                ),
+                child: AppIcons.arrowDownImportance,
               ),
             ),
           TextSpan(
