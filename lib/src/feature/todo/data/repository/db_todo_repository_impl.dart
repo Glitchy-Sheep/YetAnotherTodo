@@ -37,7 +37,7 @@ class TodoDbRepositoryImpl implements TodoDbRepository {
         priority: todo.priority,
         deadline: todo.finishUntil,
         createdAt: todo.createdAt,
-        changedAt: todo.changedAt,
+        changedAt: DateTime.now(),
       ),
     );
   }
@@ -98,6 +98,7 @@ class TodoDbRepositoryImpl implements TodoDbRepository {
 
   @override
   Future<void> setRevision(int newRevisionValue) async {
+    logger.i('$_loggerPrefix: Revision set - $newRevisionValue');
     await _db.revisionDao.setRevision(newRevisionValue);
   }
 }

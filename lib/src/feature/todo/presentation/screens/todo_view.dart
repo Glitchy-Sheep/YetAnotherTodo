@@ -211,14 +211,16 @@ class _FastTaskCreationFieldState extends State<_FastTaskCreationField> {
 
     logger.i('Fast task creation submitted');
 
+    final timestamp = DateTime.now();
+
     AppScope.of(context).todoBloc.add(
           TodoEvent.addTodo(
             TaskEntity(
               id: UuidGenerator.v4(),
               description: value,
               isDone: false,
-              createdAt: DateTime.now(),
-              changedAt: DateTime.now(),
+              createdAt: timestamp,
+              changedAt: timestamp,
             ),
           ),
         );

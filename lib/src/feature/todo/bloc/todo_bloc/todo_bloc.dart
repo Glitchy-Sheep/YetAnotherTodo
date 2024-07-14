@@ -10,7 +10,7 @@ part 'todo_event.dart';
 part 'todo_state.dart';
 part 'todo_bloc.freezed.dart';
 
-const String _loggerPrefix = '[BLoC - TODO]';
+const String _logPref = '[BLoC - TODO]';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   final TodoApiRepository todoRepositoryApi;
@@ -51,56 +51,57 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
     final todos = await todoRepositoryDb.getTodos();
     emit(TodoState.tasksLoaded(todos));
-    logger.i('$_loggerPrefix: Todo deleted: ${event.id}');
+    logger.i('$_logPref: Todo deleted: ${event.id}');
   }
 
   Future<void> _onEditTodo(_EditTodo event, Emitter<TodoState> emit) async {
     final editedTodo = event.editedTodo;
 
-    await todoRepositoryDb.editTodo(
-      editedTodo.id,
-      editedTodo.copyWith(
-        changedAt: DateTime.now(),
-      ),
-    );
+    await todoRepositoryDb.editTodo(editedTodo.id, editedTodo);
     await todoRepositoryDb.increaseRevision();
 
     final todos = await todoRepositoryDb.getTodos();
     emit(TodoState.tasksLoaded(todos));
-    logger.i('$_loggerPrefix: Todo edited: ${event.editedTodo.id}');
+    logger.i('$_logPref: Todo edited: ${event.editedTodo.id}');
   }
 
   Future<void> _onLoadTodo(_LoadTodo event, Emitter<TodoState> emit) async {
     emit(const TodoState.loadingTasks());
     final todos = await todoRepositoryDb.getTodos();
     emit(TodoState.tasksLoaded(todos));
-    logger.i('$_loggerPrefix: Tasks loaded: ${todos.length}');
+    logger.i('$_logPref: Tasks loaded: ${todos.length}');
   }
 
   Future<void> _onToggleTodo(
       _ToggleIsDone event, Emitter<TodoState> emit) async {
     final todo = await todoRepositoryDb.getTodoById(event.id);
+
     if (todo == null) {
+      logger.e('$_logPref: Todo not found: ${event.id} !!!!!!!!');
       return;
     }
 
-    final toggledTodo = todo.copyWith(isDone: !todo.isDone);
-    await todoRepositoryDb.editTodo(toggledTodo.id, toggledTodo);
+    final toggledTodo = todo.copyWith(
+      isDone: !todo.isDone,
+    );
+    logger.e('Toggled todo: $toggledTodo');
+    await todoRepositoryDb.editTodo(
+      toggledTodo.id,
+      toggledTodo,
+    );
     await todoRepositoryDb.increaseRevision();
 
     final todos = await todoRepositoryDb.getTodos();
     emit(TodoState.tasksLoaded(todos));
-    logger.i(
-        '$_loggerPrefix: Todo toggled: ${toggledTodo.id} = ${toggledTodo.isDone}');
   }
 
   /// Sync `Todo` tasks with server by this algorithm:
   /// ------------------------------------------------------
-  /// 1. Get updated list of `Todo` tasks + revision update
-  /// 2. Merge new Todos with existing ones in DB
-  /// 3. Doing stuff locally from time to time (without sync and connection)
-  /// 4. When we need to sync with server, form a PATCH request with all the current changes
-  /// 5. Send PATCH request and wait for server response in which we have updated data
+  /// 1. Doing stuff locally from time to time (without sync and connection)
+  /// 2. When we need to sync with server, form a PATCH request with all the current changes
+  ///    - Get remote/local list of `Todo` tasks + revision update
+  ///    - Merge remote/local tasks by timestamps and revisions
+  /// 3. Send PATCH request with local data which updates everything on the backend side
   Future<void> _onSyncWithServer(
     _SyncWithServer event,
     Emitter<TodoState> emit,
@@ -116,21 +117,30 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       // Step 1:
       // For remote tasks which are not in local DB
       // add them if revision is greater than local revision
-      if (!localTodos.contains(remoteTodo) && localRevision < remoteRevision) {
+      if (!localTodos.any((todo) => todo.id == remoteTodo.id) &&
+          localRevision < remoteRevision) {
+        logger.i('$_logPref: Added remote task: ${remoteTodo.id}');
         await todoRepositoryDb.addTodo(remoteTodo);
       }
 
       // Step 2:
-      // Otherwise if local tasks has remote task
+      // Otherwise if tasks in both remote and local DB
+      //
       // - Update locally if remote.changedAt > local.changedAt
       // - Send to the server if remote.changedAt < local.changedAt
-      else if (localTodos.contains(remoteTodo)) {
+      else if (localTodos.any((todo) => todo.id == remoteTodo.id)) {
+        logger.i(
+            '$_logPref: Task in both remote and local storage: ${remoteTodo.id}');
+
         final localTodo = localTodos.firstWhere(
           (todo) => todo.id == remoteTodo.id,
         );
 
-        if (remoteTodo.changedAt.isAfter(localTodo.changedAt)) {
-          // Save changes locally
+        // Local tasks is not actual (isBefore) with server
+        if (localTodo.changedAt.isBefore(remoteTodo.changedAt)) {
+          logger.w(
+            'Local task with ${localTodo.id} updated from remote',
+          );
           await todoRepositoryDb.editTodo(remoteTodo.id, remoteTodo);
         }
       }
@@ -139,6 +149,9 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       // For local tasks which are not in remote DB
       // delete them if revision is greater than local revision
       else if (localRevision < remoteRevision) {
+        logger.w(
+          '$_logPref: Delete local task ${remoteTodo.id} (revision higher on remote)',
+        );
         await todoRepositoryDb.deleteTodo(remoteTodo.id);
       }
     }
@@ -158,6 +171,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     // Send PATCH request
     final todosAfterUpdate = await todoRepositoryDb.getTodos();
     await todoRepositoryApi.updateAllTodos(todosAfterUpdate);
+    logger.i('$_logPref: Patch request sent');
 
     // Step 6:
     // And, of course, emit the new state:
