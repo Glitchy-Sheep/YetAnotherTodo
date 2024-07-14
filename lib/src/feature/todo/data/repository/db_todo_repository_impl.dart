@@ -80,4 +80,19 @@ class TodoDbRepositoryImpl implements TodoDbRepository {
   Future<void> deleteAllTodos() {
     return _db.todoDao.deleteAll();
   }
+
+  @override
+  Future<int> getRevision() async {
+    return _db.revisionDao.getRevision();
+  }
+
+  @override
+  Future<void> increaseRevision() async {
+    await _db.revisionDao.increaseRevision();
+  }
+
+  @override
+  Future<void> setRevision(int newRevisionValue) async {
+    await _db.revisionDao.setRevision(newRevisionValue);
+  }
 }
