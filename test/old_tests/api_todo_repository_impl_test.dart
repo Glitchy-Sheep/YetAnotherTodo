@@ -85,7 +85,7 @@ void main() async {
 
     logger.i('$loggerPrefix: get updated tasks on the backend');
     final allTasksAfterEdit = await tasksRepository.getTodos();
-    final updatedTask = allTasksAfterEdit.firstWhere(
+    final updatedTask = allTasksAfterEdit.tasks.firstWhere(
       (element) => element.id == todoToEdit.id,
     );
     expect(updatedTask.isDone, expectedIsDoneAfterUpdate);

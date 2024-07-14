@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../../../../core/api/interceptors/last_known_revision_interceptor.dart';
 import '../../../../core/tools/logger.dart';
+import '../../domain/entities/all_remote_tasks_entity.dart';
 import '../../domain/entities/task_entity.dart';
 import '../../domain/repository/api_todo_repository.dart';
 import '../mappers/task_mapper.dart';
@@ -78,17 +79,24 @@ class TodoApiRepositoryImpl implements TodoApiRepository {
   }
 
   @override
-  Future<List<TaskEntity>> getTodos() async {
+  Future<AllRemoteTasksEntity> getTodos() async {
     final response = await _dioClient.get('/list');
     final allTodos = GetTodoListResponseModel.fromJson(
       response.data as Map<String, dynamic>,
     );
 
-    return allTodos.list
+    final allTasks = allTodos.list
         .map(
           TaskMapper.fromModelToEntity,
         )
         .toList();
+
+    final revision = allTodos.revision;
+
+    return AllRemoteTasksEntity(
+      tasks: allTasks,
+      revision: revision,
+    );
   }
 
   @override

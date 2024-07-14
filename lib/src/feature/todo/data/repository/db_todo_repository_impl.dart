@@ -1,7 +1,10 @@
 import '../../../../core/database/database_impl.dart';
+import '../../../../core/tools/logger.dart';
 import '../../domain/entities/task_entity.dart';
 import '../../domain/repository/db_todo_repository.dart';
 import '../mappers/task_mapper.dart';
+
+const _loggerPrefix = '[REPOSITORY - DB]';
 
 class TodoDbRepositoryImpl implements TodoDbRepository {
   final AppDatabaseImpl _db;
@@ -77,8 +80,8 @@ class TodoDbRepositoryImpl implements TodoDbRepository {
   }
 
   @override
-  Future<void> deleteAllTodos() {
-    return _db.todoDao.deleteAll();
+  Future<void> deleteAllTodos() async {
+    await _db.todoDao.deleteAll();
   }
 
   @override
@@ -88,6 +91,8 @@ class TodoDbRepositoryImpl implements TodoDbRepository {
 
   @override
   Future<void> increaseRevision() async {
+    logger.i(
+        '$_loggerPrefix: Revision incresased - ${await _db.revisionDao.getRevision()}');
     await _db.revisionDao.increaseRevision();
   }
 

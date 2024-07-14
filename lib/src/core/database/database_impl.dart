@@ -38,7 +38,16 @@ class AppDatabaseImpl extends _$AppDatabaseImpl {
   AppDatabaseImpl.forTesting(super.e);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onUpgrade: (m, from, to) async {
+          if (from < 1) {
+            return m.createAll();
+          }
+        },
+      );
 }
 
 LazyDatabase _openConnection() {

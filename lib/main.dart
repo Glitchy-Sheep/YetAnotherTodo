@@ -32,7 +32,9 @@ void main() {
       logger.i('$_loggerPrefix: Shared preferences initialized');
 
       final db = AppDatabaseImpl();
-      logger.i('$_loggerPrefix: Database initialized');
+      logger
+        ..i('$_loggerPrefix: Database initialized')
+        ..i('Your local revision: ${await db.revisionDao.getRevision()}');
 
       // App entry point
       runApp(YetAnotherTodoApp(sharedPrefs: sharedPrefs, db: db));
