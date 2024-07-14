@@ -55,7 +55,14 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   }
 
   Future<void> _onEditTodo(_EditTodo event, Emitter<TodoState> emit) async {
-    await todoRepositoryDb.editTodo(event.editedTodo.id, event.editedTodo);
+    final editedTodo = event.editedTodo;
+
+    await todoRepositoryDb.editTodo(
+      editedTodo.id,
+      editedTodo.copyWith(
+        changedAt: DateTime.now(),
+      ),
+    );
     await todoRepositoryDb.increaseRevision();
 
     final todos = await todoRepositoryDb.getTodos();
