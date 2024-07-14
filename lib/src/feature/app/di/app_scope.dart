@@ -21,8 +21,13 @@ class AppScope extends InheritedWidget {
     required AppDatabaseImpl db,
     required AppSettingsRepository appSettingsRepository,
     super.key,
-  })  : _todoApiRepository = TodoApiRepositoryImpl(baseDioClient: dio),
-        todoDbRepository = TodoDbRepositoryImpl(db),
+  })  : _todoApiRepository = TodoApiRepositoryImpl(
+          baseDioClient: dio,
+          lastKnownRevisionGetter: () => db.revisionDao.getRevision(),
+        ),
+        todoDbRepository = TodoDbRepositoryImpl(
+          db,
+        ),
         _appSettingsRepository = appSettingsRepository {
     todoBloc = TodoBloc(
       todoRepositoryApi: _todoApiRepository,

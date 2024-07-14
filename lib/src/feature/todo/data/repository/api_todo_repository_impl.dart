@@ -10,39 +10,23 @@ import '../models/get_todo_list_response.dart';
 
 class TodoApiRepositoryImpl implements TodoApiRepository {
   final Dio _dioClient;
-  final Dio _revisionDioClient;
+
+  /// This is a provider of local stored revision.
+  /// it can be stored anywhere, in our case in the db.
+  final RevisionGetter lastKnownRevisionGetter;
 
   TodoApiRepositoryImpl({
     required Dio baseDioClient,
-    // Make a copy of baseDioClient
-  })  : _dioClient = baseDioClient,
-        _revisionDioClient = Dio(baseDioClient.options) {
-    // For getting revision
-    _revisionDioClient.interceptors.addAll(baseDioClient.interceptors);
-
-    // For all other requests
+    required this.lastKnownRevisionGetter,
+  }) : _dioClient = baseDioClient {
     _dioClient.interceptors.add(
-      LastKnownRevisionInterceptor(_getLastRevision),
+      LastKnownRevisionInterceptor(
+        lastRevisionGetter: lastKnownRevisionGetter,
+      ),
     );
   }
 
   static const _todoHandle = '/list';
-
-  /// FOR NETWORK TESTS ONLY
-  /// will be replaced with a proper implementation
-  /// revision will be stored in some kind of persistent storage
-  Future<int> _getLastRevision() async {
-    final response = await _revisionDioClient.get(_todoHandle);
-    final tasksInfo = GetTodoListResponseModel.fromJson(
-      response.data as Map<String, dynamic>,
-    );
-
-    final lastKnownRevision = tasksInfo.revision;
-
-    logger.i('Last known revision: $lastKnownRevision');
-
-    return lastKnownRevision;
-  }
 
   @override
   Future<void> addTodo(TaskEntity todo) async {

@@ -25,6 +25,9 @@ void main() async {
 
   final tasksRepository = TodoApiRepositoryImpl(
     baseDioClient: dio,
+    // You can pass the revision as a callback
+    // pretty simple solution, testable and interchangable
+    lastKnownRevisionGetter: () async => 0,
   );
 
   test('get todos', () async {
