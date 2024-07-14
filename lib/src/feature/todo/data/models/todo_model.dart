@@ -18,8 +18,8 @@ class TodoModel {
   /// Deadline of the task, may be null
   @JsonKey(
     name: 'deadline',
-    fromJson: _maybeUnixFromDatetime,
-    toJson: _maybeDatetimeFromUnix,
+    fromJson: _maybeDatetimeFromUnix,
+    toJson: _maybeUnixFromDatetime,
   )
   final DateTime? deadline;
 
@@ -32,13 +32,13 @@ class TodoModel {
 
   @JsonKey(
     name: 'created_at',
-    fromJson: DateTime.fromMillisecondsSinceEpoch,
+    fromJson: DateTime.fromMicrosecondsSinceEpoch,
     toJson: _unixFromDatetime,
   )
   final DateTime createdAtUnixTimestamp;
   @JsonKey(
     name: 'changed_at',
-    fromJson: DateTime.fromMillisecondsSinceEpoch,
+    fromJson: DateTime.fromMicrosecondsSinceEpoch,
     toJson: _unixFromDatetime,
   )
   final DateTime changedAtUnixTimestamp;
@@ -71,21 +71,21 @@ class TodoModel {
   // unique function for convertering nullable and not nullable types
   // maybe if json_serializable would have some tool/option
   // to bypass fromJson if type is nullable, it could be possible
-  static DateTime? _maybeUnixFromDatetime(int? timestamp) {
+  static DateTime? _maybeDatetimeFromUnix(int? timestamp) {
     if (timestamp == null) {
       return null;
     }
-    return DateTime.fromMillisecondsSinceEpoch(timestamp);
+    return DateTime.fromMicrosecondsSinceEpoch(timestamp);
   }
 
-  static int? _maybeDatetimeFromUnix(DateTime? dateTime) {
+  static int? _maybeUnixFromDatetime(DateTime? dateTime) {
     if (dateTime == null) {
       return null;
     }
-    return dateTime.millisecondsSinceEpoch;
+    return dateTime.microsecondsSinceEpoch;
   }
 
   static int _unixFromDatetime(DateTime dateTime) {
-    return dateTime.millisecondsSinceEpoch;
+    return dateTime.microsecondsSinceEpoch;
   }
 }

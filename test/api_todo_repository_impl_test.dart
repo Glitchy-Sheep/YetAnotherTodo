@@ -38,29 +38,27 @@ void main() async {
   test('create todo', () async {
     final newTodo = generateRandomTodoTask();
     await tasksRepository.addTodo(newTodo);
-    // final todos = await tasksRepository.getTodos();
-    // expect(todos, contains(newTodo));
+    final todos = await tasksRepository.getTodos();
+    expect(todos, contains(newTodo));
   });
 
   test('delete todo', () async {
     const loggerPrefix = '[DELETE TODO TEST]';
 
-    logger.i('$loggerPrefix: generating task data');
     final todoToDelete = generateRandomTodoTask();
+    logger.i('$loggerPrefix: generated task - $todoToDelete');
 
-    logger.i('$loggerPrefix: add task to the backend');
     await tasksRepository.addTodo(todoToDelete);
+    logger.i('$loggerPrefix: pushed the task to backend');
 
     final allTasks = await tasksRepository.getTodos();
     expect(allTasks, contains(todoToDelete));
 
-    logger.i('$loggerPrefix: delete task from the backend');
     await tasksRepository.deleteTodo(todoToDelete.id);
+    logger.i('$loggerPrefix: deleted the task from backend');
 
-    logger.i('$loggerPrefix: delete task from the backend');
-    final todosAfterDelete = await tasksRepository.getTodos();
-
-    expect(todosAfterDelete, isNot(contains(todoToDelete)));
+    final allTasksAfterDelete = await tasksRepository.getTodos();
+    expect(allTasksAfterDelete, isNot(contains(todoToDelete)));
   });
 
   test('edit todo', () async {
