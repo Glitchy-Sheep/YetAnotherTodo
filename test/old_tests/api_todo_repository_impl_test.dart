@@ -90,12 +90,4 @@ void main() async {
       'task.isDone updated successfully from $isDoneBeforeUpdate -> $expectedIsDoneAfterUpdate',
     );
   });
-
-  test('delete all todos', () async {
-    final allTodos = await tasksRepository.getTodos();
-    for (final todo in allTodos) {
-      await tasksRepository.deleteTodo(todo.id);
-      logger.i('Deleted: $todo.id - ${todo.description}');
-    }
-  });
 }

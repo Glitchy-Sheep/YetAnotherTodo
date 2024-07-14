@@ -26,11 +26,13 @@ class TodoApiRepositoryImpl implements TodoApiRepository {
     );
   }
 
+  static const _todoHandle = '/list';
+
   /// FOR NETWORK TESTS ONLY
   /// will be replaced with a proper implementation
   /// revision will be stored in some kind of persistent storage
   Future<int> _getLastRevision() async {
-    final response = await _revisionDioClient.get('/list');
+    final response = await _revisionDioClient.get(_todoHandle);
     final tasksInfo = GetTodoListResponseModel.fromJson(
       response.data as Map<String, dynamic>,
     );
@@ -45,7 +47,7 @@ class TodoApiRepositoryImpl implements TodoApiRepository {
   @override
   Future<void> addTodo(TaskEntity todo) async {
     await _dioClient.post(
-      '/list',
+      _todoHandle,
       data: {
         'element': TaskMapper.fromEntityToModel(todo).toJson(),
       },
@@ -56,7 +58,7 @@ class TodoApiRepositoryImpl implements TodoApiRepository {
   Future<TaskEntity?> deleteTodo(String id) async {
     try {
       final response = await _dioClient.delete(
-        '/list/$id',
+        '$_todoHandle/$id',
       );
       logger.i('DELETE RESPONSE: ${response.data}');
     } on DioException catch (e) {
@@ -71,7 +73,7 @@ class TodoApiRepositoryImpl implements TodoApiRepository {
   @override
   Future<void> editTodo(String id, TaskEntity todo) async {
     await _dioClient.put(
-      '/list/$id',
+      '$_todoHandle/$id',
       data: {
         'element': TaskMapper.fromEntityToModel(todo).toJson(),
       },
@@ -81,7 +83,7 @@ class TodoApiRepositoryImpl implements TodoApiRepository {
   @override
   Future<TaskEntity?> getTodoById(String id) async {
     final response = await _dioClient.get(
-      '/list/$id',
+      '$_todoHandle/$id',
     );
 
     final responseModel = GetTodoByIdResponseModel.fromJson(
@@ -94,6 +96,29 @@ class TodoApiRepositoryImpl implements TodoApiRepository {
   @override
   Future<List<TaskEntity>> getTodos() async {
     final response = await _dioClient.get('/list');
+    final allTodos = GetTodoListResponseModel.fromJson(
+      response.data as Map<String, dynamic>,
+    );
+
+    return allTodos.list
+        .map(
+          TaskMapper.fromModelToEntity,
+        )
+        .toList();
+  }
+
+  @override
+  Future<List<TaskEntity>> updateAllTodos(List<TaskEntity> todos) async {
+    final tasksModels = todos
+        .map(
+          TaskMapper.fromEntityToModel,
+        )
+        .toList();
+
+    final response = await _dioClient.patch(_todoHandle, data: {
+      'list': tasksModels,
+    });
+
     final allTodos = GetTodoListResponseModel.fromJson(
       response.data as Map<String, dynamic>,
     );
