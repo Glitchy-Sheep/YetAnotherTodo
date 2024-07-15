@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/tools/tools.dart';
+import '../../../../core/uikit/theme_shortcut.dart';
 import '../../../../core/uikit/uikit.dart';
 import '../../../app/di/app_scope.dart';
 import '../../bloc/create_task_form/create_task_form_cubit.dart';
@@ -28,7 +29,7 @@ class TodoEditOrCreateScreen extends StatelessWidget {
         todoRepository: tasksDbRepo,
       ),
       child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: context.theme.scaffoldBackgroundColor,
         appBar: const _AddTaskAppBar(),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -96,8 +97,8 @@ class _DeleteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isActive
-        ? Theme.of(context).colorScheme.error
-        : Theme.of(context).colorScheme.tertiary;
+        ? context.theme.colorScheme.error
+        : context.theme.colorScheme.tertiary;
 
     return TextButton(
       onPressed: isActive ? () => _onDeletePressed(context) : null,
@@ -295,7 +296,7 @@ class _DescriptionInputAreaState extends State<_DescriptionInputArea> {
   Widget build(BuildContext context) {
     return Container(
       decoration: AppDecorations.taskInputContainer.copyWith(
-        color: Theme.of(context).colorScheme.surface,
+        color: context.theme.colorScheme.surface,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: BlocListener<CreateTaskFormCubit, CreateTaskFormState>(
@@ -313,7 +314,7 @@ class _DescriptionInputAreaState extends State<_DescriptionInputArea> {
             hintText: context.strings.whatShouldBeDone,
             hintStyle: AppTextStyle.subheadText.copyWith(
               fontSize: 16,
-              color: Theme.of(context).colorScheme.tertiary,
+              color: context.theme.colorScheme.tertiary,
             ),
           ),
           style: AppTextStyle.bodyText,
@@ -336,7 +337,7 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       leading: IconButton(
         icon: AppIcons.closeBlack,
         onPressed: () => context.router.maybePop(),
@@ -347,7 +348,7 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Text(
             context.strings.saveCapsed,
             style: AppTextStyle.buttonText.copyWith(
-              color: Theme.of(context).colorScheme.primary,
+              color: context.theme.colorScheme.primary,
             ),
           ),
         ),

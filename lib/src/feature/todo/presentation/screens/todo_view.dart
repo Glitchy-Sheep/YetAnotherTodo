@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/router/router.dart';
 import '../../../../core/tools/tools.dart';
+import '../../../../core/uikit/theme_shortcut.dart';
 import '../../../../core/uikit/uikit.dart';
 import '../../../app/di/app_scope.dart';
 import '../../bloc/todo_bloc/todo_bloc.dart';
@@ -20,7 +21,7 @@ class TodoViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
@@ -70,7 +71,7 @@ class _SliverTodoListView extends StatelessWidget {
           ),
           tasksLoaded: (state) => DecoratedSliver(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
+              color: context.theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(8),
             ),
             sliver: _TaskList(
@@ -127,7 +128,7 @@ class _AddTaskFloatingActionButton extends StatelessWidget {
         child: FloatingActionButton(
           onPressed: onPressed,
           backgroundColor:
-              Theme.of(context).floatingActionButtonTheme.backgroundColor,
+              context.theme.floatingActionButtonTheme.backgroundColor,
           child: AppIcons.add,
         ),
       ),

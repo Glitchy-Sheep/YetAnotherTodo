@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/uikit/theme_shortcut.dart';
 import '../../../../core/uikit/uikit.dart';
 import '../../domain/entities/task_entity.dart';
 
@@ -31,7 +32,7 @@ class TaskCheckBox extends StatelessWidget {
 
   Color? getCheckboxFillColor(TaskEntity task, BuildContext context) {
     if (!task.isDone && task.priority == TaskPriority.important) {
-      return Theme.of(context).colorScheme.error.withOpacity(0.16);
+      return context.theme.colorScheme.error.withOpacity(0.16);
     } else {
       return null;
     }
@@ -40,12 +41,12 @@ class TaskCheckBox extends StatelessWidget {
   BorderSide? getCheckboxSide(TaskEntity task, BuildContext context) {
     if (!task.isDone && task.priority == TaskPriority.important) {
       return BorderSide(
-        color: Theme.of(context).colorScheme.error,
+        color: context.theme.colorScheme.error,
         width: 2,
       );
     } else {
       return BorderSide(
-        color: Theme.of(context).dividerColor,
+        color: context.theme.dividerColor,
         width: 2,
       );
     }

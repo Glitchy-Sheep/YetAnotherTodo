@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/router/router.dart';
 import '../../../../core/tools/tools.dart';
+import '../../../../core/uikit/theme_shortcut.dart';
 import '../../../../core/uikit/uikit.dart';
 import '../../../app/di/app_scope.dart';
 import '../../bloc/todo_bloc/todo_bloc.dart';
@@ -38,12 +39,12 @@ class TaskTile extends StatelessWidget {
           }
         },
         background: DismissBackground(
-          dismissColor: Theme.of(context).colorScheme.secondary,
+          dismissColor: context.theme.colorScheme.secondary,
           alignment: Alignment.centerLeft,
           child: AppIcons.check,
         ),
         secondaryBackground: DismissBackground(
-          dismissColor: Theme.of(context).colorScheme.error,
+          dismissColor: context.theme.colorScheme.error,
           alignment: Alignment.centerRight,
           child: AppIcons.closeWhite,
         ),
@@ -110,7 +111,7 @@ class _TaskTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = context.theme;
 
     return RichText(
       maxLines: 3,
@@ -154,9 +155,9 @@ class _TaskDeadlineSubtitle extends StatelessWidget {
     return Text(
       DateFormatters.toDayMonthYear(
           task.finishUntil!, context.strings.localeName),
-      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            decoration: task.isDone ? TextDecoration.lineThrough : null,
-          ),
+      style: context.theme.textTheme.bodySmall?.copyWith(
+        decoration: task.isDone ? TextDecoration.lineThrough : null,
+      ),
     );
   }
 }
