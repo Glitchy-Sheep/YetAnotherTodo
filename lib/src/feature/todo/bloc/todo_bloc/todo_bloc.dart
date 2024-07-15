@@ -144,15 +144,20 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
           await todoRepositoryDb.editTodo(remoteTodo.id, remoteTodo);
         }
       }
+    }
 
-      // Step 3:
-      // For local tasks which are not in remote DB
-      // delete them if revision is greater than local revision
-      else if (localRevision < remoteRevision) {
+    // Step 3:
+    // For local tasks which are not in remote DB
+    // delete them if revision is greater than local revision
+    final localOnlyTasks = localTodos.where(
+      (todo) => !remoteTodoList.any((remoteTodo) => remoteTodo.id == todo.id),
+    );
+    for (final localTodo in localOnlyTasks) {
+      if (localRevision < remoteRevision) {
         logger.w(
-          '$_logPref: Delete local task ${remoteTodo.id} (revision higher on remote)',
+          '$_logPref: Delete local task ${localTodo.id} (revision higher on remote)',
         );
-        await todoRepositoryDb.deleteTodo(remoteTodo.id);
+        await todoRepositoryDb.deleteTodo(localTodo.id);
       }
     }
 
