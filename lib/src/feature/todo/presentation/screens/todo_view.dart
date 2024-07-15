@@ -63,33 +63,40 @@ class _SliverTodoListView extends StatelessWidget {
         final isDoneTasksVisible = context.settings.isCompletedTasksVissible;
 
         return state.map(
-          initial: (state) => const SliverToBoxAdapter(
-            child: Center(child: CircularProgressIndicator()),
-          ),
-          loadingTasks: (state) => const SliverToBoxAdapter(
-            child: Center(child: CircularProgressIndicator()),
-          ),
-          tasksLoaded: (state) => DecoratedSliver(
-            decoration: BoxDecoration(
-              color: context.theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            sliver: _TaskList(
-              tasks: isDoneTasksVisible
-                  ? state.tasks
-                  : state.tasks
-                      .where(
-                        (task) => !task.isDone,
-                      )
-                      .toList(),
-            ),
-          ),
+          initial: (state) => const _LoadingTasksIndicator(),
+          loadingTasks: (state) => const _LoadingTasksIndicator(),
+          tasksLoaded: (state) {
+            final tasks = isDoneTasksVisible
+                ? state.tasks
+                : state.tasks.where((task) => !task.isDone).toList();
+
+            return DecoratedSliver(
+              decoration: BoxDecoration(
+                color: context.theme.colorScheme.surface,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              sliver: _TaskList(tasks: tasks),
+            );
+          },
           error: (state) => const SliverToBoxAdapter(
             // TODO: Handle the error accordingly
             child: Text('Error occurred'),
           ),
         );
       },
+    );
+  }
+}
+
+class _LoadingTasksIndicator extends StatelessWidget {
+  const _LoadingTasksIndicator();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverToBoxAdapter(
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }
