@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../core/tools/tools.dart';
 import '../../../app/app_settings.dart';
@@ -43,6 +44,14 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     final todos = await todoRepositoryDb.getTodos();
     emit(TodoState.tasksLoaded(todos));
     logger.i('Todo added: ${event.todoToAdd.id}');
+
+    try {
+      logger.i('$_logPref: Trying to sync with server...');
+      await todoRepositoryApi.addTodo(event.todoToAdd);
+    } on DioException catch (e) {
+      logger.e('$_logPref: Failed to sync with server: $e');
+      emit(TodoState.syncError(e.toString()));
+    }
   }
 
   Future<void> _onDeleteTodo(_DeleteTodo event, Emitter<TodoState> emit) async {
@@ -52,6 +61,14 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     final todos = await todoRepositoryDb.getTodos();
     emit(TodoState.tasksLoaded(todos));
     logger.i('$_logPref: Todo deleted: ${event.id}');
+
+    try {
+      logger.i('$_logPref: Trying to sync with server...');
+      await todoRepositoryApi.deleteTodo(event.id);
+    } on DioException catch (e) {
+      logger.e('$_logPref: Failed to sync with server: $e');
+      emit(TodoState.syncError(e.toString()));
+    }
   }
 
   Future<void> _onEditTodo(_EditTodo event, Emitter<TodoState> emit) async {
@@ -63,6 +80,14 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     final todos = await todoRepositoryDb.getTodos();
     emit(TodoState.tasksLoaded(todos));
     logger.i('$_logPref: Todo edited: ${event.editedTodo.id}');
+
+    try {
+      logger.i('$_logPref: Trying to sync with server...');
+      await todoRepositoryApi.editTodo(event.id, event.editedTodo);
+    } on DioException catch (e) {
+      logger.e('$_logPref: Failed to sync with server: $e');
+      emit(TodoState.syncError(e.toString()));
+    }
   }
 
   Future<void> _onLoadTodo(_LoadTodo event, Emitter<TodoState> emit) async {
@@ -175,8 +200,14 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     // Step 5:
     // Send PATCH request
     final todosAfterUpdate = await todoRepositoryDb.getTodos();
-    await todoRepositoryApi.updateAllTodos(todosAfterUpdate);
-    logger.i('$_logPref: Patch request sent');
+    try {
+      await todoRepositoryApi.updateAllTodos(todosAfterUpdate);
+      logger.i('$_logPref: Patch request sent');
+      emit(const TodoState.syncSuccess());
+    } on DioException catch (e) {
+      logger.e('$_logPref: Failed to sync with server: $e');
+      emit(TodoState.syncError(e.toString()));
+    }
 
     // Step 6:
     // And, of course, emit the new state:
