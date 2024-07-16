@@ -106,12 +106,21 @@ class _SliverTodoListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TodoBloc, TodoState>(
+    return BlocConsumer<TodoBloc, TodoState>(
       bloc: AppScope.of(context).todoBloc,
+      buildWhen: (previous, current) => !current.isNotification,
+      listenWhen: (previous, current) => current.isNotification,
+      listener: (context, state) {
+        if (state.isSyncSuccessNotification) {
+          _notifyAboutSyncSuccess(context);
+        } else if (state.isSyncErrorNotification) {
+          _notifyAboutSyncError(context);
+        }
+      },
       builder: (context, state) {
         final isDoneTasksVisible = context.settings.isCompletedTasksVissible;
 
-        return state.map(
+        return state.maybeMap(
           initial: (state) => const _LoadingTasksIndicator(),
           loadingTasks: (state) => const _LoadingTasksIndicator(),
           tasksLoaded: (state) {
@@ -127,12 +136,39 @@ class _SliverTodoListView extends StatelessWidget {
               sliver: _TaskList(tasks: tasks),
             );
           },
-          error: (state) => const SliverToBoxAdapter(
-            // TODO: Handle the error accordingly
-            child: Text('Error occurred'),
-          ),
+          // Should never happen because of the buildWhen filters
+          orElse: () => const SizedBox.shrink(),
         );
       },
+    );
+  }
+
+  void _notifyAboutSyncError(BuildContext context) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        // content: Text("Can't sync with server, task will be changed locally."),
+        content: Text(context.strings.cantSyncWithServer),
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        closeIconColor: Colors.white,
+        backgroundColor: Colors.redAccent,
+        duration: const Duration(seconds: 5),
+      ),
+    );
+  }
+
+  void _notifyAboutSyncSuccess(BuildContext context) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(context.strings.syncSuccess),
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        closeIconColor: Colors.white,
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 2),
+      ),
     );
   }
 }

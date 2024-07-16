@@ -18,7 +18,7 @@ class AppDioConfigurator {
     String? proxyUrl,
     bool enableLog = false,
   }) {
-    const timeout = Duration(seconds: 30);
+    const timeout = Duration(seconds: 3);
 
     final dio = Dio();
 
