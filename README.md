@@ -42,7 +42,6 @@ The following criteria were met while doing the homework:
  - New auto_route navigator
  - Error handling for network errors
 
-I tried as hard as I could to maintain readability and code consistency (using autoformatter and linter), though it's still not perfect in my opinion, I could make better decomposition, but I'm happy with the result.
 
 ## For devs 💾
 
@@ -99,13 +98,22 @@ Each feature usually divided into 3 parts:
 
 The app has a deeplink for adding/editing todos.
 
-You can test it using adb on android with the following command:
+You can test it using adb on android with the following commands:
 
+If you have not installed adb, you can download it from [here](https://developer.android.com/tools/releases/platform-tools)
+
+#### Add new todo
 ```bash
 adb shell am start -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "http://yatodo/my_todos/new"
 ```
 
-If you have not installed adb, you can download it from [here](https://developer.android.com/tools/releases/platform-tools)
+#### Edit existing todo
+```bash
+adb shell am start -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "http://yatodo/my_todos/INSERT_TODO_ID/edit"
+```
+
+*For `not found` situation it will ask you to create a brand new todo. (In the future I will add some error handling or redirections for this case).
+
 
 ## Download 🚀
 
