@@ -37,10 +37,16 @@ void main() {
         ..i('Your local revision: ${await db.revisionDao.getRevision()}');
 
       // App entry point
-      runApp(YetAnotherTodoApp(sharedPrefs: sharedPrefs, db: db));
+      runApp(YetAnotherTodoApp(
+        sharedPrefs: sharedPrefs,
+        db: db,
+      ));
     },
     (error, stackTrace) {
-      logger.e('$error \n $stackTrace \n');
+      logger.e(
+        error,
+        stackTrace: stackTrace,
+      );
     },
   );
 }
