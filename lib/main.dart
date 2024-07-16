@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,10 @@ void main() {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
 
-      await dotenv.load(fileName: 'config.env');
+      await dotenv.load(
+        fileName: 'config.env',
+        mergeWith: Platform.environment,
+      );
       logger.i('$_loggerPrefix: .env config file loaded');
 
       final sharedPrefs = await SharedPreferences.getInstance();
