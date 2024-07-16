@@ -1,6 +1,6 @@
 name: "yet_another_todo"
 
-version: "1.0.0+1"
+version: "3.0.0+1"
 publish_to: none
 
 environment:
@@ -9,7 +9,9 @@ environment:
 description: A new Flutter project.
 
 dependencies:
+  auto_route: ^8.2.0
   bloc: ^8.1.4
+  connectivity_plus: ^6.0.3
   cupertino_icons: "^1.0.6"
 
   dio: ^5.4.3+1
@@ -38,6 +40,7 @@ dependencies:
   uuid: ^4.4.0
 
 dev_dependencies:
+  auto_route_generator: ^8.0.0
   build_runner: ^2.4.11
   drift_dev: ^2.18.0
   flutter_lints: ^4.0.0

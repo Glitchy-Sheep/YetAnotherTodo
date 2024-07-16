@@ -1,14 +1,18 @@
 import 'package:dio/dio.dart';
 
-class LastKnownRevisionInterceptor extends Interceptor {
-  final Future<int> Function() getLastRevision;
+typedef RevisionGetter = Future<int> Function();
 
-  LastKnownRevisionInterceptor(this.getLastRevision);
+class LastKnownRevisionInterceptor extends Interceptor {
+  final RevisionGetter lastRevisionGetter;
+
+  LastKnownRevisionInterceptor({
+    required this.lastRevisionGetter,
+  });
 
   @override
   Future<void> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    final lastKnownRevision = await getLastRevision();
+    final lastKnownRevision = await lastRevisionGetter();
     options.headers['X-Last-Known-Revision'] = lastKnownRevision;
     handler.next(options);
   }

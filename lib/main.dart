@@ -9,6 +9,8 @@ import 'src/core/database/database_impl.dart';
 import 'src/core/tools/logger.dart';
 import 'src/feature/app/app_entry_point.dart';
 
+const _loggerPrefix = '[MAIN]';
+
 void main() {
   PlatformDispatcher.instance.onError = (error, stackTrace) {
     logger.e('$error \n $stackTrace \n');
@@ -24,19 +26,27 @@ void main() {
       WidgetsFlutterBinding.ensureInitialized();
 
       await dotenv.load(fileName: 'config.env');
-      logger.i('ENV FILE LOADED');
+      logger.i('$_loggerPrefix: .env config file loaded');
 
       final sharedPrefs = await SharedPreferences.getInstance();
+      logger.i('$_loggerPrefix: Shared preferences initialized');
+
       final db = AppDatabaseImpl();
+      logger
+        ..i('$_loggerPrefix: Database initialized')
+        ..i('Your local revision: ${await db.revisionDao.getRevision()}');
 
       // App entry point
       runApp(YetAnotherTodoApp(
         sharedPrefs: sharedPrefs,
-        db: db
+        db: db,
       ));
     },
     (error, stackTrace) {
-      logger.e('$error \n $stackTrace \n');
+      logger.e(
+        error,
+        stackTrace: stackTrace,
+      );
     },
   );
 }

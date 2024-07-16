@@ -7,26 +7,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/api/dio_configuration.dart';
 import '../../core/api/interceptors/auth_interceptor.dart';
 import '../../core/database/database_impl.dart';
-import '../../core/uikit/theme.dart';
-import '../todo/presentation/screens/todo_view.dart';
+import '../../core/router/router.dart';
+import '../../core/uikit/uikit.dart';
+import 'app_settings.dart';
 import 'di/app_scope.dart';
-import 'preferences.dart';
 
 /// The entry point of the app
 class YetAnotherTodoApp extends StatelessWidget {
   final SharedPreferences sharedPrefs;
   final AppDatabaseImpl db;
+  final AppRouter _appRouter;
 
-  const YetAnotherTodoApp({
+  YetAnotherTodoApp({
     required this.db,
     required this.sharedPrefs,
     super.key,
-  });
+  }) : _appRouter = AppRouter();
 
-  // All the DI will be done in the [YetAnotherTodoApp] class
   @override
   Widget build(BuildContext context) {
     return AppScope(
+      // ------ Main App Scope Init ------
+      db: db,
       dio: AppDioConfigurator.create(
         interceptors: [
           AuthDioInterceptor(
@@ -35,24 +37,22 @@ class YetAnotherTodoApp extends StatelessWidget {
         ],
         url: dotenv.env['API_BASE_URL']!,
       ),
-      db: db,
-      child: AppPreferencesScope(
-        preferences: sharedPrefs,
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: AppThemeData.lightTheme,
-          darkTheme: AppThemeData.darkTheme,
-          // Override the default localization delegate
-          // so the app is consistent with its language.
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            AppLocalizations.delegate,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const TodoViewScreen(),
-        ),
+      appSettingsRepository: AppSettingsRepository(
+        sharedPreferences: sharedPrefs,
+      ),
+      // ---------------------------------
+      child: MaterialApp.router(
+        routerConfig: _appRouter.config(),
+        debugShowCheckedModeBanner: false,
+        theme: AppThemeData.lightTheme,
+        darkTheme: AppThemeData.darkTheme,
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          AppLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
       ),
     );
   }

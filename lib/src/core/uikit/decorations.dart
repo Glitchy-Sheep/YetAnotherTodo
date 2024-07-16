@@ -7,11 +7,11 @@ abstract class AppDecorations {
     ),
     boxShadow: [
       BoxShadow(
-        color: Color.fromRGBO(0, 0, 0, 0.06),
+        color: Color(0x0f000000),
         blurRadius: 2,
       ),
       BoxShadow(
-        color: Color.fromRGBO(0, 0, 0, 0.12),
+        color: Color(0x1f000000),
         blurRadius: 2,
         offset: Offset(0, 2),
       ),
