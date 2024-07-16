@@ -47,6 +47,11 @@ jobs:
         with:
           channel: "stable"
       - run: flutter pub get
+
+      - run: touch config.env
+      - run: echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> config.env
+      - run: echo "API_TOKEN=${{ secrets.API_TOKEN }}" >> config.env
+
       - run: flutter test
 
   build:
