@@ -30,7 +30,7 @@ jobs:
       - run: flutter pub get
       - run: flutter gen-l10n
       - run: dart run build_runner build --delete-conflicting-outputs
-      - run: flutter format --set-exit-if-changed .
+      - run: dart format --set-exit-if-changed .
 
   test:
     timeout-minutes: 10

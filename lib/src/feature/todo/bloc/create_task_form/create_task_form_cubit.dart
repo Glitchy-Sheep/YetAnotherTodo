@@ -6,8 +6,6 @@ import '../../domain/repository/db_todo_repository.dart';
 
 part 'create_task_form_cubit.freezed.dart';
 
-const String _loggerPrefix = '[CUBIT - CREATE TASK FORM]';
-
 class CreateTaskFormCubit extends Cubit<CreateTaskFormState> {
   bool _isNewTask = true;
   final String? taskToEditId;
@@ -38,7 +36,7 @@ class CreateTaskFormCubit extends Cubit<CreateTaskFormState> {
 
       final task = await todoRepository.getTodoById(taskId);
       if (task == null) {
-        // TODO: Error handling for deep links
+        // `TODO`: Error handling for deep links
         // throw Exception('Task with id $taskId not found');
         return;
       }
