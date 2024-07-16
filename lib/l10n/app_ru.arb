@@ -1,0 +1,18 @@
+{
+    "@@locale": "ru",
+
+    "myTodos": "Мои дела",
+    "importance": "Важность",
+    "finishUntil": "Сделать до",
+    "saveCapsed": "СОХРАНИТЬ",
+    "whatShouldBeDone": "Что должно быть сделано...",
+    "done": "Сделано",
+    "delete": "Удалить",
+
+    "none": "Нет",
+    "low": "Низкий",
+    "high": "Высокий",
+
+    "newTodo": "Новое",
+    "enterDescription": "Сперва введите описание задачи"
+}
