@@ -35,6 +35,12 @@ The following criteria were met while doing the homework:
  - Basic tests for API and local storage (to be sure everything is working fine)
  - Added shared preferences for further feature development and storage of settings (e.g. completed tasks visibility)
 
+### Stage 3 - Bjarne Stroustrup
+ - Offline first architecture with TodoBloc
+ - Deeplinks for add/edit screen
+ - New auto_route navigator
+ - Error handling for network errors
+
 I tried as hard as I could to maintain readability and code consistency (using autoformatter and linter), though it's still not perfect in my opinion, I could make better decomposition, but I'm happy with the result.
 
 ## For devs 💾
@@ -72,6 +78,7 @@ The app has 3 root directories in the project:
   - *database* - Has all the database related stuff (tables, DAOs, database impl)
   - *uikit* - All the components, styles, colors used in the App
   - *tools* - Some specific tools (logger, uuid, formatters)
+  - *router* - All auto_route related files and routes
 
 
 **feature** - The directory for all the app's modules and featuress.

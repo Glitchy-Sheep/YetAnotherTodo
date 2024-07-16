@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.0
+
+    - Offline-first architecture
+    - Added deeplinks support for add/edit todo
+    - New navigation based on auto_route package
+    - Error handling for network errors
+
 ## 2.0.0
 
 
