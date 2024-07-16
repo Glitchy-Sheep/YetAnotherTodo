@@ -7,6 +7,7 @@ import '../../todo/data/repository/db_todo_repository_impl.dart';
 import '../../todo/domain/repository/api_todo_repository.dart';
 import '../../todo/domain/repository/db_todo_repository.dart';
 import '../app_settings.dart';
+import '../bloc/internet_cubit/internet_cubit.dart';
 
 class AppScope extends InheritedWidget {
   final TodoApiRepository _todoApiRepository;
@@ -14,6 +15,7 @@ class AppScope extends InheritedWidget {
   final AppSettingsRepository _appSettingsRepository;
 
   late final TodoBloc todoBloc;
+  final InternetCubit internetCubit = InternetCubit();
 
   AppScope({
     required super.child,

@@ -11,6 +11,7 @@ description: A new Flutter project.
 dependencies:
   auto_route: ^8.2.0
   bloc: ^8.1.4
+  connectivity_plus: ^6.0.3
   cupertino_icons: "^1.0.6"
 
   dio: ^5.4.3+1

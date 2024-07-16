@@ -6,6 +6,7 @@ import '../../../../core/router/router.dart';
 import '../../../../core/tools/tools.dart';
 import '../../../../core/uikit/theme_shortcut.dart';
 import '../../../../core/uikit/uikit.dart';
+import '../../../app/bloc/internet_cubit/internet_cubit.dart';
 import '../../../app/di/app_scope.dart';
 import '../../bloc/todo_bloc/todo_bloc.dart';
 import '../../domain/entities/task_entity.dart';
@@ -23,20 +24,20 @@ class TodoViewScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: context.theme.scaffoldBackgroundColor,
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            AppScope.of(context).todoBloc.add(
-                  const TodoEvent.syncWithServer(),
-                );
-          },
-          child: const CustomScrollView(
-            slivers: [
-              _SliverTodoViewAppBar(),
-              SliverPadding(
-                padding: EdgeInsets.all(16),
-                sliver: _SliverTodoListView(),
-              ),
-            ],
+        child: BlocListener<InternetCubit, InternetState>(
+          bloc: AppScope.of(context).internetCubit,
+          listener: _startUpChore,
+          child: RefreshIndicator(
+            onRefresh: () async => _onRefreshTasks(context),
+            child: const CustomScrollView(
+              slivers: [
+                _SliverTodoViewAppBar(),
+                SliverPadding(
+                  padding: EdgeInsets.all(16),
+                  sliver: _SliverTodoListView(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -49,6 +50,54 @@ class TodoViewScreen extends StatelessWidget {
   void onAddTaskPressed(BuildContext context) {
     logger.i('Pushed create route');
     context.router.push(TodoEditOrCreateRoute());
+  }
+
+  // Before refresh we can check the internet state
+  // and notify user about lost connection
+  Future<void> _onRefreshTasks(BuildContext context) async {
+    final internetState = context.appScope.internetCubit.state;
+    if (internetState != InternetState.connected) {
+      _notifyAboutInternetStatus(context, internetState);
+      return;
+    }
+    context.appScope.todoBloc.add(const TodoEvent.syncWithServer());
+  }
+
+  // This method is called when the internet state changes
+  //
+  // It will:
+  // 1. Notify user about lost internet connection
+  // 2. Sync with server if connection is restored
+  void _startUpChore(
+    BuildContext context,
+    InternetState state,
+  ) {
+    switch (state) {
+      case InternetState.initial:
+        return;
+      case InternetState.connected:
+        AppScope.of(context).todoBloc.add(const TodoEvent.syncWithServer());
+      case InternetState.disconnected:
+        _notifyAboutInternetStatus(context, state);
+    }
+  }
+
+  void _notifyAboutInternetStatus(BuildContext context, InternetState state) {
+    if (state == InternetState.disconnected) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'No internet connection. Data will be synchronized when the connection is restored. In the meantime, you can continue adding tasks locally.',
+          ),
+          behavior: SnackBarBehavior.floating,
+          showCloseIcon: true,
+          closeIconColor: Colors.white,
+          backgroundColor: Colors.redAccent,
+          duration: Duration(seconds: 5),
+        ),
+      );
+    }
   }
 }
 
