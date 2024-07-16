@@ -38,7 +38,9 @@ class CreateTaskFormCubit extends Cubit<CreateTaskFormState> {
 
       final task = await todoRepository.getTodoById(taskId);
       if (task == null) {
-        throw Exception('Task with id $taskId not found');
+        // TODO: Error handling for deep links
+        // throw Exception('Task with id $taskId not found');
+        return;
       }
 
       emit(

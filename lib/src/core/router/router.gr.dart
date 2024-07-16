@@ -16,13 +16,15 @@ abstract class _$AppRouter extends RootStackRouter {
   @override
   final Map<String, PageFactory> pagesMap = {
     TodoEditOrCreateRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<TodoEditOrCreateRouteArgs>(
-          orElse: () => const TodoEditOrCreateRouteArgs());
+          orElse: () => TodoEditOrCreateRouteArgs(
+              taskToEdit: pathParams.optString('id')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: TodoEditOrCreateScreen(
-          key: args.key,
           taskToEdit: args.taskToEdit,
+          key: args.key,
         ),
       );
     },
@@ -39,15 +41,16 @@ abstract class _$AppRouter extends RootStackRouter {
 /// [TodoEditOrCreateScreen]
 class TodoEditOrCreateRoute extends PageRouteInfo<TodoEditOrCreateRouteArgs> {
   TodoEditOrCreateRoute({
-    Key? key,
     String? taskToEdit,
+    Key? key,
     List<PageRouteInfo>? children,
   }) : super(
           TodoEditOrCreateRoute.name,
           args: TodoEditOrCreateRouteArgs(
-            key: key,
             taskToEdit: taskToEdit,
+            key: key,
           ),
+          rawPathParams: {'id': taskToEdit},
           initialChildren: children,
         );
 
@@ -59,17 +62,17 @@ class TodoEditOrCreateRoute extends PageRouteInfo<TodoEditOrCreateRouteArgs> {
 
 class TodoEditOrCreateRouteArgs {
   const TodoEditOrCreateRouteArgs({
-    this.key,
     this.taskToEdit,
+    this.key,
   });
-
-  final Key? key;
 
   final String? taskToEdit;
 
+  final Key? key;
+
   @override
   String toString() {
-    return 'TodoEditOrCreateRouteArgs{key: $key, taskToEdit: $taskToEdit}';
+    return 'TodoEditOrCreateRouteArgs{taskToEdit: $taskToEdit, key: $key}';
   }
 }
 

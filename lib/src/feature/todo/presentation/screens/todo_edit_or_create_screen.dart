@@ -13,8 +13,8 @@ import '../../domain/entities/task_entity.dart';
 @RoutePage()
 class TodoEditOrCreateScreen extends StatelessWidget {
   const TodoEditOrCreateScreen({
+    @PathParam('id') this.taskToEdit,
     super.key,
-    this.taskToEdit,
   });
 
   final String? taskToEdit;
