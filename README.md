@@ -10,7 +10,8 @@ It's a Flutter app for making a todo list.
 2. [For devs 💾](#for-devs-)
 3. [Screenshots 📷](#screenshots-)
 4. [Architecture 📦](#architecture-)
-5. [Download 🚀](#download-)
+5. [About DeepLinks 🔗](#about-deeplinks-)
+6. [Download 🚀](#download-)
 
 ## Features 🏁
 
@@ -50,7 +51,7 @@ I tried as hard as I could to maintain readability and code consistency (using a
 2. Execute `flutter pub get`
 3. Rename `config.env.template` to `config.env` and replace the API token/BaseURL with yours
 4. Execute `dart run build_runner build` for db/freezed/etc code generation
-4.1. Optionally you can run tests before running the app with `flutter test`
+   - Optionally you can run tests before running the app with `flutter test`
 5. Execute `flutter run` or start debugging in your IDE
 
 ## Screenshots 📷
@@ -93,6 +94,18 @@ Each feature usually divided into 3 parts:
 - data: Data sources and repositories
 - bloc: BLoC related files, for state management (I decided to separate bloc and domain in sake of navigation simplicity)
 
+
+## About DeepLinks 🔗
+
+The app has a deeplink for adding/editing todos.
+
+You can test it using adb on android with the following command:
+
+```bash
+adb shell am start -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "http://yatodo/my_todos/new"
+```
+
+If you have not installed adb, you can download it from [here](https://developer.android.com/tools/releases/platform-tools)
 
 ## Download 🚀
 
