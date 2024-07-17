@@ -86,13 +86,13 @@ jobs:
           base64-encoded-secret: ${{ secrets.FIREBASE_GOOGLE_SERVICES }}
           filename: android/app/google-services.json
 
-      - run: flutter build apk --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL }} --dart-define=API_TOKEN=${{ secrets.API_TOKEN }}
+      - run: flutter build apk --release
 
       - name: Upload APK to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
-          files: /build/app/outputs/apk/release/app-release.apk
+          files: build/app/outputs/apk/release/app-release.apk
 
       - name: Upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
