@@ -14,7 +14,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - uses: ./.github/actions/init_flutter.yml
+      - uses: ./.github/actions/init_flutter
       - run: flutter analyze --no-fatal-infos
 
   format:
@@ -25,7 +25,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - uses: ./.github/actions/init_flutter.yml
+      - uses: ./.github/actions/init_flutter
       - run: dart format --set-exit-if-changed .
 
   test:
@@ -37,7 +37,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - uses: ./.github/actions/init_flutter.yml
+      - uses: ./.github/actions/init_flutter
       - run: flutter test
 
   build:
@@ -53,7 +53,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - uses: ./.github/actions/init_flutter.yml
+      - uses: ./.github/actions/init_flutter
       - run: flutter build apk --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL }} --dart-define=API_TOKEN=${{ secrets.API_TOKEN }} --split-per-abi
       - name: Upload APK to GitHub Release
         uses: softprops/action-gh-release@v1
