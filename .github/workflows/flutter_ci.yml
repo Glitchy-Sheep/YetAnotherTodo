@@ -86,7 +86,7 @@ jobs:
           base64-encoded-secret: ${{ secrets.FIREBASE_GOOGLE_SERVICES }}
           filename: android/app/google-services.json
 
-      - run: flutter build apk --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL }} --dart-define=API_TOKEN=${{ secrets.API_TOKEN }} --split-per-abi
+      - run: flutter build apk --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL }} --dart-define=API_TOKEN=${{ secrets.API_TOKEN }}
 
       - name: Upload APK to GitHub Release
         uses: softprops/action-gh-release@v2
