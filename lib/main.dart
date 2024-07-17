@@ -15,10 +15,6 @@ import 'src/feature/app/app_entry_point.dart';
 const _loggerPrefix = '[MAIN]';
 
 void main() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
   PlatformDispatcher.instance.onError = (error, stackTrace) {
     logger.e('$error \n $stackTrace \n');
     return true;
@@ -31,6 +27,9 @@ void main() async {
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
 
       await dotenv.load(
         fileName: 'config.env',
