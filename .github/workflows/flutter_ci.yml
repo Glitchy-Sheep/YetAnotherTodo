@@ -6,43 +6,16 @@ on:
       - main
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Generate localization files
-        run: flutter gen-l10n
-
-      - name: Run build_runner
-        run: dart run build_runner build --delete-conflicting-outputs
-
   analyze:
     timeout-minutes: 10
+    name: format
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - run: flutter pub get
-      - run: flutter gen-l10n
-      - run: dart run build_runner build --delete-conflicting-outputs
+      - uses: ./.github/actions/initialize_flutter
       - run: flutter analyze --no-fatal-infos
 
   format:
@@ -53,9 +26,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - run: flutter pub get
-      - run: flutter gen-l10n
-      - run: dart run build_runner build --delete-conflicting-outputs
+      - uses: ./.github/actions/initialize_flutter
       - run: dart format --set-exit-if-changed .
 
   test:
@@ -67,21 +38,13 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - run: flutter pub get
-      - run: dart run build_runner build --delete-conflicting-outputs
-      - run: |
-          touch config.env
-          echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> config.env
-          echo "API_TOKEN=${{ secrets.API_TOKEN }}" >> config.env
+      - uses: ./.github/actions/initialize_flutter
       - run: flutter test
 
   build:
     timeout-minutes: 18
     needs: [test]
     runs-on: ubuntu-latest
-    env:
-      API_BASE_URL: ${{ secrets.API_BASE_URL }}
-      API_TOKEN: ${{ secrets.API_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -91,13 +54,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - run: flutter pub get
-      - run: flutter gen-l10n
-      - run: dart run build_runner build --delete-conflicting-outputs
-      - run: |
-          touch config.env
-          echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> config.env
-          echo "API_TOKEN=${{ secrets.API_TOKEN }}" >> config.env
+      - uses: ./.github/actions/initialize_flutter
       - run: flutter build apk --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL }} --dart-define=API_TOKEN=${{ secrets.API_TOKEN }} --split-per-abi
       - name: Upload APK to GitHub Release
         uses: softprops/action-gh-release@v1
