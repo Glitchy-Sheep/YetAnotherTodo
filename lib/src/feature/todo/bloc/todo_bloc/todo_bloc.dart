@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../core/tools/tools.dart';
 import '../../../app/app_settings.dart';
@@ -48,6 +49,12 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     try {
       logger.i('$_logPref: Trying to sync with server...');
       await todoRepositoryApi.addTodo(event.todoToAdd);
+      await FirebaseAnalytics.instance.logEvent(name: 'add_todo', parameters: {
+        'id': event.todoToAdd.id,
+        'priority': event.todoToAdd.priority,
+        'finish_until': event.todoToAdd.finishUntil.toString(),
+        // Should we log `description` or not as it is a sensitive data?
+      });
     } on DioException catch (e) {
       logger.e('$_logPref: Failed to sync with server: $e');
       emit(TodoState.syncError(e.toString()));
@@ -65,6 +72,12 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     try {
       logger.i('$_logPref: Trying to sync with server...');
       await todoRepositoryApi.deleteTodo(event.id);
+      await FirebaseAnalytics.instance.logEvent(
+        name: 'delete_todo',
+        parameters: {
+          'id': event.id,
+        },
+      );
     } on DioException catch (e) {
       logger.e('$_logPref: Failed to sync with server: $e');
       emit(TodoState.syncError(e.toString()));
@@ -84,6 +97,14 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     try {
       logger.i('$_logPref: Trying to sync with server...');
       await todoRepositoryApi.editTodo(event.id, event.editedTodo);
+      await FirebaseAnalytics.instance.logEvent(name: 'edit_todo', parameters: {
+        'id': event.id,
+        'changedAt': event.editedTodo.changedAt.toString(),
+        'createdAt': event.editedTodo.createdAt.toString(),
+        'priority': event.editedTodo.priority,
+        'deadline': event.editedTodo.finishUntil.toString(),
+        // Should we log `description` or not as it is a sensitive data?
+      });
     } on DioException catch (e) {
       logger.e('$_logPref: Failed to sync with server: $e');
       emit(TodoState.syncError(e.toString()));
@@ -137,6 +158,13 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     final remoteTodos = await todoRepositoryApi.getTodos();
     final remoteTodoList = remoteTodos.tasks;
     final remoteRevision = remoteTodos.revision;
+
+    await FirebaseAnalytics.instance.logEvent(name: 'start_sync', parameters: {
+      'local_revision': localRevision,
+      'remote_revision': remoteRevision,
+      'local_tasks_count': localTodos.length,
+      'remote_tasks_count': remoteTodoList.length,
+    });
 
     for (final remoteTodo in remoteTodoList) {
       // Step 1:
@@ -204,6 +232,11 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       await todoRepositoryApi.updateAllTodos(todosAfterUpdate);
       logger.i('$_logPref: Patch request sent');
       emit(const TodoState.syncSuccess());
+      await FirebaseAnalytics.instance
+          .logEvent(name: 'successful_sync', parameters: {
+        'after_update_tasks_count': todosAfterUpdate.length,
+        'before_update_tasks_count': localTodos.length,
+      });
     } on DioException catch (e) {
       logger.e('$_logPref: Failed to sync with server: $e');
       emit(TodoState.syncError(e.toString()));
