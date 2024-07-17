@@ -80,7 +80,7 @@ jobs:
           api_token: ${{ secrets.API_TOKEN }}
           api_base_url: ${{ secrets.API_BASE_URL }}
 
-      - name: Generate google-services.json
+      - name: Generate google-services.json via cat
         run: |
           touch android/app/google-services.json
           cat "${{ secrets.FIREBASE_GOOGLE_SERVICES }}" > android/app/google-services.json
