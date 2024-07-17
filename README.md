@@ -42,6 +42,13 @@ The following criteria were met while doing the homework:
  - New auto_route navigator
  - Error handling for network errors
 
+### Stage 4 - Bjarne Stroustrup
+ - Add ci/cd for
+   - tests
+   - format/lint/analyze
+   - build
+   - Firebase App Distribution
+
 
 ## For devs 💾
 

@@ -2,6 +2,13 @@
 
 ## 3.0.0
 
+
+    - CI/CD: tests, format/analyze, build, firebase app distribution
+
+
+## 3.0.0
+
+
     - Offline-first architecture
     - Added deeplinks support for add/edit todo
     - New navigation based on auto_route package
