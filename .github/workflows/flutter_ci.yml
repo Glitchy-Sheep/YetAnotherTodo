@@ -92,7 +92,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           draft: true
-          files: build/app/outputs/flutter-apk/app-release.apk
+          files: /build/app/outputs/apk/release/app-release.apk
 
       - name: Upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -100,4 +100,4 @@ jobs:
           appId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS_FILE_CONTENT }}
           groups: main-testers
-          file: build/app/outputs/flutter-apk/app-release.apk
+          file: build/app/outputs/apk/release/app-release.apk
