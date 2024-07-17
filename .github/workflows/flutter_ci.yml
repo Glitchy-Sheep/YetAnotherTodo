@@ -79,6 +79,12 @@ jobs:
         with:
           api_token: ${{ secrets.API_TOKEN }}
           api_base_url: ${{ secrets.API_BASE_URL }}
+
+      - name: Generate google-services.json
+        run: |
+          touch android/app/google-services.json
+          echo "${{ secrets.FIREBASE_GOOGLE_SERVICES }}" > android/app/google-services.json
+
       - run: flutter build apk --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL }} --dart-define=API_TOKEN=${{ secrets.API_TOKEN }} --split-per-abi
 
       - name: Upload APK to GitHub Release
