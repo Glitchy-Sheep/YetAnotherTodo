@@ -8,14 +8,13 @@ on:
 jobs:
   analyze:
     timeout-minutes: 10
-    name: format
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - uses: ./.github/actions/initialize_flutter
+      - uses: ./.github/actions/init_flutter.yml
       - run: flutter analyze --no-fatal-infos
 
   format:
@@ -26,7 +25,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - uses: ./.github/actions/initialize_flutter
+      - uses: ./.github/actions/init_flutter.yml
       - run: dart format --set-exit-if-changed .
 
   test:
@@ -38,7 +37,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - uses: ./.github/actions/initialize_flutter
+      - uses: ./.github/actions/init_flutter.yml
       - run: flutter test
 
   build:
@@ -54,7 +53,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - uses: ./.github/actions/initialize_flutter
+      - uses: ./.github/actions/init_flutter.yml
       - run: flutter build apk --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL }} --dart-define=API_TOKEN=${{ secrets.API_TOKEN }} --split-per-abi
       - name: Upload APK to GitHub Release
         uses: softprops/action-gh-release@v1
