@@ -5,12 +5,17 @@ on:
     branches:
       - main
 
+# I will refactor this config file
+# after completing the stage 4
+# 
+# I think it can be optimized a lot
+
 jobs:
   analyze:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable"
@@ -28,7 +33,7 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable"
@@ -42,7 +47,7 @@ jobs:
     needs: [format, analyze]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable"
@@ -56,7 +61,7 @@ jobs:
       - run: flutter test
 
   build:
-    timeout-minutes: 10
+    timeout-minutes: 15
     needs: [test]
     runs-on: ubuntu-latest
     env:
