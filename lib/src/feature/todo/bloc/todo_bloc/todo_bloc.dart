@@ -13,6 +13,7 @@ part 'todo_state.dart';
 part 'todo_bloc.freezed.dart';
 
 const String _logPref = '[BLoC - TODO]';
+const int _tooOldLastKnownRevisionStatusCode = 400;
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   final TodoApiRepository todoRepositoryApi;
@@ -58,6 +59,9 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     } on DioException catch (e) {
       logger.e('$_logPref: Failed to sync with server: $e');
       emit(TodoState.syncError(e.toString()));
+      if (e.response?.statusCode == _tooOldLastKnownRevisionStatusCode) {
+        add(const TodoEvent.syncWithServer());
+      }
     }
   }
 
@@ -81,6 +85,9 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     } on DioException catch (e) {
       logger.e('$_logPref: Failed to sync with server: $e');
       emit(TodoState.syncError(e.toString()));
+      if (e.response?.statusCode == _tooOldLastKnownRevisionStatusCode) {
+        add(const TodoEvent.syncWithServer());
+      }
     }
   }
 
@@ -108,6 +115,9 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     } on DioException catch (e) {
       logger.e('$_logPref: Failed to sync with server: $e');
       emit(TodoState.syncError(e.toString()));
+      if (e.response?.statusCode == _tooOldLastKnownRevisionStatusCode) {
+        add(const TodoEvent.syncWithServer());
+      }
     }
   }
 
