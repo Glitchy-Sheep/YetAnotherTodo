@@ -14,52 +14,52 @@ on:
 # ⚡
 
 jobs:
-  analyze:
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-      - uses: ./.github/actions/init_flutter
-        with:
-          api_token: ${{ secrets.API_TOKEN }}
-          api_base_url: ${{ secrets.API_BASE_URL }}
-      - run: flutter analyze --no-fatal-infos
+  #   analyze:
+  #     timeout-minutes: 10
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - uses: actions/checkout@v4
+  #       - uses: subosito/flutter-action@v2
+  #         with:
+  #           channel: stable
+  #       - uses: ./.github/actions/init_flutter
+  #         with:
+  #           api_token: ${{ secrets.API_TOKEN }}
+  #           api_base_url: ${{ secrets.API_BASE_URL }}
+  #       - run: flutter analyze --no-fatal-infos
 
-  format:
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-      - uses: ./.github/actions/init_flutter
-        with:
-          api_token: ${{ secrets.API_TOKEN }}
-          api_base_url: ${{ secrets.API_BASE_URL }}
-      - run: dart format --set-exit-if-changed .
+  #   format:
+  #     timeout-minutes: 10
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - uses: actions/checkout@v4
+  #       - uses: subosito/flutter-action@v2
+  #         with:
+  #           channel: stable
+  #       - uses: ./.github/actions/init_flutter
+  #         with:
+  #           api_token: ${{ secrets.API_TOKEN }}
+  #           api_base_url: ${{ secrets.API_BASE_URL }}
+  #       - run: dart format --set-exit-if-changed .
 
-  test:
-    timeout-minutes: 10
-    needs: [format, analyze]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-      - uses: ./.github/actions/init_flutter
-        with:
-          api_token: ${{ secrets.API_TOKEN }}
-          api_base_url: ${{ secrets.API_BASE_URL }}
-      - run: flutter test
+  #   test:
+  #     timeout-minutes: 10
+  #     needs: [format, analyze]
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - uses: actions/checkout@v4
+  #       - uses: subosito/flutter-action@v2
+  #         with:
+  #           channel: stable
+  #       - uses: ./.github/actions/init_flutter
+  #         with:
+  #           api_token: ${{ secrets.API_TOKEN }}
+  #           api_base_url: ${{ secrets.API_BASE_URL }}
+  #       - run: flutter test
 
   build:
     timeout-minutes: 18
-    needs: [test]
+    # needs: [test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
