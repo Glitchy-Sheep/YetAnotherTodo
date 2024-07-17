@@ -1,18 +1,24 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'firebase_options.dart';
 import 'src/core/database/database_impl.dart';
 import 'src/core/tools/logger.dart';
 import 'src/feature/app/app_entry_point.dart';
 
 const _loggerPrefix = '[MAIN]';
 
-void main() {
+void main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   PlatformDispatcher.instance.onError = (error, stackTrace) {
     logger.e('$error \n $stackTrace \n');
     return true;
@@ -22,7 +28,7 @@ void main() {
     logger.e('${details.exception} \n ${details.stack} \n');
   };
 
-  runZonedGuarded(
+  await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
 
