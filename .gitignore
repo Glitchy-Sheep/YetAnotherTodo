@@ -50,5 +50,6 @@ app.*.map.json
 *.freezed.*
 
 # Firebase stuff
-firebase.json
-google-services.json
+# firebase.json
+# google-services.json
+# firebase_options.dart

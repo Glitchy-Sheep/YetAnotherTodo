@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "694343399996",
+    "project_id": "yetanothertodo-45be1",
+    "storage_bucket": "yetanothertodo-45be1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694343399996:android:e47ec9d45ebdba646a6139",
+        "android_client_info": {
+          "package_name": "com.example.yet_another_todo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkk6I0h_RiTTW-5pyTYLVoxcJ2wXpycoY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
