@@ -1,4 +1,11 @@
 name: "Init Flutter"
+
+inputs:
+  api_base_url:
+    required: true
+  api_token:
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -10,16 +17,20 @@ runs:
         architecture: "x64"
 
     - name: Get dependencies
-    - run: flutter pub get
+      shell: bash
+      run: flutter pub get
 
     - name: Generate code
-    - run: dart run build_runner build --delete-conflicting-outputs
+      shell: bash
+      run: dart run build_runner build --delete-conflicting-outputs
 
     - name: Generate localization
-    - run: flutter gen-l10n
+      shell: bash
+      run: flutter gen-l10n
 
     - name: Generate config.env
-    - run: |
+      shell: bash
+      run: |
         touch config.env
-        echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> config.env
-        echo "API_TOKEN=${{ secrets.API_TOKEN }}" >> config.env
+        echo "API_BASE_URL=${{ inputs.API_BASE_URL }}" >> config.env
+        echo "API_TOKEN=${{ inputs.API_TOKEN }}" >> config.env
