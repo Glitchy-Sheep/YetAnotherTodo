@@ -5,6 +5,14 @@ on:
     branches:
       - main
 
+# I'm using custom actions here
+# so the config doesn't repeat in every job of the workflow
+# and it seems more clean and consistent
+#
+# But I think that should be some better solution for this
+# later on I will have a look at it after passing the stage 4 deadline
+# ⚡
+
 jobs:
   analyze:
     timeout-minutes: 10
@@ -62,14 +70,19 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+
       - uses: ./.github/actions/init_flutter
         with:
           api_token: ${{ secrets.API_TOKEN }}
           api_base_url: ${{ secrets.API_BASE_URL }}
       - run: flutter build apk --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL }} --dart-define=API_TOKEN=${{ secrets.API_TOKEN }} --split-per-abi
+
       - name: Upload APK to GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v4
+        if: startsWith(github.ref, 'refs/tags/')
         with:
+          tag: ${{ github.ref }}
           files: build/app/outputs/flutter-apk/app-release.apk
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
