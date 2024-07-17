@@ -5,6 +5,8 @@ inputs:
     required: true
   api_token:
     required: true
+  firebase_options:
+    required: true
 
 runs:
   using: "composite"
@@ -34,3 +36,9 @@ runs:
         touch config.env
         echo "API_BASE_URL=${{ inputs.API_BASE_URL }}" >> config.env
         echo "API_TOKEN=${{ inputs.API_TOKEN }}" >> config.env
+
+    - name: Generate /lib/firebase_options.dart
+      shell: bash
+      run: |
+        touch lib/firebase_options.dart
+        echo "${{ inputs.firebase_options }}" >> lib/firebase_options.dart

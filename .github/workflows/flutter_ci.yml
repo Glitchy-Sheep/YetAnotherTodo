@@ -30,6 +30,7 @@ jobs:
         with:
           api_token: ${{ secrets.API_TOKEN }}
           api_base_url: ${{ secrets.API_BASE_URL }}
+          firebase_options: ${{ secrets.FIREBASE_OPTIONS }}
       - run: flutter analyze --no-fatal-infos
 
   format:
@@ -44,6 +45,7 @@ jobs:
         with:
           api_token: ${{ secrets.API_TOKEN }}
           api_base_url: ${{ secrets.API_BASE_URL }}
+          firebase_options: ${{ secrets.FIREBASE_OPTIONS }}
       - run: dart format --set-exit-if-changed .
 
   test:
@@ -59,6 +61,7 @@ jobs:
         with:
           api_token: ${{ secrets.API_TOKEN }}
           api_base_url: ${{ secrets.API_BASE_URL }}
+          firebase_options: ${{ secrets.FIREBASE_OPTIONS }}
       - run: flutter test
 
   build:
@@ -79,6 +82,7 @@ jobs:
         with:
           api_token: ${{ secrets.API_TOKEN }}
           api_base_url: ${{ secrets.API_BASE_URL }}
+          firebase_options: ${{ secrets.FIREBASE_OPTIONS }}
       - run: flutter build apk --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL }} --dart-define=API_TOKEN=${{ secrets.API_TOKEN }} --split-per-abi
 
       - name: Upload APK to GitHub Release
