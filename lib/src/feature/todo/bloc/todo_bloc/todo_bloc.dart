@@ -52,7 +52,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       await todoRepositoryApi.addTodo(event.todoToAdd);
       await FirebaseAnalytics.instance.logEvent(name: 'add_todo', parameters: {
         'id': event.todoToAdd.id,
-        'priority': event.todoToAdd.priority,
+        'priority': event.todoToAdd.priority.toString(),
         'finish_until': event.todoToAdd.finishUntil.toString(),
         // Should we log `description` or not as it is a sensitive data?
       });
