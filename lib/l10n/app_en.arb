@@ -15,5 +15,8 @@
     "high": "High",
 
     "newTodo": "New",
-    "enterDescription": "Enter the task description"
+    "enterDescription": "Enter the task description",
+
+    "cantSyncWithServer": "Can't sync with server, task will be changed locally.",
+    "syncSuccess": "Your tasks is up to date!"
 }

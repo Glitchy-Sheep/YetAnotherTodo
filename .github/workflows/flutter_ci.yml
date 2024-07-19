@@ -1,0 +1,103 @@
+name: Flutter CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+# I'm using custom actions here
+# so the config doesn't repeat in every job of the workflow
+# and it seems more clean and consistent
+#
+# But I think that should be some better solution for this
+# later on I will have a look at it after passing the stage 4 deadline
+# ⚡
+
+permissions:
+  contents: write
+  discussions: write
+
+jobs:
+  analyze:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - uses: ./.github/actions/init_flutter
+        with:
+          api_token: ${{ secrets.API_TOKEN }}
+          api_base_url: ${{ secrets.API_BASE_URL }}
+      - run: flutter analyze --no-fatal-infos
+
+  format:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - uses: ./.github/actions/init_flutter
+        with:
+          api_token: ${{ secrets.API_TOKEN }}
+          api_base_url: ${{ secrets.API_BASE_URL }}
+      - run: dart format --set-exit-if-changed .
+
+  test:
+    timeout-minutes: 10
+    needs: [format, analyze]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - uses: ./.github/actions/init_flutter
+        with:
+          api_token: ${{ secrets.API_TOKEN }}
+          api_base_url: ${{ secrets.API_BASE_URL }}
+      - run: flutter test
+
+  build:
+    timeout-minutes: 18
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: ./.github/actions/init_flutter
+        with:
+          api_token: ${{ secrets.API_TOKEN }}
+          api_base_url: ${{ secrets.API_BASE_URL }}
+
+      - name: Generate google-services.json via secret-to-file
+        uses: MobileDevOps/secret-to-file-action@v1.0.0
+        with:
+          base64-encoded-secret: ${{ secrets.FIREBASE_GOOGLE_SERVICES }}
+          filename: android/app/google-services.json
+
+      - run: flutter build apk --release
+
+      - name: Upload APK to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: build/app/outputs/apk/release/app-release.apk
+
+      - name: Upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS_FILE_CONTENT }}
+          groups: main-testers
+          file: build/app/outputs/apk/release/app-release.apk

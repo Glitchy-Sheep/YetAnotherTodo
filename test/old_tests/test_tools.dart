@@ -12,12 +12,13 @@ String generateRandomString(int length) {
 
 TaskEntity generateRandomTodoTask() {
   final id = generateRandomString(12);
+  final timestamp = DateTime.now();
 
   return TaskEntity(
     id: id,
     description: 'Test task',
     isDone: false,
-    createdAt: DateTime.now(),
-    changedAt: DateTime.now(),
+    createdAt: timestamp,
+    changedAt: timestamp,
   );
 }

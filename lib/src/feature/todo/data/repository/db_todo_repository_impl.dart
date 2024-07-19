@@ -1,24 +1,24 @@
 import '../../../../core/database/database_impl.dart';
+import '../../../../core/tools/logger.dart';
 import '../../domain/entities/task_entity.dart';
 import '../../domain/repository/db_todo_repository.dart';
+import '../mappers/task_mapper.dart';
 
-class TodoRepositoryDbImpl implements TodoRepositoryDb {
+const _loggerPrefix = '[REPOSITORY - DB]';
+
+class TodoDbRepositoryImpl implements TodoDbRepository {
   final AppDatabaseImpl _db;
 
-  TodoRepositoryDbImpl(this._db);
+  TodoDbRepositoryImpl(this._db);
 
   @override
-  Future<void> addTodo(TaskEntity todo) async {
-    await _db.todoDao.insertTodoItem(
-      TodoItem(
-        id: todo.id,
-        description: todo.description,
-        isDone: todo.isDone,
-        priority: todo.priority,
-        deadline: todo.finishUntil,
-        createdAt: todo.createdAt,
-        changedAt: todo.changedAt,
-      ),
+  Future<TaskEntity> addTodo(TaskEntity todo) async {
+    final insertedTodo = await _db.todoDao.insertTodoItem(
+      TaskMapper.fromEntityToDbModel(todo),
+    );
+
+    return TaskMapper.fromDbModelToEntity(
+      insertedTodo,
     );
   }
 
@@ -30,14 +30,14 @@ class TodoRepositoryDbImpl implements TodoRepositoryDb {
   @override
   Future<void> editTodo(String id, TaskEntity todo) async {
     await _db.todoDao.updateTodoItem(
-      TodoItem(
+      TodoDbModel(
         id: id,
         description: todo.description,
         isDone: todo.isDone,
         priority: todo.priority,
         deadline: todo.finishUntil,
         createdAt: todo.createdAt,
-        changedAt: todo.changedAt,
+        changedAt: DateTime.now(),
       ),
     );
   }
@@ -80,7 +80,25 @@ class TodoRepositoryDbImpl implements TodoRepositoryDb {
   }
 
   @override
-  Future<void> deleteAllTodos() {
-    return _db.todoDao.deleteAll();
+  Future<void> deleteAllTodos() async {
+    await _db.todoDao.deleteAll();
+  }
+
+  @override
+  Future<int> getRevision() async {
+    return _db.revisionDao.getRevision();
+  }
+
+  @override
+  Future<void> increaseRevision() async {
+    logger.i(
+        '$_loggerPrefix: Revision incresased - ${await _db.revisionDao.getRevision()}');
+    await _db.revisionDao.increaseRevision();
+  }
+
+  @override
+  Future<void> setRevision(int newRevisionValue) async {
+    logger.i('$_loggerPrefix: Revision set - $newRevisionValue');
+    await _db.revisionDao.setRevision(newRevisionValue);
   }
 }

@@ -16,9 +16,9 @@ class AppDioConfigurator {
     required Iterable<Interceptor> interceptors,
     required String url,
     String? proxyUrl,
-    bool enableLog = true,
+    bool enableLog = false,
   }) {
-    const timeout = Duration(seconds: 30);
+    const timeout = Duration(seconds: 3);
 
     final dio = Dio();
 

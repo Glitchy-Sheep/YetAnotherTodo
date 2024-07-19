@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'colors.dart';
 
 /// Storage for all the icons used in the app
 abstract class AppIcons {
-  static const Icon arrowDown = Icon(
+  static const arrowDown = Icon(
     Icons.arrow_downward,
   );
 
-  static const Icon important = Icon(
+  static const important = Icon(
     Icons.priority_high,
   );
 
-  static const Icon delete = Icon(
+  static const delete = Icon(
     Icons.delete,
     size: 24,
   );
 
-  static const Icon closeBlack = Icon(
+  static const closeBlack = Icon(
     Icons.close,
   );
 
-  static const Icon closeWhite = Icon(
+  static const closeWhite = Icon(
     Icons.close,
     color: ColorPalette.lightColorWhite,
   );
@@ -36,17 +37,29 @@ abstract class AppIcons {
     size: 24,
   );
 
-  static const Icon add = Icon(
+  static const add = Icon(
     Icons.add,
   );
 
-  static const Icon check = Icon(
+  static const check = Icon(
     Icons.check,
     color: ColorPalette.lightColorWhite,
   );
 
-  static const Icon taskInfo = Icon(
+  static const taskInfo = Icon(
     Icons.info_outline,
     size: 24,
+  );
+
+  static final exclamationMarks = SvgPicture.asset(
+    'assets/icons/exclamation_marks.svg',
+    width: 16,
+    height: 16,
+  );
+
+  static final arrowDownImportance = SvgPicture.asset(
+    'assets/icons/arrow_down.svg',
+    width: 16,
+    height: 16,
   );
 }

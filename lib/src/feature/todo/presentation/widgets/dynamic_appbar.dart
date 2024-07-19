@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/tools/app_localizations_alias.dart';
-import '../../../../core/uikit/app_icons.dart';
+import '../../../../core/uikit/theme_shortcut.dart';
+import '../../../../core/uikit/uikit.dart';
 import '../../../app/di/app_scope.dart';
-import '../../../app/preferences.dart';
 import '../../bloc/todo_bloc/todo_bloc.dart';
 
 class DynamicSliverAppBar extends SliverPersistentHeaderDelegate {
@@ -36,8 +36,8 @@ class DynamicSliverAppBar extends SliverPersistentHeaderDelegate {
         AppBar(
           scrolledUnderElevation: 4,
           backgroundColor: Color.lerp(
-            Theme.of(context).appBarTheme.backgroundColor,
-            Theme.of(context).appBarTheme.surfaceTintColor,
+            context.theme.appBarTheme.backgroundColor,
+            context.theme.appBarTheme.surfaceTintColor,
             (1 - (shrinkOffset / expandedHeight)).clamp(0, 1),
           ),
         ),
@@ -46,9 +46,9 @@ class DynamicSliverAppBar extends SliverPersistentHeaderDelegate {
           left: (60 - shrinkOffset).clamp(16, 60),
           child: Text(
             context.strings.myTodos,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontSize: (32 - shrinkOffset / 3).clamp(20, 32),
-                ),
+            style: context.theme.textTheme.titleLarge?.copyWith(
+              fontSize: (32 - shrinkOffset / 3).clamp(20, 32),
+            ),
           ),
         ),
         Align(
@@ -66,15 +66,10 @@ class DynamicSliverAppBar extends SliverPersistentHeaderDelegate {
                   return state.mapOrNull(
                         tasksLoaded: (value) => Text(
                           '${context.strings.done} - ${value.tasks.where((t) => t.isDone).length}',
-                          style: Theme.of(context).textTheme.bodySmall,
+                          style: context.theme.textTheme.bodySmall,
                         ),
                       ) ??
-                      Container();
-
-                  // return Text(
-                  //   '${context.strings.done} - 10',
-                  //   style: Theme.of(context).textTheme.bodySmall,
-                  // );
+                      const SizedBox.shrink();
                 },
               ),
             ),
@@ -114,7 +109,7 @@ class _VisibilityButtonState extends State<VisibilityButton> {
         setState(
           () {
             // Seems messy, should be refactored
-            context.preferences.toggleCompletedTasksVissible();
+            context.settings.toggleCompletedTasksVissible();
             widget.completedTasksVisibility.value =
                 !widget.completedTasksVisibility.value;
 
@@ -126,7 +121,7 @@ class _VisibilityButtonState extends State<VisibilityButton> {
       icon: widget.completedTasksVisibility.value
           ? AppIcons.visibleIcon
           : AppIcons.hiddenIcon,
-      color: Theme.of(context).colorScheme.primary,
+      color: context.theme.colorScheme.primary,
     );
   }
 }

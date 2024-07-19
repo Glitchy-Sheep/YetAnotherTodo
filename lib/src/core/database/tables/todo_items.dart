@@ -2,7 +2,8 @@ import 'package:drift/drift.dart';
 import '../../../feature/todo/domain/entities/task_entity.dart';
 
 @TableIndex(name: 'todo_is_done', columns: {#isDone})
-class TodoItems extends Table {
+@DataClassName('TodoDbModel')
+class TodoTable extends Table {
   TextColumn get id => text()();
   TextColumn get description => text()();
   BoolColumn get isDone => boolean()();
