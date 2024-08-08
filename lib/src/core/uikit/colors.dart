@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+// TODO: Separate dark and light theme colors
 /// The color palette used in the app.
 /// Has all colors from the Figma design
 abstract class ColorPalette {
