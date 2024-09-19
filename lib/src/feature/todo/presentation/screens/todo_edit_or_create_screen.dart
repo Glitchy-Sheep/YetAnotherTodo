@@ -1,34 +1,35 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/tools/app_localizations_alias.dart';
-import '../../../../core/tools/date_formatters.dart';
-import '../../../../core/uikit/app_icons.dart';
-import '../../../../core/uikit/app_text_style.dart';
-import '../../../../core/uikit/colors.dart';
-import '../../../../core/uikit/decorations.dart';
+import '../../../../core/tools/tools.dart';
+import '../../../../core/uikit/theme_shortcut.dart';
+import '../../../../core/uikit/uikit.dart';
 import '../../../app/di/app_scope.dart';
-import '../../bloc/create_task_form_cubit.dart';
+import '../../bloc/create_task_form/create_task_form_cubit.dart';
 import '../../bloc/todo_bloc/todo_bloc.dart';
 import '../../domain/entities/task_entity.dart';
 
-class TodoCreateScreen extends StatelessWidget {
-  const TodoCreateScreen({
+@RoutePage()
+class TodoEditOrCreateScreen extends StatelessWidget {
+  const TodoEditOrCreateScreen({
+    @PathParam('id') this.taskToEdit,
     super.key,
-    this.taskToEdit,
   });
 
-  final TaskEntity? taskToEdit;
+  final String? taskToEdit;
 
-  // late final bool isNewTask;
   @override
   Widget build(BuildContext context) {
+    final tasksDbRepo = context.appScope.todoDbRepository;
+
     return BlocProvider(
       create: (context) => CreateTaskFormCubit(
-        task: taskToEdit,
+        taskToEditId: taskToEdit,
+        todoRepository: tasksDbRepo,
       ),
       child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: context.theme.scaffoldBackgroundColor,
         appBar: const _AddTaskAppBar(),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -62,7 +63,7 @@ class TodoCreationForm extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const _DescriptionInputArea(),
+            _DescriptionInputArea(description: state.description),
             const SizedBox(height: 28),
             const _PriorityLable(),
             _PriorityDropdownButton(selectedPriority: state.priority),
@@ -96,11 +97,11 @@ class _DeleteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isActive
-        ? Theme.of(context).colorScheme.error
-        : Theme.of(context).colorScheme.tertiary;
+        ? context.theme.colorScheme.error
+        : context.theme.colorScheme.tertiary;
 
     return TextButton(
-      onPressed: isActive ? () {} : null,
+      onPressed: isActive ? () => _onDeletePressed(context) : null,
       child: Row(
         children: [
           // Workaround for color change
@@ -108,15 +109,26 @@ class _DeleteButton extends StatelessWidget {
           const SizedBox(width: 12),
           Text(
             context.strings.delete,
-            style: TextStyle(
+            style: AppTextStyle.bodyText.copyWith(
               color: color,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _onDeletePressed(BuildContext context) {
+    final todoBloc = context.appScope.todoBloc;
+    final todoToDelete = context.read<CreateTaskFormCubit>().toTaskEntity();
+
+    todoBloc.add(
+      TodoEvent.deleteTodo(
+        todoToDelete.id,
+      ),
+    );
+
+    context.router.maybePop();
   }
 }
 
@@ -129,6 +141,8 @@ class _DeadlineDatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentDate = selectedDate;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -142,11 +156,13 @@ class _DeadlineDatePicker extends StatelessWidget {
                 context.strings.finishUntil,
                 style: AppTextStyle.bodyText,
               ),
-              if (selectedDate != null) ...[
+              if (currentDate != null) ...[
                 const SizedBox(height: 10),
                 Text(
                   DateFormatters.toDayMonthYear(
-                      selectedDate!, context.strings.localeName),
+                    currentDate,
+                    context.strings.localeName,
+                  ),
                   style: AppTextStyle.subheadText.copyWith(
                     color: ColorPalette.lightColorBlue,
                   ),
@@ -262,31 +278,50 @@ class _PriorityDropdownButton extends StatelessWidget {
   }
 }
 
-class _DescriptionInputArea extends StatelessWidget {
-  const _DescriptionInputArea();
+class _DescriptionInputArea extends StatefulWidget {
+  final String description;
+
+  const _DescriptionInputArea({
+    required this.description,
+  });
+
+  @override
+  State<_DescriptionInputArea> createState() => _DescriptionInputAreaState();
+}
+
+class _DescriptionInputAreaState extends State<_DescriptionInputArea> {
+  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: AppDecorations.taskInputContainer.copyWith(
-        color: Theme.of(context).colorScheme.surface,
+        color: context.theme.colorScheme.surface,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: TextField(
-        onChanged: context.read<CreateTaskFormCubit>().onDescriptionChanged,
-        onTapOutside: (event) => FocusScope.of(context).unfocus(),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: context.strings.whatShouldBeDone,
-          hintStyle: AppTextStyle.subheadText.copyWith(
-            fontSize: 16,
-            color: Theme.of(context).colorScheme.tertiary,
+      child: BlocListener<CreateTaskFormCubit, CreateTaskFormState>(
+        listener: (context, state) {
+          setState(() {
+            controller.text = state.description;
+          });
+        },
+        child: TextFormField(
+          controller: controller,
+          onChanged: context.read<CreateTaskFormCubit>().onDescriptionChanged,
+          onTapOutside: (event) => FocusScope.of(context).unfocus(),
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: context.strings.whatShouldBeDone,
+            hintStyle: AppTextStyle.subheadText.copyWith(
+              fontSize: 16,
+              color: context.theme.colorScheme.tertiary,
+            ),
           ),
+          style: AppTextStyle.bodyText,
+          keyboardType: TextInputType.multiline,
+          minLines: 4,
+          maxLines: null,
         ),
-        style: AppTextStyle.bodyText,
-        keyboardType: TextInputType.multiline,
-        minLines: 4,
-        maxLines: null,
       ),
     );
   }
@@ -302,10 +337,10 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: context.theme.scaffoldBackgroundColor,
       leading: IconButton(
         icon: AppIcons.closeBlack,
-        onPressed: () => Navigator.pop(context),
+        onPressed: () => context.router.maybePop(),
       ),
       actions: [
         TextButton(
@@ -313,7 +348,7 @@ class _AddTaskAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Text(
             context.strings.saveCapsed,
             style: AppTextStyle.buttonText.copyWith(
-              color: Theme.of(context).colorScheme.primary,
+              color: context.theme.colorScheme.primary,
             ),
           ),
         ),

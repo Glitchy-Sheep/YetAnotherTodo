@@ -1,110 +1,204 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/tools/app_localizations_alias.dart';
-import '../../../../core/tools/logger.dart';
-import '../../../../core/tools/uuid_generator.dart';
-import '../../../../core/uikit/app_icons.dart';
-import '../../../../core/uikit/app_text_style.dart';
+import '../../../../core/router/router.dart';
+import '../../../../core/tools/tools.dart';
+import '../../../../core/uikit/theme_shortcut.dart';
+import '../../../../core/uikit/uikit.dart';
+import '../../../app/bloc/internet_cubit/internet_cubit.dart';
 import '../../../app/di/app_scope.dart';
-import '../../../app/preferences.dart';
 import '../../bloc/todo_bloc/todo_bloc.dart';
 import '../../domain/entities/task_entity.dart';
 import '../widgets/dynamic_appbar.dart';
 import '../widgets/task_tile.dart';
-import 'todo_create.dart';
 
 /// Main screen which shows the list of todos
+
+@RoutePage()
 class TodoViewScreen extends StatelessWidget {
   const TodoViewScreen({super.key});
 
-  // TODO: Something is slightly wrong with "update tasks" process,
-  // for some reason the screen blinks sometimes
-  //
-  // it happends on update tasks, I think it's because of rebuild during emits
-  // or something like that. I'm not sure how to fix it now.
-  //
-  // Maybe I need to pass key somewhere, but for now I'm not sure.
-  // If you know how to do it properly, please let me know.
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: RefreshIndicator(
-          onRefresh: () async {
-            AppScope.of(context).todoBloc.add(
-                  const TodoEvent.syncWithServer(),
-                );
-          },
-          child: CustomScrollView(
-            slivers: [
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: DynamicSliverAppBar(
-                  expandedHeight: 148,
-                  collapsedHeight: 88,
-                  completedTasksVisibility: ValueNotifier(
-                    context.preferences.isCompletedTasksVissible,
-                  ),
+    return Scaffold(
+      backgroundColor: context.theme.scaffoldBackgroundColor,
+      body: SafeArea(
+        child: BlocListener<InternetCubit, InternetState>(
+          bloc: AppScope.of(context).internetCubit,
+          listener: _startUpChore,
+          child: RefreshIndicator(
+            onRefresh: () async => _onRefreshTasks(context),
+            child: const CustomScrollView(
+              slivers: [
+                _SliverTodoViewAppBar(),
+                SliverPadding(
+                  padding: EdgeInsets.all(16),
+                  sliver: _SliverTodoListView(),
                 ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.all(16),
-                sliver: BlocBuilder<TodoBloc, TodoState>(
-                  bloc: AppScope.of(context).todoBloc,
-                  builder: (context, state) {
-                    final isDoneTasksVisible =
-                        context.preferences.isCompletedTasksVissible;
-
-                    return state.map(
-                      initial: (state) => const SliverToBoxAdapter(
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                      loadingTasks: (state) => const SliverToBoxAdapter(
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                      tasksLoaded: (state) => DecoratedSliver(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surface,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        sliver: _TaskList(
-                          tasks: isDoneTasksVisible
-                              ? state.tasks
-                              : state.tasks
-                                  .where(
-                                    (task) => !task.isDone,
-                                  )
-                                  .toList(),
-                        ),
-                      ),
-                      error: (state) => const SliverToBoxAdapter(
-                        child: Text('Error occurred'),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-        floatingActionButton: _AddTaskFloatingActionButton(
-          onPressed: () => onAddTaskPressed(context),
-        ),
+      ),
+      floatingActionButton: _AddTaskFloatingActionButton(
+        onPressed: () => onAddTaskPressed(context),
       ),
     );
   }
 
   void onAddTaskPressed(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute<TodoCreateScreen>(
-        builder: (context) => const TodoCreateScreen(),
+    logger.i('Pushed create route');
+    context.router.push(TodoEditOrCreateRoute());
+  }
+
+  // Before refresh we can check the internet state
+  // and notify user about lost connection
+  Future<void> _onRefreshTasks(BuildContext context) async {
+    final internetState = context.appScope.internetCubit.state;
+    if (internetState != InternetState.connected) {
+      _notifyAboutInternetStatus(context, internetState);
+      return;
+    }
+    context.appScope.todoBloc.add(const TodoEvent.syncWithServer());
+  }
+
+  // This method is called when the internet state changes
+  //
+  // It will:
+  // 1. Notify user about lost internet connection
+  // 2. Sync with server if connection is restored
+  void _startUpChore(
+    BuildContext context,
+    InternetState state,
+  ) {
+    switch (state) {
+      case InternetState.initial:
+        return;
+      case InternetState.connected:
+        AppScope.of(context).todoBloc.add(const TodoEvent.syncWithServer());
+      case InternetState.disconnected:
+        _notifyAboutInternetStatus(context, state);
+    }
+  }
+
+  void _notifyAboutInternetStatus(BuildContext context, InternetState state) {
+    if (state == InternetState.disconnected) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'No internet connection. Data will be synchronized when the connection is restored. In the meantime, you can continue adding tasks locally.',
+          ),
+          behavior: SnackBarBehavior.floating,
+          showCloseIcon: true,
+          closeIconColor: Colors.white,
+          backgroundColor: Colors.redAccent,
+          duration: Duration(seconds: 5),
+        ),
+      );
+    }
+  }
+}
+
+class _SliverTodoListView extends StatelessWidget {
+  const _SliverTodoListView();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<TodoBloc, TodoState>(
+      bloc: AppScope.of(context).todoBloc,
+      buildWhen: (previous, current) => !current.isNotification,
+      listenWhen: (previous, current) => current.isNotification,
+      listener: (context, state) {
+        if (state.isSyncSuccessNotification) {
+          _notifyAboutSyncSuccess(context);
+        } else if (state.isSyncErrorNotification) {
+          _notifyAboutSyncError(context);
+        }
+      },
+      builder: (context, state) {
+        final isDoneTasksVisible = context.settings.isCompletedTasksVissible;
+
+        return state.maybeMap(
+          initial: (state) => const _LoadingTasksIndicator(),
+          loadingTasks: (state) => const _LoadingTasksIndicator(),
+          tasksLoaded: (state) {
+            final tasks = isDoneTasksVisible
+                ? state.tasks
+                : state.tasks.where((task) => !task.isDone).toList();
+
+            return DecoratedSliver(
+              decoration: BoxDecoration(
+                color: context.theme.colorScheme.surface,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              sliver: _TaskList(tasks: tasks),
+            );
+          },
+          // Should never happen because of the buildWhen filters
+          orElse: () => const SizedBox.shrink(),
+        );
+      },
+    );
+  }
+
+  void _notifyAboutSyncError(BuildContext context) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        // content: Text("Can't sync with server, task will be changed locally."),
+        content: Text(context.strings.cantSyncWithServer),
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        closeIconColor: Colors.white,
+        backgroundColor: Colors.redAccent,
+        duration: const Duration(seconds: 5),
+      ),
+    );
+  }
+
+  void _notifyAboutSyncSuccess(BuildContext context) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(context.strings.syncSuccess),
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        closeIconColor: Colors.white,
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+}
+
+class _LoadingTasksIndicator extends StatelessWidget {
+  const _LoadingTasksIndicator();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverToBoxAdapter(
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
+class _SliverTodoViewAppBar extends StatelessWidget {
+  const _SliverTodoViewAppBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: DynamicSliverAppBar(
+        expandedHeight: 148,
+        collapsedHeight: 88,
+        completedTasksVisibility: ValueNotifier(
+          context.settings.isCompletedTasksVissible,
+        ),
       ),
     );
   }
@@ -126,7 +220,7 @@ class _AddTaskFloatingActionButton extends StatelessWidget {
         child: FloatingActionButton(
           onPressed: onPressed,
           backgroundColor:
-              Theme.of(context).floatingActionButtonTheme.backgroundColor,
+              context.theme.floatingActionButtonTheme.backgroundColor,
           child: AppIcons.add,
         ),
       ),
@@ -152,7 +246,11 @@ class _TaskList extends StatelessWidget {
                 key: ValueKey(tasks[index].id),
                 task: tasks[index],
                 onCheck: (newValue) {
-                  // MarkTodoAsDone
+                  context.appScope.todoBloc.add(
+                    TodoEvent.toggleIsDone(
+                      tasks[index].id,
+                    ),
+                  );
                 },
               );
             },
@@ -206,19 +304,19 @@ class _FastTaskCreationFieldState extends State<_FastTaskCreationField> {
 
     logger.i('Fast task creation submitted');
 
-    AppScope.of(context).todoBloc
-      ..add(
-        TodoEvent.addTodo(
-          TaskEntity(
-            id: UuidGenerator.v4(),
-            description: value,
-            isDone: false,
-            createdAt: DateTime.now(),
-            changedAt: DateTime.now(),
+    final timestamp = DateTime.now();
+
+    AppScope.of(context).todoBloc.add(
+          TodoEvent.addTodo(
+            TaskEntity(
+              id: UuidGenerator.v4(),
+              description: value,
+              isDone: false,
+              createdAt: timestamp,
+              changedAt: timestamp,
+            ),
           ),
-        ),
-      )
-      ..add(const TodoEvent.loadTodos());
+        );
 
     textController.clear();
   }

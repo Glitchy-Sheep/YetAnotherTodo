@@ -10,7 +10,8 @@ It's a Flutter app for making a todo list.
 2. [For devs 💾](#for-devs-)
 3. [Screenshots 📷](#screenshots-)
 4. [Architecture 📦](#architecture-)
-5. [Download 🚀](#download-)
+5. [About DeepLinks 🔗](#about-deeplinks-)
+6. [Download 🚀](#download-)
 
 ## Features 🏁
 
@@ -35,7 +36,19 @@ The following criteria were met while doing the homework:
  - Basic tests for API and local storage (to be sure everything is working fine)
  - Added shared preferences for further feature development and storage of settings (e.g. completed tasks visibility)
 
-I tried as hard as I could to maintain readability and code consistency (using autoformatter and linter), though it's still not perfect in my opinion, I could make better decomposition, but I'm happy with the result.
+### Stage 3 - Bjarne Stroustrup
+ - Offline first architecture with TodoBloc
+ - Deeplinks for add/edit screen
+ - New auto_route navigator
+ - Error handling for network errors
+
+### Stage 4 - Bjarne Stroustrup
+ - Add ci/cd for
+   - tests
+   - format/lint/analyze
+   - build
+   - Firebase App Distribution
+
 
 ## For devs 💾
 
@@ -44,7 +57,7 @@ I tried as hard as I could to maintain readability and code consistency (using a
 2. Execute `flutter pub get`
 3. Rename `config.env.template` to `config.env` and replace the API token/BaseURL with yours
 4. Execute `dart run build_runner build` for db/freezed/etc code generation
-4.1. Optionally you can run tests before running the app with `flutter test`
+   - Optionally you can run tests before running the app with `flutter test`
 5. Execute `flutter run` or start debugging in your IDE
 
 ## Screenshots 📷
@@ -72,6 +85,7 @@ The app has 3 root directories in the project:
   - *database* - Has all the database related stuff (tables, DAOs, database impl)
   - *uikit* - All the components, styles, colors used in the App
   - *tools* - Some specific tools (logger, uuid, formatters)
+  - *router* - All auto_route related files and routes
 
 
 **feature** - The directory for all the app's modules and featuress.
@@ -85,6 +99,27 @@ Each feature usually divided into 3 parts:
 - domain: Entities and business logic
 - data: Data sources and repositories
 - bloc: BLoC related files, for state management (I decided to separate bloc and domain in sake of navigation simplicity)
+
+
+## About DeepLinks 🔗
+
+The app has a deeplink for adding/editing todos.
+
+You can test it using adb on android with the following commands:
+
+If you have not installed adb, you can download it from [here](https://developer.android.com/tools/releases/platform-tools)
+
+#### Add new todo
+```bash
+adb shell am start -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "http://yatodo/my_todos/new"
+```
+
+#### Edit existing todo
+```bash
+adb shell am start -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "http://yatodo/my_todos/INSERT_TODO_ID/edit"
+```
+
+*For `not found` situation it will ask you to create a brand new todo. (In the future I will add some error handling or redirections for this case).
 
 
 ## Download 🚀

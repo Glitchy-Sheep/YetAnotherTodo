@@ -20,47 +20,49 @@ void main() async {
       ),
     ],
     url: dotenv.env['API_BASE_URL']!,
-    enableLog: false,
   );
 
-  final tasksRepository = TodoRepositoryApiImpl(
+  final tasksRepository = TodoApiRepositoryImpl(
     baseDioClient: dio,
+    // You can pass the revision as a callback
+    // pretty simple solution, testable and interchangable
+    lastKnownRevisionGetter: () async {
+      return 0;
+    },
   );
 
   test('get todos', () async {
     const loggerPrefix = '[GET TODO TEST]';
     final todos = await tasksRepository.getTodos();
 
-    expect(todos, isA<List<TaskEntity>>());
+    expect(todos.tasks, isA<List<TaskEntity>>());
     logger.i('$loggerPrefix: GOT DATA - $todos');
   });
 
   test('create todo', () async {
     final newTodo = generateRandomTodoTask();
     await tasksRepository.addTodo(newTodo);
-    // final todos = await tasksRepository.getTodos();
-    // expect(todos, contains(newTodo));
+    final todos = await tasksRepository.getTodos();
+    expect(todos.tasks, contains(newTodo));
   });
 
   test('delete todo', () async {
     const loggerPrefix = '[DELETE TODO TEST]';
 
-    logger.i('$loggerPrefix: generating task data');
     final todoToDelete = generateRandomTodoTask();
+    logger.i('$loggerPrefix: generated task - $todoToDelete');
 
-    logger.i('$loggerPrefix: add task to the backend');
     await tasksRepository.addTodo(todoToDelete);
+    logger.i('$loggerPrefix: pushed the task to backend');
 
     final allTasks = await tasksRepository.getTodos();
-    expect(allTasks, contains(todoToDelete));
+    expect(allTasks.tasks, contains(todoToDelete));
 
-    logger.i('$loggerPrefix: delete task from the backend');
     await tasksRepository.deleteTodo(todoToDelete.id);
+    logger.i('$loggerPrefix: deleted the task from backend');
 
-    logger.i('$loggerPrefix: delete task from the backend');
-    final todosAfterDelete = await tasksRepository.getTodos();
-
-    expect(todosAfterDelete, isNot(contains(todoToDelete)));
+    final allTasksAfterDelete = await tasksRepository.getTodos();
+    expect(allTasksAfterDelete.tasks, isNot(contains(todoToDelete)));
   });
 
   test('edit todo', () async {
@@ -73,7 +75,7 @@ void main() async {
 
     logger.i('$loggerPrefix: get updated tasks on the backend');
     final allTasks = await tasksRepository.getTodos();
-    expect(allTasks, contains(todoToEdit));
+    expect(allTasks.tasks, contains(todoToEdit));
 
     final isDoneBeforeUpdate = todoToEdit.isDone;
     final expectedIsDoneAfterUpdate = !isDoneBeforeUpdate;
@@ -84,20 +86,12 @@ void main() async {
 
     logger.i('$loggerPrefix: get updated tasks on the backend');
     final allTasksAfterEdit = await tasksRepository.getTodos();
-    final updatedTask = allTasksAfterEdit.firstWhere(
+    final updatedTask = allTasksAfterEdit.tasks.firstWhere(
       (element) => element.id == todoToEdit.id,
     );
     expect(updatedTask.isDone, expectedIsDoneAfterUpdate);
     logger.i(
       'task.isDone updated successfully from $isDoneBeforeUpdate -> $expectedIsDoneAfterUpdate',
     );
-  });
-
-  test('delete all todos', () async {
-    final allTodos = await tasksRepository.getTodos();
-    for (final todo in allTodos) {
-      await tasksRepository.deleteTodo(todo.id);
-      logger.i('Deleted: $todo.id - ${todo.description}');
-    }
   });
 }
